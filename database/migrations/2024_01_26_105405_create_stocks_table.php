@@ -18,15 +18,15 @@ return new class extends Migration
             $table->bigInteger('tin');
             $table->string('name');
             $table->string('sort_name');
-            $table->string('email');
-            $table->integer('mobile');
+            $table->string('email')->nullable();
+            $table->integer('mobile')->nullable();
             $table->string('bangla_name');
-            $table->string('type');
-            $table->tinyInteger('file_in_stock');
-            $table->string('file_rack');
+            $table->string('type')->nullable();;
+            $table->tinyInteger('file_in_stock')->nullable();;
+            $table->string('file_rack')->nullable();;
             $table->integer('circle');
-            $table->string('address');
-            $table->integer('last_return');
+            $table->string('address')->nullable();;
+            $table->integer('last_return')->nullable();;
             $table->timestamps();
         });
     }
