@@ -13,6 +13,9 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
+
+
+  <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('plugins/datepicker/bootstrap-datepicker.min.css') }}">
   @stack('css')
 </head>
@@ -27,7 +30,16 @@
     @include('Partial.sidebar')
 
   <!-- Content Wrapper. Contains page content -->
-  @yield('content')
+
+  <div class="content-wrapper" >
+
+    
+      @yield('content')
+   
+
+  </div>
+
+
   <!-- /.content-wrapper -->
 
   @include('Partial.footer')
