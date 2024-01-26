@@ -8,7 +8,7 @@ class ArrearController extends Controller
 {
     public function index()
     {
-        $arrears = Arrear::all();
-        return view('circle.arrear.index', compact('arrears'));
+        //$arrears = Arrear::all();
+        return view('circle.arrear.index', );
     }
 }
