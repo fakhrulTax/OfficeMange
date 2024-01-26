@@ -6,6 +6,7 @@ use App\Http\Controllers\CircleController;
 use App\Http\Controllers\RangeController;
 use App\Http\Controllers\TechnicalController;
 use App\Http\Controllers\CommissionerController;
+use App\Http\Controllers\StockController;
 
 
 Route::get('/', function () {
@@ -19,6 +20,8 @@ Auth::routes();
 Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     
     Route::get('/circle-dashboard', [CircleController::class, 'index'])->name('dashboard');
+
+    Route::get('/stock', [StockController::class, 'index'])->name('stock');
     
 });
 

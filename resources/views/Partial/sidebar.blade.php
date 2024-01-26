@@ -46,7 +46,7 @@
           </li>   
           
           <li class="nav-item">
-            <a href="" class="nav-link ">
+            <a href="{{route('circle.stock')}}" class="nav-link ">
               <i class="nav-icon fas fa-list text-light"></i>
               <p>
                 Stock

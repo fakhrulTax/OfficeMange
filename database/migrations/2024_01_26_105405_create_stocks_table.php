@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('mobile')->unique();
             $table->string('bangla_name');
             $table->string('type');
-            $table->tinyInteger('fiel_in_stock')->default(0);
+            $table->tinyInteger('fiel_in_stock')->default(0);       
             $table->string('file_rack');
             $table->integer('circle');
             $table->string('address')->nullable();;
