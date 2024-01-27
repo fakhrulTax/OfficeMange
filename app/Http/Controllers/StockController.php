@@ -149,4 +149,22 @@ class StockController extends Controller
         }
 >>>>>>> c8c99453e942ba3b1e698c8c6bacd41c86185225
     }
+
+
+
+
+
+    public function tinChecker($tin){
+
+        $stock = Stock::where('tin',$tin)->first();
+        if($stock){
+            return response()->json([
+                'status' => 200
+            ]);
+        }else{
+            return response()->json([
+                'status' => 404
+            ]);
+        }
+    }
 }
