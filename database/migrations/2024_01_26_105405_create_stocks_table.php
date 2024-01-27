@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('tin');
+            $table->bigInteger('tin')->unique();
             $table->string('name');
             $table->string('sort_name');
             $table->string('email')->nullable();
