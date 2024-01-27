@@ -19,15 +19,16 @@ return new class extends Migration
             $table->string('name');
             $table->string('sort_name');
             $table->string('email')->nullable();
-            $table->integer('mobile')->nullable();
+            $table->string('mobile')->nullable();
             $table->string('bangla_name');
             $table->string('type')->nullable();;
             $table->tinyInteger('file_in_stock')->nullable();;
             $table->string('file_rack')->nullable();;
             $table->integer('circle');
-            $table->string('address')->nullable();;
+            $table->text('address')->nullable();;
             $table->integer('last_return')->nullable();;
             $table->timestamps();
+          
         });
     }
 

@@ -12,9 +12,9 @@ class StockController extends Controller
 {
     public function index(){
 
-        $taxInfo = Stock::latest()->get();
+        $Stocks = Stock::latest()->get();
 
-        return view('circle.stock.index', compact('taxInfo'));
+        return view('circle.stock.index', compact('Stocks'));
     }
 
 
@@ -25,7 +25,7 @@ class StockController extends Controller
                 'tin' => 'required|unique:stocks|min:12|max:12',
                 'name' => 'required',
                 'bangla_name' => 'required',
-                'mobile' => 'nullable|min:11|max:11',
+                'mobile' => 'min:11|max:11',
             ]);
             //check existing court name for current user
 
@@ -35,8 +35,9 @@ class StockController extends Controller
            
             if($request->address_line_one != null && $request->address_line_two != null && $request->address_line_three != null){
                
-                $address = $request->address_line_one . ' | ' . $request-> address_line_two . ' | '. $request->address_line_three;
+                // $address = $request->address_line_one . ' | ' . $request-> address_line_two . ' | '. $request->address_line_three;
 
+                $address = '<p>'. $request->address_line_one .'</p>, <p>' . $request-> address_line_two .'</p>, <p>' . $request->address_line_three .'</p>';
             }else{
 
                 $address = null;
@@ -86,6 +87,62 @@ class StockController extends Controller
 
 
     public function update(Request $request){
-        
+        try {
+
+            $stock = Stock::find($request->id);
+
+            if(!$stock){
+                return response()->json([
+                    'message' => 'Tax payer not found',
+                    'status' => 404
+                ]);
+            }
+
+
+            $request->validate([
+                'name' => 'required',
+                'bangla_name' => 'required',
+                'mobile' => 'min:11|max:11',
+            ]);
+            //check existing court name for current user
+
+            $sort_name = MyHelper::sortName($request->name);
+           
+            if($request->address_line_one != null && $request->address_line_two != null && $request->address_line_three != null){
+               
+                // $address = $request->address_line_one . ' | ' . $request-> address_line_two . ' | '. $request->address_line_three;
+
+                $address = '<p>'. $request->address_line_one .'</p>, <p>' . $request-> address_line_two .'</p>, <p>' . $request->address_line_three .'</p>';
+            }else{
+
+                $address = null;
+            }
+
+            
+
+            $stock->update([
+                'name' => $request->name,
+                'bangla_name' => $request->bangla_name,
+                'sort_name' =>  $sort_name,
+                'email' => $request->email,
+                'mobile'=>$request->mobile,
+                'type' => $request->type,
+                'file_in_stock' => $request->file_in_stock,
+                'file_rack' => $request->file_rack,
+                'address'=> $address,
+                'last_return'=> $request->last_return
+            ]);
+
+            return response()->json([
+                'message' => 'Tax payer updated successfully',
+                'status' => 200
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage(),
+                'status' => 500
+            ]);
+        }
     }
 }
