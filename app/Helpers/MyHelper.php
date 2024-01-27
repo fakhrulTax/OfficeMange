@@ -2,6 +2,7 @@
 // app/Helpers/MyHelper.php
 
 namespace App\Helpers;
+use App\Models\Stock;
 
 class MyHelper
 {
@@ -16,4 +17,15 @@ class MyHelper
           return $sort_name;
     }
     // Add more helper methods as needed
+
+    public static function tinCheck($tin){
+
+        $existTin = Stock::where('tin', $tin)->first();
+
+        if($existTin){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
