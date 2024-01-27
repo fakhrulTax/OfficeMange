@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('arrears', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tin');
+            $table->string('arrear_type');
             $table->date('demand_create_date');
             $table->integer('assessment_year');
             $table->BigInteger('arrear');
