@@ -53,23 +53,30 @@
 
 
 
-                        @foreach ($taxInfo as $key => $value)
+                        @foreach ($Stocks as $key => $stock)
                             <tr>
                                 <td>{{ ++$key }}</td>
-                                <td>{{ $value->tin }}</td>
-                                <td>{{ $value->name }} {{ $value->address ? ', ' . str_replace(' | ', ', ', $value->address) : '' }} </td>
-                                <td> {{ $value->type }}</td>
-                                <td>{{ $value->file_in_stock ? 'Yes' : 'No' }}</td>
-                                <td>{{ $value->file_rack }}</td>
-                                <td> {{ $value->last_return }} </td>
-                                <td>{{ $value->circle }}</td>
+                                <td>{{ $stock->tin }}</td>
+                                <td>{{ $stock->name }} <br>
+                                    
+                                {{ str_replace('</p><p>', ', ', strip_tags($stock->address)) }}
+
+
+                                
+                                
+                                </td>
+                                <td> {{ $stock->type }}</td>
+                                <td>{{ $stock->file_in_stock ? 'Yes' : 'No' }}</td>
+                                <td>{{ $stock->file_rack }}</td>
+                                <td> {{ $stock->last_return }} </td>
+                                <td>{{ $stock->circle }}</td>
                                 <td>
                                     <button class="btn btn-primary btn-sm"
-                                        onclick="edit({{ $value->id }})">Edit</button>
+                                        onclick="edit({{ $stock->id }})">Edit</button>
                                     <button class="btn btn-success btn-sm"
-                                        onclick="view({{ $value->id }})">View</button>
+                                        onclick="view({{ $stock->id }})">View</button>
                                     <button class="btn btn-danger btn-sm"
-                                        onclick="notice({{ $value->id }})">Notice</button>
+                                        onclick="notice({{ $stock->id }})">Notice</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -312,12 +319,13 @@
                     type: "POST",
                     data: $data,
                     success: function(data) {
-                        if (data.status == 500) {
+                        if (data.status != 200) {
 
 
                             $('.error').text(data.message);
                         } else {
                             $.toast({
+                                heading: "Success",
                                 text: "Tax Payer Added successfully",
                                 position: "top-right",
                                 loaderBg: "#5ba035",
@@ -366,7 +374,7 @@
                     type: "POST",
                     data: $data,
                     success: function(data) {
-                        if (data.status == 500) {
+                        if (data.status != 200) {
 
 
                             $('.error').text(data.message);
@@ -374,6 +382,7 @@
                         } else {
                             
                             $.toast({
+                                heading: "Success",
                                 text: "Tax Payer Updated successfully",
                                 position: "top-right",
                                 loaderBg: "#5ba035",

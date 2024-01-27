@@ -1,6 +1,4 @@
 
-
-
                 <div class="col-12">
                     <p class="text-danger error">
 
@@ -17,7 +15,7 @@
                             <div class="form-group">
                                 <label for="tin">TIN Number</label>
                                 <input type="number" class="form-control" id="tin" name="tin"
-                                    value="{{ $StockInfo->tin }}" >
+                                    value="{{ $StockInfo->tin }}" readonly >
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -101,8 +99,7 @@
                                 @php
                                     if($StockInfo->address){
 
-                                    $add = explode(' | ', $StockInfo->address);
-
+                                    $add = explode(', ', strip_tags($StockInfo->address));
                                 
                                     }
                                     
