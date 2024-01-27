@@ -7,6 +7,7 @@ use App\Http\Controllers\RangeController;
 use App\Http\Controllers\TechnicalController;
 use App\Http\Controllers\CommissionerController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\ArrearController;
 
 
 Route::get('/', function () {
@@ -26,7 +27,16 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
     Route::get('/stock/edit', [StockController::class, 'edit'])->name('stockEdit');
     Route::post('/stock/edit', [StockController::class, 'update'])->name('stockUpdate');
-    
+
+
+    //Tin checker
+
+    Route::get('/tin-checker/{tin}', [StockController::class, 'tinChecker'])->name('tinChecker');
+
+
+    //Arrear routes
+    Route::get('/arrears', [ArrearController::class, 'index'])->name('arrears');
+    Route::post('/arrear', [ArrearController::class, 'store'])->name('arrearStore');
 });
 
 
