@@ -22,6 +22,10 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/circle-dashboard', [CircleController::class, 'index'])->name('dashboard');
 
     Route::get('/stock', [StockController::class, 'index'])->name('stock');
+    Route::post('/stock', [StockController::class, 'store'])->name('stockStore');
+
+    Route::get('/stock/edit', [StockController::class, 'edit'])->name('stockEdit');
+    Route::post('/stock/edit', [StockController::class, 'update'])->name('stockUpdate');
     
 });
 
