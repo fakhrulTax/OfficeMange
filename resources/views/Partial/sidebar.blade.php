@@ -55,7 +55,7 @@
           </li> 
 
           <li class="nav-item">
-            <a href="{{ route('circle.arrear.index') }}" class="nav-link {{ ( Route::currentRouteName() == 'circle.arrear.index' )?'active':'' }}">
+            <a href="{{route('circle.arrears')}}" class="nav-link">
               <i class="nav-icon fas fa-money-check-alt text-danger"></i>
               <p>
                 Arrear
