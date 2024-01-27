@@ -22,8 +22,6 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/circle-dashboard', [CircleController::class, 'index'])->name('dashboard');
 
     Route::get('/stock', [StockController::class, 'index'])->name('stock');
-
-    Route::get('/arrear', [ArrearController::class, 'index'])->name('arrear.index');
     
 });
 
