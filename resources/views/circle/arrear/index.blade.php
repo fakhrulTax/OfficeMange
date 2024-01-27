@@ -15,7 +15,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Arrear()</h1>
+                    <h1 class="m-0">Arrear({{count($arrears)}})</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -55,11 +55,16 @@
                                 <td>
 
                                     {{ $arrear->stock->name }} <br>
+                                    {{  str_replace('</p><p>', ', ', strip_tags($arrear->stock->address)) }} <br>
                                     {{ $arrear->tin }}
 
 
                                 </td>
-                                <td>{{ $arrear->assessment_year }}</td>
+                                @php
+                                    $year1 = substr($arrear->assessment_year, 0, 4);
+                                    $year2 = substr($arrear->assessment_year, 4, 4);
+                                @endphp     
+                                <td>{{ $year1}} - {{ $year2 }}</td>
 
                                 <td>{{ $arrear->arrear }}</td>
 
@@ -115,9 +120,9 @@
                     <div class="modal-body">
 
                         <div class="col-12">
-                            <p class="text-danger error">
+                            <h4 class="text-danger error">
 
-                            </p>
+                            </h4>
                         </div>
 
                         <form action="" method="POST" id="add-arrear-form">
@@ -137,7 +142,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="tin">TIN Number</label>
-                                        <input type="number" class="form-control text-danger border-danger" id="tin"
+                                        <input type="number" class="form-control text-danger" id="tin"
                                             name="tin" placeholder="6540656206">
                                     </div>
                                 </div>
@@ -155,7 +160,7 @@
                                     <div class="form-group">
                                         <label for="assessment_year">Assesment Year</label>
                                         <input type="number" class="form-control" id="assessment_year"
-                                            name="assessment_year" placeholder="2021-2022">
+                                            name="assessment_year" placeholder="20212022">
                                     </div>
                                 </div>
 
@@ -251,6 +256,7 @@
 
                             $('.error').text(data.message);
                         } else {
+                            
                             $.toast({
                                 heading: "Success",
                                 text: "Tax Payer Added successfully",

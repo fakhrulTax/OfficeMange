@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Arrear;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\MyHelper;
 class ArrearController extends Controller
 {
     public function index()
@@ -29,6 +30,19 @@ class ArrearController extends Controller
             'assessment_year' => 'required | digits:8',
             'arrear' => 'required',
         ]);
+
+
+        $isExistTin = MyHelper::tinCheck($request->tin);
+
+        if($isExistTin == false){
+            throw new \Exception('Tax Payer Not Added Yet!');
+        }
+
+        $isExistArrear = Arrear::where('tin', $request->tin)->where('assessment_year', $request->assessment_year)->first();
+
+        if($isExistArrear){
+            throw new \Exception('Arrear Already Added!');
+        }
 
 
         $circle = Auth::user()->circle;
