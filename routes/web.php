@@ -37,6 +37,8 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     //Arrear routes
     Route::get('/arrears', [ArrearController::class, 'index'])->name('arrears');
     Route::post('/arrear', [ArrearController::class, 'store'])->name('arrearStore');
+    Route::get('/arrear/edit', [ArrearController::class, 'edit'])->name('arrearEdit');
+    Route::post('/arrear/edit', [ArrearController::class, 'update'])->name('arrearUpdate');
 });
 
 

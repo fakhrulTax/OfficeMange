@@ -356,7 +356,7 @@
                 },
                 success: function(data) {
 
-                    console.log(data);
+
                     $('#editModal').modal('show');
                     $('#editModal').find('.modal-body').html(data);
                 }

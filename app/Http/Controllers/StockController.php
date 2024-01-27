@@ -89,6 +89,7 @@ class StockController extends Controller
     public function update(Request $request){
         try {
 
+    
             $stock = Stock::find($request->id);
 
             if(!$stock){
