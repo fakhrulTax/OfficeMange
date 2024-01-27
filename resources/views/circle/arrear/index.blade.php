@@ -72,7 +72,10 @@
 
                                 <td>
                                     <button class="btn btn-danger btn-sm"
-                                        onclick="notice({{ $arrear->id }})">Notice</button>
+                                        onclick="ArreardEdit({{ $arrear->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
+
+                                    <button class="btn btn-info btn-sm"
+                                        onclick="ArreardNotice({{ $arrear->id }})">Notice</button>
                                 </td>
 
 
@@ -81,17 +84,6 @@
 
                             </tr>
                         @endforeach
-
-
-
-
-
-
-
-
-
-
-
 
                     </tbody>
                     <tfoot>
@@ -106,7 +98,7 @@
 
 
 
-        {{-- Moda start  --}}
+        {{-- add Modal start  --}}
 
         <div class="modal fade" id="addModal">
             <div class="modal-dialog modal-lg">
@@ -206,6 +198,33 @@
             <!-- /.modal-dialog -->
         </div>
 
+
+
+        {{-- Edit Modal Start --}}
+
+        <div class="modal fade" id="editModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit New Arrear</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        
+                    </div>
+                    
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="updateBtn">Save changes</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
     </section>
 @endsection
 
@@ -322,5 +341,64 @@
                 }
             })
         });
+
+
+        function ArreardEdit (id) {
+            $.ajax({
+                url: "{{ route('circle.arrearEdit') }}",
+                type: "GET",
+                data: {
+                    id: id
+                },
+                success: function(data) {
+
+                  
+                    $('#editModal').modal('show');
+                    $('#editModal').find('.modal-body').html(data);
+                }
+
+
+            })
+        }
+
+        $(document).ready(function() {
+            $('#updateBtn').on('click', function() {
+                $data = $('#edit-arrear-form').serialize();
+             
+                $.ajax({
+                    url: "{{ route('circle.arrearUpdate') }}",
+                    type: "POST",
+                    data: $data,
+                  
+                    success: function(data) {
+                        if (data.status != 200) {
+
+
+                            $('.error').text(data.message);
+
+                        } else {
+                            
+                            $.toast({
+                                heading: "Success",
+                                text: "Tax Payer Updated successfully",
+                                position: "top-right",
+                                loaderBg: "#5ba035",
+                                icon: "success",
+                                hideAfter: 3e3,
+                                stack: 1,
+
+                            }) ;
+
+                            $('#editModal').modal('hide');
+                            $('#edit-arrear-form')[0].reset();
+                            $('.error').text('');
+                            location.reload();
+
+                        }
+                    }
+                })
+            })
+        })
+
     </script>
 @endpush
