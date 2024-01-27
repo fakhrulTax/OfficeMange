@@ -12,9 +12,6 @@ class StockController extends Controller
 {
     public function index(){
 
-<<<<<<< HEAD
-        return view('circle.stock.index');
-=======
         $Stocks = Stock::latest()->get();
 
         return view('circle.stock.index', compact('Stocks'));
