@@ -10,7 +10,7 @@ class ArrearController extends Controller
 {
     public function index()
     {
-        $arrears = Arrear::with('stock')->get();
+        $arrears = Arrear::with('stock')->latest()->get();
 
 
         return view('circle.arrear.index', compact('arrears'));
@@ -70,9 +70,69 @@ class ArrearController extends Controller
             'message' => $th->getMessage(),
             'status' => 500
         ]);
-    }
+     }
 
         
         
+    }
+
+    public function edit(Request $request){
+
+        $arrear = Arrear::where('id',  $request->id)->first();
+        return view('circle.arrear.edit_arrear', compact('arrear'))->render();
+    }
+
+
+
+    public function update(Request $request){
+        try{
+
+
+            $request->validate([
+                'arrear_type' => 'required',
+                'demand_create_date' => 'required',
+                'assessment_year' => 'required | digits:8',
+                'arrear' => 'required',
+            ]);
+
+            $tin = Arrear::where('id', $request->id)->first();
+    
+           
+
+            //check tin is exist in another row or not
+          
+            $isExistArrear = Arrear::where('tin', $tin->tin)->where('assessment_year', $request->assessment_year)->first();
+
+            
+            if($isExistArrear){
+                if($isExistArrear->id != $tin ->id){
+                    throw new \Exception('Arrear Already Added!');
+                }
+                
+            }
+    
+    
+    
+            Arrear::where('id', $request->id)->update([
+                'arrear_type' => $request->arrear_type,
+                'demand_create_date' => date('d-m-Y', strtotime($request->demand_create_date)),
+                'assessment_year' => $request->assessment_year,
+                'arrear' => $request->arrear,
+                'fine' => $request->fine,
+                'comments' => $request->comments
+            ]);
+    
+            return response()->json([
+                'message' => 'Arrear updated successfully',
+                'status' => 200
+            ], 200);
+    
+    
+           }catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage(),
+                'status' => 500
+            ]);
+         }
     }
 }
