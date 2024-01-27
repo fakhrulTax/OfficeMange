@@ -21,12 +21,12 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('mobile')->nullable();
             $table->string('bangla_name');
-            $table->string('type')->nullable();;
-            $table->tinyInteger('file_in_stock')->nullable();;
-            $table->string('file_rack')->nullable();;
+            $table->string('type')->nullable();
+            $table->tinyInteger('file_in_stock')->nullable();
+            $table->string('file_rack')->nullable();
             $table->integer('circle');
-            $table->text('address')->nullable();;
-            $table->integer('last_return')->nullable();;
+            $table->text('address')->nullable();
+            $table->integer('last_return')->nullable();
             $table->timestamps();
           
         });
