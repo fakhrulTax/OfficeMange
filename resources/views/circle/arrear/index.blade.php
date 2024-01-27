@@ -1,157 +1,326 @@
 @extends('app')
-@section('title',$title)
+
 @push('css')
-<style>
+    <!--  Datatable -->
 
-</style>
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endpush
+
+
+
 @section('content')
-<div class="content-wrapper">
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <!-- Default box -->
-            <div class="card">
-              <div class="card-header">
-                @if(isset($type)  && $type == 'edit' )
-                  @include('pages.Arrear.edit')
-                @else
-                  @include('pages.Arrear.create')
-                @endif
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                @if (session('success'))
-                    <div class="alert text-success">
-                        {{ session('success') }}
-                    </div>
-                  @endif    
-                @if (session('danger'))
-                    <div class="alert text-danger">
-                        {{ session('danger') }}
-                    </div>
-                  @endif
-                <!--SEARCH FORM  ----> 
-                <form action="{{ route('arrear.search') }}" method="POST">
-                  @csrf
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <input type="number" name="searchTin" placeholder="TIN" class="form-control" value="{{ (isset($search->searchTin))?$search->searchTin:'' }}">
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-                     <button type="submit" class="btn btn-primary">Search</button>                    
-                    </div>
-                  </div>                                    
-                </form> 
-                <!--END SEARCH FORM  ---->  
-
-                <div>
-                  <a href="{{ route('arrear.register') }}" target="_blank" class="btn btn-primary">Register</a>
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Arrear({{count($arrears)}})</h1>
                 </div>
-                <!--End Register Button--->
-
-                <table class="table table-bordered table-striped">
-                    <tr>
-                      <td class="col-md-0.5">ক্রমিক</td>                      
-                      <td class="col-md-3">করদাতার নাম, ঠিকানা ও টিআইএন</td>                      
-                      <td class="col-md-3">বকেয়া দাবি</td>                      
-                      <td class="col-md-3">বকেয়া দাবি হতে আদায়</td>                      
-                      <td class="col-md-2">গৃহীত কার্যক্রম/মন্তব্য</td>                   
-                      <td class="col-md-0.5">নোটিশ</td>                   
-                    </tr>
-                    <?php $i = 1; ?>
-                    @foreach( $arrears as $arrear )
-                    <!-- <tr>
-                         <td class="col-md-0.5">{{ $i }}</td>                      
-                          <td class="col-md-3">
-                            <p>{{ $arrear->stock->bangla_name }}</p>
-                                {!! $arrear->stock->address !!}
-                            <p>{{ $arrear->tin }}</p>   
-                          </td>                      
-                          <td class="col-md-3">
-                                @foreach( $arrearClass->getArrear($arrear->tin) as $a )
-                                    <p>
-                                        <form action="{{ route('arrear.destroy', $a->id) }}" method="POST">
-                                        {{ en2bn(yearSlice($a->assessment_year)) }} : {{ en2bn(moneyFormatBD($a->arrear + $a->fine))  }}
-                                        <a href="{{ route('arrear.edit', $a->id) }}" class="btn btn-sm btn-primary">Edit</a> 
-                                          @csrf
-                                          @method('delete')
-                                          <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are You Sure? Do You want to Delete this Item')">Del</button>
-                                          </form>
-                                    </p>
-                                @endforeach 
-                                <p style="border-top: 1px solid #010101">
-                                    সর্ব মোট  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 
-                                    {{  en2bn(moneyFormatBD($arrearClass->sumArrearByTIN($arrear->tin))) }}
-                                </p>                                
-                          </td>        
-                                        
-                          <td class="col-md-3">
-                          	@foreach($collection->getArrearCollectionYear($arrear->tin) as $c)
-                          		<p>
-                          			{{ en2bn(yearSlice($c->assessment_year)) }} : 
-                          			{{ en2bn(moneyFormatBD($collection->getArrearCollectionSumByYear($arrear->tin, $c->assessment_year))) }}
-                          		</p>
-                          	@endforeach
-                          	@if($collection->sumArrearCollectionByTIN($arrear->tin))
-                          	<p style="border-top: 1px solid #010101">
-                                    সর্ব মোট  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 
-                                    {{  en2bn(moneyFormatBD($collection->sumArrearCollectionByTIN($arrear->tin))) }}
-                                </p>
-                                @endif 
-                          </td>          
-                                      
-                          <td class="col-md-2">
-                          	 @foreach( $arrear->stock->arrears as $a  )
-                            		<p> {{ $a->comments }}</p>
-                          	@endforeach
-                          </td>                   
-                          <td class="col-md-0.5">
-                          	 <button class="btn btn-sm btn-primary" onclick="arrearModal({{ $arrear->tin }})">Noice</button>
-                          </td> 
-                    </tr> -->
-                    <?php $i++; ?>
-                    @endforeach;               
-                    
-                    
-                    
-                   
-                    
-                    
-                </table>          
-                    
-              </div>
-              <!-- /.card-body -->  
-              <div class="card-footer">
-                <ul class="pagination pagination-sm m-0 float-right">
-                  <!-- {{ $arrears->links("pagination::bootstrap-4") }} -->
-                </ul>
-              </div>
-
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                            data-target="#addModal"><i class="fas fa-plus"></i> Add item</button>
+                    </ol>
+                </div>
             </div>
-            <!-- /.card -->
-          </div>
         </div>
-      </div>
-    </section>
-    <!-- /.content -->
-  </div>
-  @if( count($arrears) )
-        @include('pages.Arrear.arrearModal')
-  @endif
-  @endsection
 
-  @push('js')
-<script>
-  function arrearModal(tin)
-  {
-      document.getElementById('atin').value = tin;
-      $('#arrearModal').modal('toggle');
-  }
-</script>
-  @endpush
+    </div>
+
+    <section class="content">
+
+
+        <div class="card">
+
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name, Address and TIN</th>
+                            <th>Assessment Year</th>
+                            <th>Arrear</th>
+                            <th>Comments</th>
+
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach ($arrears as $key => $arrear)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>
+
+                                    {{ $arrear->stock->name }} <br>
+                                    {{  str_replace('</p><p>', ', ', strip_tags($arrear->stock->address)) }} <br>
+                                    {{ $arrear->tin }}
+
+
+                                </td>
+                                @php
+                                    $year1 = substr($arrear->assessment_year, 0, 4);
+                                    $year2 = substr($arrear->assessment_year, 4, 4);
+                                @endphp     
+                                <td>{{ $year1}} - {{ $year2 }}</td>
+
+                                <td>{{ $arrear->arrear }}</td>
+
+                                <td>{{ $arrear->comments }}</td>
+
+                                <td>
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="notice({{ $arrear->id }})">Notice</button>
+                                </td>
+
+
+
+
+
+                            </tr>
+                        @endforeach
+
+
+
+
+
+
+
+
+
+
+
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+
+
+
+        {{-- Moda start  --}}
+
+        <div class="modal fade" id="addModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add New Arrear</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="col-12">
+                            <h4 class="text-danger error">
+
+                            </h4>
+                        </div>
+
+                        <form action="" method="POST" id="add-arrear-form">
+                            @csrf
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="arrear_type"> Arrear Type</label>
+                                        <select name="arrear_type" id="arrear_type" class="form-control">
+                                            <option value="disputed">Disputed</option>
+                                            <option value="undisputed">UnDisputed</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="tin">TIN Number</label>
+                                        <input type="number" class="form-control text-danger" id="tin"
+                                            name="tin" placeholder="6540656206">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="demand_create_date"> Demand Create Date </label>
+                                        <input type="date" class="form-control" id="demand_create_date"
+                                            name="demand_create_date">
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="assessment_year">Assesment Year</label>
+                                        <input type="number" class="form-control" id="assessment_year"
+                                            name="assessment_year" placeholder="20212022">
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="arrear"> Arrear</label>
+                                        <input type="number" class="form-control" id="arrear" name="arrear"
+                                            placeholder="156465">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="fine">Fine</label>
+                                        <input type="number" class="form-control" id="fine" name="fine"
+                                            placeholder="1000">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="comments"> Comments </label>
+                                        <textarea name="comments" id="comments" cols="30" rows="2" class="form-control"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="addBtn" disabled>Save changes</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+    </section>
+@endsection
+
+
+
+@push('js')
+    <!-- DataTables  & Plugins -->
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <!-- AdminLTE App -->
+
+
+    <script>
+        $(function() {
+            $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+
+            $('#addBtn').on('click', function() {
+                $data = $('#add-arrear-form').serialize();
+                $.ajax({
+                    url: "{{ route('circle.arrearStore') }}",
+                    type: "POST",
+                    data: $data,
+                    success: function(data) {
+                        if (data.status != 200) {
+
+
+                            $('.error').text(data.message);
+                        } else {
+                            
+                            $.toast({
+                                heading: "Success",
+                                text: "Tax Payer Added successfully",
+                                position: "top-right",
+                                loaderBg: "#5ba035",
+                                icon: "success",
+                                hideAfter: 3e3,
+                                stack: 1,
+
+                            });
+
+                            $('#modal-lg').modal('hide');
+                            $('#add-arrear-form')[0].reset();
+                            $('.error').text('');
+                            location.reload();
+
+                        }
+                    }
+                })
+            });
+
+
+
+
+            $('#tin').keyup(function() {
+                var tin = $(this).val();
+                if (tin.length == 12) {
+
+                    $.ajax({
+                        url: "{{ url('tin-checker') }}" + '/' + tin,
+                        type: "GET",
+                        data: {
+                            tin: tin
+                        },
+                        success: function(data) {
+
+                            if (data.status == 200) {
+                                $('#addBtn').prop('disabled', false);
+                                $('#tin').addClass('bg-success');
+                                $('#tin').removeClass('bg-danger');;
+
+                            } else {
+                                $('#tin').removeClass('bg-success');
+                                $('#tin').addClass('bg-danger');
+                                $('#addBtn').prop('disabled', true);
+                            }
+
+                        }
+                    })
+
+
+
+
+
+
+                } else {
+
+                    $('#tin').removeClass('bg-success');
+                    $('#tin').addClass('bg-danger');
+                    $('#addBtn').prop('disabled', true);
+
+
+                }
+            })
+        });
+    </script>
+@endpush
