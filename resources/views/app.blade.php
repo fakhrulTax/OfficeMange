@@ -12,7 +12,8 @@
   <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
+  <link href="{{ asset('jquery-toast/jquery.toast.min.css') }}" rel="stylesheet" type="text/css" />
+
 
 
   <!-- Theme style -->
@@ -54,7 +55,15 @@
 
 <!-- jQuery -->
 <script src="{{ asset('js/jquery.min.js') }}"></script>
-<script src="{{ asset('js/toastr.min.js') }}"></script>
+
+ <!-- Toast js -->
+
+<script src="{{ asset('jquery-toast/jquery.toast.min.js') }}"></script>
+<!-- toastr init js-->
+<script src="{{ asset('jquery-toast/toastr.init.js') }}"></script>
+
+
+
 
 <!-- Bootstrap 4 -->
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
@@ -69,6 +78,33 @@
     weekStart: 5
   });
 </script>
+
+<script>
+  @if (Session::has('message'))
+
+      var type = ("{{ Session::get('type') }}");
+
+      var message = ("{{ Session::get('message') }}");
+      switch (type) {
+      case 'success':
+      toastr.success(message);
+      break;
+      case 'warning':
+      toastr.warning(message);
+      break;
+      case 'error':
+      toastr.error(message);
+      break;
+      case 'info':
+      toastr.info(message);
+      break;
+      }
+
+  @endif
+
+
+</script>
 @stack('js')
+
 </body>
 </html>
