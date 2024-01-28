@@ -2,10 +2,6 @@
 
 @push('css')
     <!--  Datatable -->
-<<<<<<< HEAD
-=======
-
->>>>>>> c8c99453e942ba3b1e698c8c6bacd41c86185225
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
@@ -23,11 +19,11 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <button type="button" class="btn btn-primary float-right" data-toggle="modal"
-<<<<<<< HEAD
+
                             data-target="#modal-lg"><i class="fas fa-plus"></i> Add item</button>
-=======
+
                             data-target="#addModal"><i class="fas fa-plus"></i> Add item</button>
->>>>>>> c8c99453e942ba3b1e698c8c6bacd41c86185225
+
                     </ol>
                 </div>
             </div>
