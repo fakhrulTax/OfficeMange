@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <a href="{{ route('circle.collection.create') }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add Collection</a>
+                        
                     </ol>
                 </div>
             </div>

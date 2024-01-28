@@ -13,6 +13,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
   <link href="{{ asset('jquery-toast/jquery.toast.min.css') }}" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
 
 
 
@@ -70,6 +71,8 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('js/adminlte.min.js') }}"></script>
 <script src="{{ asset('plugins/datepicker/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('js/toastr.min.js') }}"></script>
+  {!! Toastr::message() !!}
 <script type="text/javascript">
   $('#deadline, #challan_date, #audit_date, #expire_date, #deadline, #reopen_date, #disposal_date, #pay_date, #po_challan_date, #issue_date, #hearing_date, #from_date, #to_date').datepicker({
     autoclose: true,

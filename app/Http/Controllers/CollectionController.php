@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Collection;
 use App\Models\Arrear;
+use Toastr;
 
 
 class CollectionController extends Controller
@@ -28,7 +29,7 @@ class CollectionController extends Controller
 
     //Store Collection
     public function store(Request $request)
-    {
+    {        
         $request->validate([
             'type' => 'required',
             'tin' => 'required|digits:12',
@@ -45,7 +46,7 @@ class CollectionController extends Controller
             $arrear = new Arrear();            
             if( !$arrear->checkArrear($request->tin, $request->assessment_year )  )
             {
-                //Toastr::error('There is no arrea for this TIN', 'danger');
+                Toastr::error('There is no arrear for this TIN and Assessment Year', 'danger');
                 return back();
             }            
         }
@@ -74,7 +75,7 @@ class CollectionController extends Controller
 
         ]);
 
-        //Toastr::success('Collection Added Successful', 'success');
+        Toastr::success('Collection Added Successful', 'success');
         return redirect()->route('circle.collection.index');
     } 
 
