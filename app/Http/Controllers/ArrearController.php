@@ -10,8 +10,11 @@ class ArrearController extends Controller
 {
     public function index()
     {
-        $arrears = Arrear::with('stock')->latest()->get();
+        $arrears = Arrear::with('stock')->latest()->get()->groupBy('tin');
 
+        // $arrears = Arrear::with('stock')->latest()->get();
+        
+  
 
         return view('circle.arrear.index', compact('arrears'));
     }
@@ -96,10 +99,8 @@ class ArrearController extends Controller
             ]);
 
             $tin = Arrear::where('id', $request->id)->first();
-    
-           
 
-            //check tin is exist in another row or not
+             //check tin is exist in another row or not
           
             $isExistArrear = Arrear::where('tin', $tin->tin)->where('assessment_year', $request->assessment_year)->first();
 
