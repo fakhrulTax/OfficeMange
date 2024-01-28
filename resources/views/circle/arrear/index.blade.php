@@ -107,7 +107,7 @@
 
                                 <td>{{ $arrear->sum('fine') }}</td>
 
-                                <td>{{ $arrear[0]->circle }}</td>
+                                <td>Circle-{{ $arrear[0]->circle }}</td>
                                 <td>Notice</td>
 
                                 
