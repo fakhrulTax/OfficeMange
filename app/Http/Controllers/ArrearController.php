@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Arrear;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\MyHelper;
+
 class ArrearController extends Controller
 {
     public function index()
@@ -135,5 +136,75 @@ class ArrearController extends Controller
                 'status' => 500
             ]);
          }
+    }
+
+
+    public function CommissionerIndex(){
+
+        $TotalArrear = Arrear::sum('arrear');
+        $TotalFine = Arrear::sum('fine');
+        $GrandArrear = number_format($TotalArrear + $TotalFine);
+
+
+        $disputedArrear = Arrear::where('arrear_type', 'disputed')->sum('arrear');
+        $disputedFine = Arrear::where('arrear_type', 'disputed')->sum('fine');
+        $TotalDisputedArrear = number_format($disputedArrear + $disputedFine);
+
+
+        $UndisputedArrear = Arrear::where('arrear_type', 'undisputed')->sum('arrear');
+        $UndisputedFine = Arrear::where('arrear_type', 'undisputed')->sum('fine');
+        $TotalUndisputedArrear = number_format($UndisputedArrear + $UndisputedFine);
+
+        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear'));
+
+    }
+
+
+    public function CommissionerArrearSort($circle){
+        
+        if($circle == 'all'){
+        $TotalArrear = Arrear::sum('arrear');
+        $TotalFine = Arrear::sum('fine');
+        $GrandArrear = $TotalArrear + $TotalFine;
+
+
+        $disputedArrear = Arrear::where('arrear_type', 'disputed')->sum('arrear');
+        $disputedFine = Arrear::where('arrear_type', 'disputed')->sum('fine');
+        $TotalDisputedArrear = $disputedArrear + $disputedFine;
+
+
+        $UndisputedArrear = Arrear::where('arrear_type', 'undisputed')->sum('arrear');
+        $UndisputedFine = Arrear::where('arrear_type', 'undisputed')->sum('fine');
+        $TotalUndisputedArrear = $UndisputedArrear + $UndisputedFine;
+
+     
+        return response ()->json([
+            'GrandArrear' => number_format($GrandArrear),
+            'TotalDisputedArrear' => number_format($TotalDisputedArrear),
+            'TotalUndisputedArrear' => number_format($TotalUndisputedArrear),
+          
+        ], 200);
+        }else{
+
+            $TotalArrear = Arrear::where('circle', $circle)->sum('arrear');
+            $TotalFine = Arrear::where('circle', $circle)->sum('fine');
+            $GrandArrear = $TotalArrear + $TotalFine;
+
+            $disputedArrear = Arrear::where('circle', $circle)->where('arrear_type', 'disputed')->sum('arrear');
+            $disputedFine = Arrear::where('circle', $circle)->where('arrear_type', 'disputed')->sum('fine');
+            $TotalDisputedArrear = $disputedArrear + $disputedFine;
+
+            $UndisputedArrear = Arrear::where('circle', $circle)->where('arrear_type', 'undisputed')->sum('arrear');
+            $UndisputedFine = Arrear::where('circle', $circle)->where('arrear_type', 'undisputed')->sum('fine');
+            $TotalUndisputedArrear = $UndisputedArrear + $UndisputedFine;
+
+            return response ()->json([
+                'GrandArrear' => number_format($GrandArrear),
+                'TotalDisputedArrear' => number_format($TotalDisputedArrear),
+                'TotalUndisputedArrear' => number_format($TotalUndisputedArrear),
+            ]);
+
+
+        }
     }
 }
