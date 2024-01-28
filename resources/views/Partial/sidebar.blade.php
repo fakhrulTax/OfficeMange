@@ -63,6 +63,16 @@
             </a>
           </li>
           
+          <li class="nav-item">
+            <a href="{{route('circle.collection.index')}}" class="nav-link {{ ( Route::currentRouteName() == 'circle.collection.index' ||  Route::currentRouteName() == 'circle.collection.create')?'active':'' }}">
+              <i class="nav-icon fab fa-speakap text-warning"></i>
+              <p>
+                Collection
+              </p>
+            </a>
+          </li>
+
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
