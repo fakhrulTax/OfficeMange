@@ -57,7 +57,13 @@ Route::middleware(['auth', 'role:technical'])->group(function () {
     Route::get('/technical-dashboard', [TechnicalController::class, 'index']);
 });
 
-Route::middleware(['auth', 'role:commissioner'])->group(function () {
-    Route::get('/commissioner-dashboard', [CommissionerController::class, 'index']);
+Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(function () {
+
+    Route::get('/commissioner-dashboard', [CommissionerController::class, 'index'])->name('dashboard');
+
+    Route::get('commissioner/arrears', [ArrearController::class, 'CommissionerIndex'])->name('arrears');
+
+    Route::get('commissioner/arrears/sort/{circle}', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
+
 });
  
