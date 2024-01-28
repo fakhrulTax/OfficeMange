@@ -24,9 +24,13 @@ class StockController extends Controller
             $request->validate([
                 'tin' => 'required|unique:stocks|min:12|max:12',
                 'name' => 'required',
-                'bangla_name' => 'required',
-                'mobile' => 'min:11|max:11',
             ]);
+
+            if($request->mobile != null){
+                $request->validate([
+                    'mobile' => 'min:11|max:11',
+                ]);
+            }
             //check existing court name for current user
 
             $sort_name = MyHelper::sortName($request->name);
@@ -102,9 +106,13 @@ class StockController extends Controller
 
             $request->validate([
                 'name' => 'required',
-                'bangla_name' => 'required',
-                'mobile' => 'min:11|max:11',
             ]);
+
+            if($request->mobile != null){
+                $request->validate([
+                    'mobile' => 'min:11|max:11',
+                ]);
+            }
             //check existing court name for current user
 
             $sort_name = MyHelper::sortName($request->name);
