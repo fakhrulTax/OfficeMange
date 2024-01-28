@@ -42,14 +42,84 @@
                             <th>Name, Address and TIN</th>
                             <th>Assessment Year</th>
                             <th>Arrear</th>
-                            <th>Comments</th>
+                            <th>Fine</th>
+                            <th>Circle</th>
 
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        @foreach ($arrears as $key => $arrear)
+                        @php
+                            $i = 0
+                        @endphp
+
+                        @foreach ($arrears as $key => $arrear )
+
+                            <tr>
+                                <td>{{  $i+1 }}</td>
+                                <td>
+                                    {{ $arrear[0]->stock->name }} <br>
+                                    {{  str_replace('</p><p>', ', ', strip_tags($arrear[0]->stock->address)) }} <br>
+                                    {{ $arrear[0]->tin }}
+                                    </td>
+
+                                <td>
+
+                                    <table class="table table-bordered table-striped">
+                                        @foreach ($arrear as $key => $ar)
+                                        <tr>
+
+                                            @php
+                                                $year1 = substr($ar->assessment_year, 0, 4);
+                                                $year2 = substr($ar->assessment_year, 4, 4);
+                                            @endphp  
+                                            
+                                                <td>{{ $year1 }} - {{ $year1 }}</td>
+
+                                                <td>{{$ar->arrear}}</td>
+
+                                                <td> 
+
+                                                    <button class="btn btn-danger btn-sm"
+                                        onclick="ArreardEdit({{ $ar->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
+                                                </td>
+
+                                               
+                                                
+                                           
+                                            
+                                        </tr>
+                                        @endforeach
+                                        <tr> <td class="text-bold">Total</td>
+                                            <td class="text-bold" >{{ $arrear->sum('arrear') }}</td>
+                                            <td></td>
+                                        </tr>
+                                       
+
+                                    </table>
+                                    
+                                </td>
+
+                                <td>
+                                    {{ $arrear->sum('arrear') }}
+                                </td>
+
+                                <td>{{ $arrear->sum('fine') }}</td>
+
+                                <td>{{ $arrear[0]->circle }}</td>
+                                <td>Notice</td>
+
+                                
+                            </tr>
+                            @php
+                                $i++
+                            @endphp
+                        @endforeach
+
+
+
+                        {{-- @foreach ($arrears as $key => $arrear)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td>
@@ -67,6 +137,7 @@
                                 <td>{{ $year1}} - {{ $year2 }}</td>
 
                                 <td>{{ $arrear->arrear }}</td>
+                                <td>{{ $arrear->fine }}</td>
 
                                 <td>{{ $arrear->comments }}</td>
 
@@ -83,10 +154,16 @@
 
 
                             </tr>
-                        @endforeach
+                        @endforeach --}}
 
                     </tbody>
                     <tfoot>
+                        <th colspan="3" class="text-center">Total</th>
+
+
+                        <th></th>
+                        <th></th>
+                        <th colspan="2"></th>
 
                     </tfoot>
                 </table>
@@ -125,6 +202,7 @@
                                     <div class="form-group">
                                         <label for="arrear_type"> Arrear Type</label>
                                         <select name="arrear_type" id="arrear_type" class="form-control">
+                                            <option selected disabled>Select Arrear Type</option>
                                             <option value="disputed">Disputed</option>
                                             <option value="undisputed">UnDisputed</option>
                                         </select>
@@ -250,13 +328,65 @@
     <script>
         $(function() {
             $("#example1").DataTable({
+
                 "responsive": true,
                 "lengthChange": true,
                 "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                footerCallback: function (row, data, start, end, display) {
+        let api = this.api();
+ 
+        // Remove the formatting to get integer data for summation
+        let intVal = function (i) {
+            return typeof i === 'string'
+                ? i.replace(/[\$,]/g, '') * 1
+                : typeof i === 'number'
+                ? i
+                : 0;
+        };
+ 
+        // Total over all pages
+        total = api
+            .column([3])
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+
+        
+ 
+        // Total over this page
+        arrearTotal = api
+            .column(3, { page: 'current' })
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+            
+ 
+        // Update footer
+        api.column(3).footer().innerHTML =arrearTotal;
+
+
+         // Fine Total over this page
+         fineTotal = api
+            .column(4, { page: 'current' })
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+
+            // Update footer
+        api.column(4).footer().innerHTML =fineTotal;
+
+
+
+            
+    }
+           
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+ 
 
         });
+        
+
+        
+
+       
     </script>
 
 
