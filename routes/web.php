@@ -55,3 +55,4 @@ Route::middleware(['auth', 'role:technical'])->group(function () {
 Route::middleware(['auth', 'role:commissioner'])->group(function () {
     Route::get('/commissioner-dashboard', [CommissionerController::class, 'index']);
 });
+ 
