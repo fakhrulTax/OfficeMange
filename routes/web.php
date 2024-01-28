@@ -7,6 +7,7 @@ use App\Http\Controllers\RangeController;
 use App\Http\Controllers\TechnicalController;
 use App\Http\Controllers\CommissionerController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\ArrearController;
 
 
 Route::get('/', function () {
