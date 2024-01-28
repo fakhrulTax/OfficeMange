@@ -153,6 +153,7 @@ class StockController extends Controller
                 'status' => 500
             ]);
         }
+>>>>>>> c8c99453e942ba3b1e698c8c6bacd41c86185225
     }
 
 
