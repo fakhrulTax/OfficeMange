@@ -14,7 +14,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="tin">TIN Number</label>
-                                <input type="number" class="form-control" id="tin" name="tin"
+                                <input type="number" class="form-control"
                                     value="{{ $StockInfo->tin }}" readonly >
                             </div>
                         </div>

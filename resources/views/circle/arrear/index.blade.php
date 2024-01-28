@@ -42,14 +42,84 @@
                             <th>Name, Address and TIN</th>
                             <th>Assessment Year</th>
                             <th>Arrear</th>
-                            <th>Comments</th>
+                            <th>Fine</th>
+                            <th>Circle</th>
 
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        @foreach ($arrears as $key => $arrear)
+                        @php
+                            $i = 0
+                        @endphp
+
+                        @foreach ($arrears as $key => $arrear )
+
+                            <tr>
+                                <td>{{  $i+1 }}</td>
+                                <td>
+                                    {{ $arrear[0]->stock->name }} <br>
+                                    {{  str_replace('</p><p>', ', ', strip_tags($arrear[0]->stock->address)) }} <br>
+                                    {{ $arrear[0]->tin }}
+                                    </td>
+
+                                <td>
+
+                                    <table class="table table-bordered table-striped">
+                                        @foreach ($arrear as $key => $ar)
+                                        <tr>
+
+                                            @php
+                                                $year1 = substr($ar->assessment_year, 0, 4);
+                                                $year2 = substr($ar->assessment_year, 4, 4);
+                                            @endphp  
+                                            
+                                                <td>{{ $year1 }} - {{ $year1 }}</td>
+
+                                                <td>{{$ar->arrear}}</td>
+
+                                                <td> 
+
+                                                    <button class="btn btn-danger btn-sm"
+                                        onclick="ArreardEdit({{ $ar->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
+                                                </td>
+
+                                               
+                                                
+                                           
+                                            
+                                        </tr>
+                                        @endforeach
+                                        <tr> <td class="text-bold">Total</td>
+                                            <td class="text-bold" >{{ $arrear->sum('arrear') }}</td>
+                                            <td></td>
+                                        </tr>
+                                       
+
+                                    </table>
+                                    
+                                </td>
+
+                                <td>
+                                    {{ $arrear->sum('arrear') }}
+                                </td>
+
+                                <td>{{ $arrear->sum('fine') }}</td>
+
+                                <td>{{ $arrear[0]->circle }}</td>
+                                <td>Notice</td>
+
+                                
+                            </tr>
+                            @php
+                                $i++
+                            @endphp
+                        @endforeach
+
+
+
+                        {{-- @foreach ($arrears as $key => $arrear)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td>
@@ -67,12 +137,16 @@
                                 <td>{{ $year1}} - {{ $year2 }}</td>
 
                                 <td>{{ $arrear->arrear }}</td>
+                                <td>{{ $arrear->fine }}</td>
 
                                 <td>{{ $arrear->comments }}</td>
 
                                 <td>
                                     <button class="btn btn-danger btn-sm"
-                                        onclick="notice({{ $arrear->id }})">Notice</button>
+                                        onclick="ArreardEdit({{ $arrear->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
+
+                                    <button class="btn btn-info btn-sm"
+                                        onclick="ArreardNotice({{ $arrear->id }})">Notice</button>
                                 </td>
 
 
@@ -80,21 +154,16 @@
 
 
                             </tr>
-                        @endforeach
-
-
-
-
-
-
-
-
-
-
-
+                        @endforeach --}}
 
                     </tbody>
                     <tfoot>
+                        <th colspan="3" class="text-center">Total</th>
+
+
+                        <th></th>
+                        <th></th>
+                        <th colspan="2"></th>
 
                     </tfoot>
                 </table>
@@ -106,7 +175,7 @@
 
 
 
-        {{-- Moda start  --}}
+        {{-- add Modal start  --}}
 
         <div class="modal fade" id="addModal">
             <div class="modal-dialog modal-lg">
@@ -133,6 +202,7 @@
                                     <div class="form-group">
                                         <label for="arrear_type"> Arrear Type</label>
                                         <select name="arrear_type" id="arrear_type" class="form-control">
+                                            <option selected disabled>Select Arrear Type</option>
                                             <option value="disputed">Disputed</option>
                                             <option value="undisputed">UnDisputed</option>
                                         </select>
@@ -206,6 +276,33 @@
             <!-- /.modal-dialog -->
         </div>
 
+
+
+        {{-- Edit Modal Start --}}
+
+        <div class="modal fade" id="editModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit New Arrear</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        
+                    </div>
+                    
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="updateBtn">Save changes</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
     </section>
 @endsection
 
@@ -231,13 +328,65 @@
     <script>
         $(function() {
             $("#example1").DataTable({
+
                 "responsive": true,
                 "lengthChange": true,
                 "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                footerCallback: function (row, data, start, end, display) {
+        let api = this.api();
+ 
+        // Remove the formatting to get integer data for summation
+        let intVal = function (i) {
+            return typeof i === 'string'
+                ? i.replace(/[\$,]/g, '') * 1
+                : typeof i === 'number'
+                ? i
+                : 0;
+        };
+ 
+        // Total over all pages
+        total = api
+            .column([3])
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+
+        
+ 
+        // Total over this page
+        arrearTotal = api
+            .column(3, { page: 'current' })
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+            
+ 
+        // Update footer
+        api.column(3).footer().innerHTML =arrearTotal;
+
+
+         // Fine Total over this page
+         fineTotal = api
+            .column(4, { page: 'current' })
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+
+            // Update footer
+        api.column(4).footer().innerHTML =fineTotal;
+
+
+
+            
+    }
+           
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+ 
 
         });
+        
+
+        
+
+       
     </script>
 
 
@@ -322,5 +471,64 @@
                 }
             })
         });
+
+
+        function ArreardEdit (id) {
+            $.ajax({
+                url: "{{ route('circle.arrearEdit') }}",
+                type: "GET",
+                data: {
+                    id: id
+                },
+                success: function(data) {
+
+                  
+                    $('#editModal').modal('show');
+                    $('#editModal').find('.modal-body').html(data);
+                }
+
+
+            })
+        }
+
+        $(document).ready(function() {
+            $('#updateBtn').on('click', function() {
+                $data = $('#edit-arrear-form').serialize();
+             
+                $.ajax({
+                    url: "{{ route('circle.arrearUpdate') }}",
+                    type: "POST",
+                    data: $data,
+                  
+                    success: function(data) {
+                        if (data.status != 200) {
+
+
+                            $('.error').text(data.message);
+
+                        } else {
+                            
+                            $.toast({
+                                heading: "Success",
+                                text: "Tax Payer Updated successfully",
+                                position: "top-right",
+                                loaderBg: "#5ba035",
+                                icon: "success",
+                                hideAfter: 3e3,
+                                stack: 1,
+
+                            }) ;
+
+                            $('#editModal').modal('hide');
+                            $('#edit-arrear-form')[0].reset();
+                            $('.error').text('');
+                            location.reload();
+
+                        }
+                    }
+                })
+            })
+        })
+
     </script>
 @endpush
