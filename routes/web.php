@@ -8,6 +8,7 @@ use App\Http\Controllers\TechnicalController;
 use App\Http\Controllers\CommissionerController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ArrearController;
+use App\Http\Controllers\CollectionController;
 
 
 Route::get('/', function () {
@@ -27,6 +28,10 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
     Route::get('/stock/edit', [StockController::class, 'edit'])->name('stockEdit');
     Route::post('/stock/edit', [StockController::class, 'update'])->name('stockUpdate');
+
+    Route::get('/collection', [CollectionController::class, 'index'])->name('collection.index');
+    Route::get('/collection/create', [CollectionController::class, 'create'])->name('collection.create');
+    Route::post('/collection/store', [CollectionController::class, 'store'])->name('collection.store');
 
 
     //Tin checker

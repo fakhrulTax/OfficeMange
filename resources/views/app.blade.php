@@ -71,7 +71,7 @@
 <script src="{{ asset('js/adminlte.min.js') }}"></script>
 <script src="{{ asset('plugins/datepicker/bootstrap-datepicker.min.js') }}"></script>
 <script type="text/javascript">
-  $('#deadline, #audit_date, #expire_date, #deadline, #reopen_date, #disposal_date, #pay_date, #po_challan_date, #issue_date, #hearing_date, #from_date, #to_date').datepicker({
+  $('#deadline, #challan_date, #audit_date, #expire_date, #deadline, #reopen_date, #disposal_date, #pay_date, #po_challan_date, #issue_date, #hearing_date, #from_date, #to_date').datepicker({
     autoclose: true,
     format: 'dd-mm-yyyy',
     todayHighlight: true,
