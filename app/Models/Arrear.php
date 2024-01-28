@@ -28,4 +28,17 @@ class Arrear extends Model
         return $this->belongsTo(Stock::class, 'tin', 'tin');
     }
 
+    //Check Arrear available in database
+    public function checkArrear($tin, $assessment_year)
+    {
+        $arrear = Arrear::where('tin',$tin)
+                ->where('assessment_year',$assessment_year)
+                ->get();
+        if(count($arrear))
+        {
+            return $arrear;
+        }
+        return false;
+    }
+
 }
