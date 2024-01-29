@@ -3,6 +3,7 @@
 
 namespace App\Helpers;
 use App\Models\Stock;
+use App\Models\Arrear;
 
 class MyHelper
 {
@@ -28,4 +29,30 @@ class MyHelper
             return false;
         }
     }
+
+
+    public static function calculateArrearSum($circle = null) {
+        $query = Arrear::query();
+    
+        if ($circle !== 'all') {
+            $query->where('circle', $circle);
+        }
+    
+        $totals = $query->selectRaw('SUM(arrear) as total_arrear, SUM(fine) as total_fine')
+                       ->first();
+    
+        $disputed = $query->where('arrear_type', 'disputed')
+                          ->selectRaw('SUM(arrear) as disputed_arrear, SUM(fine) as disputed_fine')
+                          ->first();
+    
+        $undisputed_arrear = $totals->total_arrear - ($disputed->disputed_arrear ?? 0);
+        $undisputed_fine = $totals->total_fine - ($disputed->disputed_fine ?? 0);
+    
+        return $result = [
+            'GrandArrear' => number_format(($totals->total_arrear ?? 0) + ($totals->total_fine ?? 0)),
+            'TotalDisputedArrear' => number_format(($disputed->disputed_arrear ?? 0) + ($disputed->disputed_fine ?? 0)),
+            'TotalUndisputedArrear' => number_format(($undisputed_arrear ?? 0) + ($undisputed_fine ?? 0)),
+        ];
+    }
+    
 }
