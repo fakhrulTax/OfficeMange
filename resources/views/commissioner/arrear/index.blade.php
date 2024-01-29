@@ -16,7 +16,7 @@
                 <form action="" method="POST">
                     @csrf
                     <select name="circle" id="circle" class="form-control" >
-                        <option value="all" >All </option>
+                        <option value="all">All </option>
                         <option value="1">Circle 1</option>
                         <option value="2">Circle 2</option>
                         <option value="3">Circle 3</option>
@@ -92,7 +92,6 @@
         // change function for circle
             $('#circle').change(function() {
                 let circle = $(this).val();
-
                 $.ajax({
                     type: "GET",
                     url: "{{ url('commissioner/arrears/sort') }}"+'/' + circle,
