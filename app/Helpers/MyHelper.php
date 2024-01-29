@@ -4,6 +4,7 @@
 namespace App\Helpers;
 use App\Models\Stock;
 use App\Models\Arrear;
+use Illuminate\Support\Facades\Auth;
 
 class MyHelper
 {
@@ -72,6 +73,32 @@ class MyHelper
 
 
     public static function calculateArrearSum($circle = null) {
+
+        $user = Auth::user();
+    
+        if($user->user_role == 'range' && $circle == 'all') {
+            $circles = self::rangWiseCircle($user->range); 
+    
+            $totals = Arrear::whereIn('circle', $circles)
+                ->selectRaw('SUM(arrear) as total_arrear, SUM(fine) as total_fine')
+                ->first();
+    
+            $disputed = Arrear::whereIn('circle', $circles)
+                ->where('arrear_type', 'disputed')
+                ->selectRaw('SUM(arrear) as disputed_arrear, SUM(fine) as disputed_fine')
+                ->first();
+    
+            $undisputed_arrear = $totals->total_arrear - ($disputed->disputed_arrear ?? 0);
+            $undisputed_fine = $totals->total_fine - ($disputed->disputed_fine ?? 0);
+    
+            return $result = [
+                'GrandArrear' => number_format(($totals->total_arrear ?? 0) + ($totals->total_fine ?? 0)),
+                'TotalDisputedArrear' => number_format(($disputed->disputed_arrear ?? 0) + ($disputed->disputed_fine ?? 0)),
+                'TotalUndisputedArrear' => number_format(($undisputed_arrear ?? 0) + ($undisputed_fine ?? 0)),
+            ];
+    
+        }
+    
         $query = Arrear::query();
     
         if ($circle !== 'all') {
@@ -95,5 +122,24 @@ class MyHelper
         ];
     }
 
+    
+
+
+    public static function rangWiseCircle($range):array
+    {
+        $ranges = [
+            '1' => [1, 2, 3, 4, 5, 6],
+            '2' => [7, 8, 9, 10, 11, 12],
+            '3' => [13, 14, 15, 16, 17],
+            '4' => [18, 19, 20, 21, 22],
+        ];
+    
+        return $ranges[$range];
+      
+    }
+
+   
+    
+    
     
 }
