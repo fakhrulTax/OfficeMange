@@ -139,7 +139,7 @@ class ArrearController extends Controller
     }
 
 
-    public function CommissionerIndex(){
+    public function CommissionerArrear(){
 
 
         $result = MyHelper::calculateArrearSum('all');
