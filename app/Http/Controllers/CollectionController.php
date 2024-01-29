@@ -47,7 +47,7 @@ class CollectionController extends Controller
             if( !$arrear->checkArrear($request->tin, $request->assessment_year )  )
             {
                 Toastr::error('There is no arrear for this TIN and Assessment Year', 'danger');
-                return back();
+                return back()->withInput();
             }            
         }
 

@@ -97,7 +97,7 @@
                           @error('challan_no')
                             <div class="text text-danger">{{ $message }}</div>
                           @enderror
-                          <input type="text" class="form-control" id="challan_no" placeholder="Challan No" name="challan_no" value="{{ old('po_challan_no') }}" required>
+                          <input type="text" class="form-control" id="challan_no" placeholder="Challan No" name="challan_no" value="{{ old('challan_no') }}" required>
                        </div>
                       </div>
 
@@ -107,7 +107,7 @@
                           @error('challan_date')
                             <div class="text text-danger">{{ $message }}</div>
                           @enderror
-                          <input type="text" class="form-control" id="challan_date" placeholder="dd-mm-yyyy" name="challan_date" value="{{ old('po_challan_date') }}" required>
+                          <input type="text" class="form-control" id="challan_date" placeholder="dd-mm-yyyy" name="challan_date" value="{{ old('challan_date') }}" required>
                        </div>
                       </div> 
 
