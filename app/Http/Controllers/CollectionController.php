@@ -45,9 +45,9 @@ class CollectionController extends Controller
 
         if (!$arrear) {
             Toastr::error('There is no arrear for this TIN and Assessment Year', 'danger');
-            return back();
+            return back()->withInput();
         }
-        
+
         //  //Check The Advance is availavle in Advance Table
         // if( $request->type == 'advance' )
         // {
@@ -75,6 +75,57 @@ class CollectionController extends Controller
         Toastr::success('Collection Added Successful', 'success');
         return redirect()->route('circle.collection.index');
     } 
+
+    //Collection Edit
+    public function edit($id)
+    {
+        $collection = Collection::find($id);
+        return view('circle.collection.edit',[
+            'title' => 'Collection|Edit a Collection',
+            'collection' => $collection
+        ]);
+    }
+
+    //Collection Update
+    public function update(Request $request){
+        
+        $request->validate([
+            'type' => 'required',
+            'tin' => 'required|digits:12',
+            'pay_date' => 'required|date',
+            'assessment_year' => 'required|digits:8',
+            'challan_no' => 'required',
+            'challan_date' => 'required',
+        ]);
+
+        //Check The Arrear is availavle in Arrear Table
+
+        $arrear = Arrear::checkArrear($request->tin, $request->assessment_year);
+
+        if (!$arrear) {
+            Toastr::error('There is no arrear for this TIN and Assessment Year', 'danger');
+            return back()->withInput();
+        }
+
+        Collection::where('id', $request->id)->update([
+            'type' => $request->type,
+            'tin' => $request->tin,
+            'assessment_year' => $request->assessment_year,
+            'pay_date' => date('Y-m-d',strtotime($request->pay_date)),
+            'amount' => $request->amount,
+            'challan_no' => $request->challan_no,
+            'challan_date' =>  date('Y-m-d',strtotime($request->challan_date)),
+            'circle' => Auth::user()->circle,
+
+        ]);
+
+        Toastr::success('Collection Update Successful', 'success');
+        return redirect()->route('circle.collection.index');
+
+
+        
+
+    }
 
 
 

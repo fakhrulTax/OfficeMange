@@ -1,10 +1,7 @@
 @extends('app')
 
 @push('css')
-    <!--  Datatable -->
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+   
 @endpush
 
 
@@ -31,28 +28,55 @@
 
         <div class="card">
 
+             @if( count($collections) < 1  )
+
+                <h2 class="text-danger">Sorry! There is no data to show!</h2>
+                
+             @else
+
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-primary table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Type</th>
                             <th>TIN & Name</th>
                             <th>Payment Date</th>
+                            <th>Ass. Year</th>
                             <th>Amount</th>
-                            <th>Challan No.</th>
-                            <th>Challan Date</th>
+                            <th>Challan No & Date</th>
                             <th>Option</th>
                         </tr>
                     </thead>
 
                     <tbody>
 
+                    <?php $sum = 0; ?>
+                    @foreach ($collections as $key => $collection)
+                        <tr>
+                            <td>{{ ++$key }}</td>
+                            <td> {{ $collection->type }}</td>
+                            <td>{{ $collection->tin }} <br>
+                                {{ $collection->stock->name }}
+                            </td>                            
+                            <td>{{ date('d-m-Y',strtotime($collection->pay_date)) }}</td>
+                            <td> {{ $collection->assessment_year }}</td>
+                            <td> {{ $collection->amount }}</td>
+                            <td> {{ $collection->challan_no }} <br>
+                                 {{ date('d-m-Y',strtotime($collection->challan_date)) }}
+                            </td>
+                            <td>
+                                <a href="{{ route('circle.collection.edit',$collection->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                            </td>
+                        </tr>
+                        <?php $sum = $sum + $collection->amount; ?>
+                    @endforeach                 
 
-
-                        
-
+                    <tr>
+                        <td colspan="5">Total</td>
+                        <td colspan="2">{{ $sum }}</td>
+                    </tr>
 
 
                     </tbody>
@@ -62,6 +86,9 @@
                 </table>
             </div>
             <!-- /.card-body -->
+
+            @endif
+
         </div>
         <!-- /.card -->
 
@@ -74,43 +101,7 @@
 
 
 @push('js')
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    <!-- AdminLTE App -->
-
-
-    <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": true,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
-    </script>
-    <script>
-        
+    <script>     
 
 
 
