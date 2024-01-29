@@ -37,13 +37,12 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>TIN</th>
-                            <th>Name, Address</th>
                             <th>Type</th>
-                            <th>File</th>
-                            <th>Rack</th>
-                            <th>Last Return</th>
-                            <th>Circle</th>
+                            <th>TIN & Name</th>
+                            <th>Payment Date</th>
+                            <th>Amount</th>
+                            <th>Challan No.</th>
+                            <th>Challan Date</th>
                             <th>Option</th>
                         </tr>
                     </thead>
