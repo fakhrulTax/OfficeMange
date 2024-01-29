@@ -44,10 +44,6 @@
                   
                         
 
-
-
-
-
                     </select>
                 </form>
             </div>
@@ -96,7 +92,7 @@
                 let circle = $(this).val();
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('commissioner/arrears/sort') }}"+'/' + circle,
+                    url: "{{ url('technical/arrears/sort') }}"+'/' + circle,
                     success: function(data) {
                        
                         $('.arrear').html(data.GrandArrear);
@@ -112,9 +108,7 @@
 
             });
 
-        // $('.arrear').hide();
-        // $('.disputed').hide();
-        // $('.undisputed').hide();
+
       
     });
 
