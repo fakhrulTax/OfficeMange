@@ -35,6 +35,7 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::post('/collection/store', [CollectionController::class, 'store'])->name('collection.store');
     Route::get('/collection/{id}/edit', [CollectionController::class, 'edit'])->name('collection.edit');
 	Route::put('/collection/{id}', [CollectionController::class, 'update'])->name('collection.update');
+	Route::get('/collection/search', [CollectionController::class, 'search'])->name('collection.search');
 
 
     //Tin checker
