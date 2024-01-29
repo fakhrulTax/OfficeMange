@@ -13,35 +13,24 @@
                 <h1 class="m-0">Select Circle</h1>
             </div>
 
+         @php
+            $range  = Auth::user()->range;
+            $ranges =  \App\Helpers\MyHelper::rangWiseCircle($range);
+
+         @endphp
+
+
 
             <div class="col-sm-4">
                 <form action="" method="POST">
                     @csrf
                     <select name="circle" id="circle" class="form-control" >
                         <option value="all">All </option>
-                        <option value="1">Circle 1</option>
-                        <option value="2">Circle 2</option>
-                        <option value="3">Circle 3</option>
-                        <option value="4">Circle 4</option>
-                        <option value="5">Circle 5</option>
-                        <option value="6">Circle 6</option>
-                        <option value="7">Circle 7</option>
-                        <option value="8">Circle 8</option>
-                        <option value="9">Circle 9</option>
-                        <option value="10">Circle 10</option>
-                        <option value="11">Circle 11</option>
-                        <option value="12">Circle 12</option>
-                        <option value="13">Circle 13</option>
-                        <option value="14">Circle 14</option>
-                        <option value="15">Circle 15</option>
-                        <option value="16">Circle 16</option>
-                        <option value="17">Circle 17</option>
-                        <option value="18">Circle 18</option>
-                        <option value="19">Circle 19</option>
-                        <option value="20">Circle 20</option>
-                        <option value="21">Circle 21</option>
-                        <option value="22">Circle 22</option>
-                  
+
+
+                        @foreach ($ranges as $key => $range)
+                            <option value="{{$range}}">Circle {{$range}}</option>
+                        @endforeach
                         
 
                     </select>
