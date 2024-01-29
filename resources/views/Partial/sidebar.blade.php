@@ -64,7 +64,7 @@
           </li>
           
           <li class="nav-item">
-            <a href="{{route('circle.collection.index')}}" class="nav-link {{ ( Route::currentRouteName() == 'circle.collection.index' ||  Route::currentRouteName() == 'circle.collection.create')?'active':'' }}">
+            <a href="{{route('circle.collection.index')}}" class="nav-link {{ ( Route::currentRouteName() == 'circle.collection.index' ||  Route::currentRouteName() == 'circle.collection.create' || Route::currentRouteName() == 'circle.collection.search' )?'active':'' }}">
               <i class="nav-icon fab fa-speakap text-warning"></i>
               <p>
                 Collection

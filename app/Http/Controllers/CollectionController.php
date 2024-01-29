@@ -11,9 +11,44 @@ use Toastr;
 
 class CollectionController extends Controller
 {
+
+    //Search
+    //Search
+    public function search(Request $request)
+    {
+        $collections = Collection::query();
+        if(!empty($request->type))
+        {
+            $collections = $collections->where('type', '=', $request->type);
+        }
+
+        if(!empty($request->tin))
+        {
+            $collections = $collections->where('tin', '=', $request->tin);
+        }
+
+        if(!empty($request->from_date) && !empty($request->to_date))
+        {
+            $from_date = date('Y-m-d', strtotime($request->from_date));
+            $to_date = date('Y-m-d', strtotime($request->to_date));            
+            $collections = $collections->whereBetween('pay_date',[$from_date, $to_date]);
+        }
+        
+        $collections = $collections->where('circle', Auth::user()->circle);
+        $collections = $collections->paginate(100);
+
+        return view('circle.Collection.index',[
+            'title' => 'Collection|Search', 
+            'collections' => $collections,
+            'search' => $request
+        ]);
+    }
+
+
     public function index()
     {
         $collections = Collection::orderBy('id', 'DESC')
+                        ->where('circle', Auth::user()->circle)
                         ->paginate(100);
                         
         return view('circle.collection.index',[
@@ -120,10 +155,7 @@ class CollectionController extends Controller
         ]);
 
         Toastr::success('Collection Update Successful', 'success');
-        return redirect()->route('circle.collection.index');
-
-
-        
+        return redirect()->route('circle.collection.index');       
 
     }
 

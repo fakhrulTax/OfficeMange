@@ -6,6 +6,14 @@ use App\Models\Stock;
 
 class MyHelper
 {
+    //Assessment Year Format
+    public static function assessment_year_format( $number )
+    {
+         return substr($number,0,4).'-'.substr($number,4,8);
+
+    }
+
+    //Short Name
     public static function sortName($name){
         $sort_name = strtolower($name);
         $sort_name = explode(' ', $sort_name);
@@ -30,7 +38,7 @@ class MyHelper
     }
 
     //BD Style Money Comma
-    function moneyFormatBD($num) {
+    public static function moneyFormatBD($num) {
         
         if( $num < 1 )
         {

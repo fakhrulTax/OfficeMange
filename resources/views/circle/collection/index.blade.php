@@ -25,6 +25,50 @@
 
     <section class="content">
 
+        <div class="card">
+            <div class="card-body">
+            <form action="{{ route('circle.collection.search') }}" method="GET">              
+                 <div class="row">
+
+                  <div class="col-md-3">
+                     <div class="form-group">
+                       <input type="number" id="tin" name="tin" placeholder="TIN" class="form-control" value="@if( !empty($search->tin) ){{ $search->tin }}@endif" autofocus>
+                     </div>
+                   </div>
+
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <select class="form-control" name="type" id="type">
+                          <option value="">Select Type</option>
+                          <option value="advance" @if( !empty($search->type) && $search->type =='advance' ){{'selected'}}@endif>Advance</option>
+                          <option value="arrear" @if( !empty($search->type) && $search->type =='arrear' ){{'selected'}}@endif>Arrear</option>
+                          <option value="return_process"@if( !empty($search->type) && $search->type =='return_process' ){{'selected'}}@endif>Return Process</option>
+                        </select>
+                      </div>
+                    </div>
+
+                   <div class="col-md-2">
+                     <div class="form-group">
+                       <input type="text" id="from_date" name="from_date" placeholder="Date From" class="form-control" value="@if( !empty($search->from_date) ){{ date('d-m-Y', strtotime($search->from_date)) }}@endif">
+                     </div>
+                   </div>
+
+                   <div class="col-md-2">
+                     <div class="form-group">
+                       <input type="text" id="to_date" name="to_date" placeholder="To Date" class="form-control"  value="@if( !empty($search->from_date) ){{ date('d-m-Y', strtotime($search->to_date)) }}@endif">
+                     </div>
+                   </div>
+
+                   <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                   </div>
+
+                 </div>
+                 
+               </form>
+            </div>
+        </div>
+
 
         <div class="card">
 
@@ -61,8 +105,8 @@
                                 {{ $collection->stock->name }}
                             </td>                            
                             <td>{{ date('d-m-Y',strtotime($collection->pay_date)) }}</td>
-                            <td> {{ $collection->assessment_year }}</td>
-                            <td> {{ $collection->amount }}</td>
+                            <td> {{ App\Helpers\MyHelper::assessment_year_format($collection->assessment_year) }}</td>
+                            <td> {{ App\Helpers\MyHelper::moneyFormatBD($collection->amount) }}</td>
                             <td> {{ $collection->challan_no }} <br>
                                  {{ date('d-m-Y',strtotime($collection->challan_date)) }}
                             </td>
@@ -75,7 +119,7 @@
 
                     <tr>
                         <td colspan="5">Total</td>
-                        <td colspan="2">{{ $sum }}</td>
+                        <td colspan="3">{{ App\Helpers\MyHelper::moneyFormatBD($sum) }}</td>
                     </tr>
 
 
