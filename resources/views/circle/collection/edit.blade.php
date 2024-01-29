@@ -10,7 +10,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Add Collection</h1>
+                    <h1 class="m-0">Update Collection</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -31,25 +31,26 @@
             <div class="card-body">
 
 
-            <form action="{{ route('circle.collection.store') }}" method="POST">
+            <form action="{{ route('circle.collection.update', $collection->id) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div class="card-body">
                     <div class="row">
 
-                      <div class="col-sm-3">
-                        <div class="form-group">
-                          <label for="tin">Type</label>
-                          @error('type')
-                            <div class="text text-danger">{{ $message }}</div>
-                          @enderror
-                          <select class="form-control" name="type" id="type" required>
-                            <option value="">Select Type</option>
-                            <option value="arrear">Arrear</option>
-                            <option value="advance" <?php (old('type') == 'advance')?'selected':'' ?> >Advance</option>                            
-                            <option value="return_process">Return Process</option>
-                          </select>
-                       </div>
-                      </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="tin">Type</label>
+                                @error('type')
+                                    <div class="text text-danger">{{ $message }}</div>
+                                @enderror
+                                <select class="form-control" name="type" id="type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="advance" <?php if($collection->type=='advance'){echo'selected';} ?> >Advance</option>
+                                    <option value="arrear"  <?php if($collection->type=='arrear'){echo'selected';} ?> >Arrear</option>
+                                    <option value="return_process"  <?php if($collection->type=='return_process'){echo'selected';} ?> >Return Process</option>
+                                </select>
+                            </div>
+                        </div>
 
                       <div class="col-sm-3">
                         <div class="form-group">
@@ -57,7 +58,7 @@
                           @error('pay_date')
                             <div class="text text-danger">{{ $message }}</div>
                           @enderror
-                          <input type="text" class="form-control" id="pay_date" placeholder="dd-mm-yyyy" name="pay_date" value="{{ old('pay_date') }}" required>
+                          <input type="text" class="form-control" id="pay_date" placeholder="dd-mm-yyyy" name="pay_date" value="{{ date('d-m-Y', strtotime($collection->pay_date)) }}" required>
                        </div>
                       </div> 
 
@@ -67,7 +68,7 @@
                           @error('tin')
                             <div class="text text-danger">{{ $message }}</div>
                           @enderror
-                          <input type="nubmer" class="form-control" id="tin" placeholder="TIN" name="tin" value="{{ old('tin') }}" required>
+                          <input type="nubmer" class="form-control" id="tin" placeholder="TIN" name="tin" value="{{ $collection->tin }}" required>
                        </div>
                       </div>
 
@@ -77,7 +78,7 @@
                           @error('assessment_year')
                             <div class="text text-danger">{{ $message }}</div>
                           @enderror
-                          <input type="nubmer" class="form-control" id="assessment_year" placeholder="Assessment Year" name="assessment_year" value="{{ old('assessment_year') }}" required>
+                          <input type="nubmer" class="form-control" id="assessment_year" placeholder="Assessment Year" name="assessment_year" value="{{ $collection->assessment_year }}" required>
                        </div>
                       </div>
 
@@ -87,7 +88,7 @@
                           @error('po_challan_no')
                             <div class="text text-danger">{{ $message }}</div>
                           @enderror
-                          <input type="number" class="form-control" id="amount" placeholder="Amount" name="amount" value="{{ old('amount') }}" required>
+                          <input type="number" class="form-control" id="amount" placeholder="Amount" name="amount" value="{{ $collection->amount }}" required>
                        </div>
                       </div>
 
@@ -97,7 +98,7 @@
                           @error('challan_no')
                             <div class="text text-danger">{{ $message }}</div>
                           @enderror
-                          <input type="text" class="form-control" id="challan_no" placeholder="Challan No" name="challan_no" value="{{ old('challan_no') }}" required>
+                          <input type="text" class="form-control" id="challan_no" placeholder="Challan No" name="challan_no" value="{{ $collection->challan_no }}" required>
                        </div>
                       </div>
 
@@ -107,7 +108,7 @@
                           @error('challan_date')
                             <div class="text text-danger">{{ $message }}</div>
                           @enderror
-                          <input type="text" class="form-control" id="challan_date" placeholder="dd-mm-yyyy" name="challan_date" value="{{ old('challan_date') }}" required>
+                          <input type="text" class="form-control" id="challan_date" placeholder="dd-mm-yyyy" name="challan_date" value="{{ date('d-m-Y', strtotime($collection->challan_date)) }}" required>
                        </div>
                       </div> 
 
@@ -134,8 +135,7 @@
 
 @push('js')
    
-    <script>
-        
+    <script>     
 
 
 
