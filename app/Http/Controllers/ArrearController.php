@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Arrear;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\MyHelper;
+
 class ArrearController extends Controller
 {
     public function index()
@@ -136,4 +137,31 @@ class ArrearController extends Controller
             ]);
          }
     }
+
+
+    public function CommissionerArrear(){
+
+
+        $result = MyHelper::calculateArrearSum('all');
+
+        $GrandArrear = $result['GrandArrear'];
+        $TotalDisputedArrear = $result['TotalDisputedArrear'];
+        $TotalUndisputedArrear = $result['TotalUndisputedArrear'];
+
+        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear'));
+
+    }
+
+
+
+
+    public function CommissionerArrearSort($circle) {
+        $result = MyHelper::calculateArrearSum($circle);
+        
+        return response ()->json($result, 200);
+
+
+    }
+    
+    
 }

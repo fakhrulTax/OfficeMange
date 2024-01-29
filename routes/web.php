@@ -52,16 +52,33 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
 
 
-Route::middleware(['auth', 'role:range'])->group(function () {
-    Route::get('/range-dashboard', [RangeController::class, 'index']);
+Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
+
+    Route::get('/range-dashboard', [RangeController::class, 'index'])->name('dashboard');
+
+
+    Route::get('range/arrears', [RangeController::class, 'RangeArrear'])->name('arrears');
+
+    Route::get('range/arrears/sort/{circle}', [RangeController::class, 'RangeArrearSort'])->name('arrearssort');
 });
 
 
-Route::middleware(['auth', 'role:technical'])->group(function () {
-    Route::get('/technical-dashboard', [TechnicalController::class, 'index']);
+Route::middleware(['auth', 'role:technical'])->name('technical.')->group(function () {
+
+    Route::get('/technical-dashboard', [TechnicalController::class, 'index'])->name('dashboard');
+
+    Route::get('technical/arrears', [TechnicalController::class, 'TechnicalArrear'])->name('arrears');
+
+    Route::get('technical/arrears/sort/{circle}', [TechnicalController::class, 'TechnicalArrearSort'])->name('arrearssort');
 });
 
-Route::middleware(['auth', 'role:commissioner'])->group(function () {
-    Route::get('/commissioner-dashboard', [CommissionerController::class, 'index']);
+Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(function () {
+
+    Route::get('/commissioner-dashboard', [CommissionerController::class, 'index'])->name('dashboard');
+
+    Route::get('commissioner/arrears', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
+
+    Route::get('commissioner/arrears/sort/{circle}', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
+
 });
  

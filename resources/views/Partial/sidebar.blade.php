@@ -32,6 +32,17 @@
         </div>
         --->
       <!-- Sidebar Menu -->
+
+      @php
+          $user = Auth::user();
+      
+          
+      @endphp
+
+
+      {{-- circle sidebar start from here  --}}
+        @if ($user->user_role == 'circle')
+
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
@@ -75,6 +86,134 @@
 
         </ul>
       </nav>
+
+      @endif
+
+
+      {{-- commissioner sidebar start from here   --}}
+      @if ($user->user_role == 'commissioner')
+
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item">
+            <a href="{{ route('commissioner.dashboard') }}" class="nav-link ">
+              <i class="nav-icon fas fa-home text-light"></i>
+              <p>
+                Home
+              </p>
+            </a>
+          </li>   
+          
+          <li class="nav-item">
+            <a href="" class="nav-link ">
+              <i class="nav-icon fas fa-list text-light"></i>
+              <p>
+                Stock
+              </p>
+            </a>
+          </li> 
+
+          <li class="nav-item">
+            <a href="{{route('commissioner.arrears')}}" class="nav-link">
+              <i class="nav-icon fas fa-money-check-alt text-danger"></i>
+              <p>
+                Arrear
+              </p>
+            </a>
+          </li>
+          
+        </ul>
+      </nav>
+        
+      @endif
+
+
+
+       {{-- technical sidebar start from here   --}}
+       @if ($user->user_role == 'technical')
+
+       <nav class="mt-2">
+         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+           <!-- Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library -->
+           <li class="nav-item">
+             <a href="{{ route('technical.dashboard') }}" class="nav-link ">
+               <i class="nav-icon fas fa-home text-light"></i>
+               <p>
+                 Home
+               </p>
+             </a>
+           </li>   
+           
+           <li class="nav-item">
+             <a href="" class="nav-link ">
+               <i class="nav-icon fas fa-list text-light"></i>
+               <p>
+                 Stock
+               </p>
+             </a>
+           </li> 
+ 
+           <li class="nav-item">
+             <a href="{{route('technical.arrears')}}" class="nav-link">
+               <i class="nav-icon fas fa-money-check-alt text-danger"></i>
+               <p>
+                 Arrear
+               </p>
+             </a>
+           </li>
+           
+         </ul>
+       </nav>
+         
+       @endif
+
+
+
+       {{-- Range sidebar start from here   --}}
+       @if ($user->user_role == 'range')
+
+       <nav class="mt-2">
+         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+           <!-- Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library -->
+           <li class="nav-item">
+             <a href="{{ route('range.dashboard') }}" class="nav-link ">
+               <i class="nav-icon fas fa-home text-light"></i>
+               <p>
+                 Home
+               </p>
+             </a>
+           </li>   
+           
+           <li class="nav-item">
+             <a href="" class="nav-link ">
+               <i class="nav-icon fas fa-list text-light"></i>
+               <p>
+                 Stock
+               </p>
+             </a>
+           </li> 
+ 
+           <li class="nav-item">
+             <a href="{{route('range.arrears')}}" class="nav-link">
+               <i class="nav-icon fas fa-money-check-alt text-danger"></i>
+               <p>
+                 Arrear
+               </p>
+             </a>
+           </li>
+           
+         </ul>
+       </nav>
+         
+       @endif
+
+
+
+
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
