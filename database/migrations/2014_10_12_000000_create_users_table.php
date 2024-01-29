@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('mobile_number')->unique();
+            $table->string('range')->nullable();
             $table->integer('circle');
             $table->string('user_role');
             $table->timestamp('email_verified_at')->nullable();
