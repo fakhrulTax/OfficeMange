@@ -123,6 +123,18 @@
               </p>
             </a>
           </li>
+
+
+          <li class="nav-item">
+            <a href="{{route('commissioner.users')}}" class="nav-link {{ Route::currentRouteName() == 'commissioner.users' ?'active':'' }} ">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                Users
+              </p>
+            </a>
+          </li>
+
+         
           
         </ul>
       </nav>

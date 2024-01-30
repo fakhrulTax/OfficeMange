@@ -25,6 +25,10 @@ class User extends Authenticatable
         'circle',
         'user_role',
         'office_name',
+        'designation',
+        'range',
+        'user_otp',
+        'otp_expired_at',
     ];
 
     /**
