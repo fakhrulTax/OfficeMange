@@ -9,6 +9,7 @@ use App\Http\Controllers\CommissionerController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ArrearController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\AppealController;
 
 
 Route::get('/', function () {
@@ -36,6 +37,14 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/collection/{id}/edit', [CollectionController::class, 'edit'])->name('collection.edit');
 	Route::put('/collection/{id}', [CollectionController::class, 'update'])->name('collection.update');
 	Route::get('/collection/search', [CollectionController::class, 'search'])->name('collection.search');
+
+    //Appeal Route
+    Route::get('/appeal', [AppealController::class, 'index'])->name('appeal.index');
+    Route::get('/appeal/create', [AppealController::class, 'create'])->name('appeal.create');
+    Route::post('/appeal/store', [AppealController::class, 'store'])->name('appeal.store');
+    Route::get('/appeal/{id}/edit', [AppealController::class, 'edit'])->name('appeal.edit');
+	Route::put('/appeal/{id}', [AppealController::class, 'update'])->name('appeal.update');
+	Route::get('/appeal/search', [AppealController::class, 'search'])->name('appeal.search');
 
 
     //Tin checker
