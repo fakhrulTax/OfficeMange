@@ -83,6 +83,15 @@
             </a>
           </li>
 
+          <li class="nav-item">
+            <a href="{{route('circle.appeal.index')}}" class="nav-link ">
+              <i class="nav-icon fa fa-bookmark text-primary"></i>
+              <p>
+                Appeal
+              </p>
+            </a>
+          </li>
+
 
         </ul>
       </nav>
