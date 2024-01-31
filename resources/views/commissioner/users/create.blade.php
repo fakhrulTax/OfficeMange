@@ -18,7 +18,7 @@
 
 
 
-                <form action="{{ route('commissioner.user.store') }}" method="POST">
+                <form action="{{ route('commissioner.user.store') }}" id="addUserForm" method="POST">
                     @csrf
 
 
@@ -181,10 +181,9 @@
                             <div class="form-group">
                                 <label for="password">Password <span class="text-danger">*</span> </label>
                                 <input type="password" class="form-control" id="password" name="password" required>
-
-                                @error('password')
-                                <span class="text-danger"> {{ $message }} </span>
-                            @enderror
+                                
+                                <span class="text-danger" id="passwordError"> </span>
+                                
 
                             </div>
                         </div>
@@ -249,6 +248,23 @@
                 $('.range').removeAttr('required')
             }
         })
+    });
+
+
+    $(document).ready(function() {
+        $('#addUserForm').submit(function(event) {
+            var password = $('#password').val();
+            var passwordError = $('#passwordError');
+            var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+            if (!passwordPattern.test(password)) {
+                passwordError.text('Password must be 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.');
+                passwordError.show();
+                event.preventDefault(); // Prevent form submission
+            } else {
+                passwordError.hide();
+            }
+        });
     });
 
 </script>

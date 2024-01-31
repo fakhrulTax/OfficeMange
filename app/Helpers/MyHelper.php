@@ -153,17 +153,48 @@ class MyHelper
        
 
 
-        //this line will be remove
-        return true;
-        //this line will be remove
+        $apiKey = 'igrlK8G7BaluoUkj9Egh';
+        $senderId = '8809617615162';
 
+        $url = 'http://bulksmsbd.net/api/smsapi';
 
-          $response = Http::post('https://api.smsapi.com/send-otp', [
-            'to' => $user->mobile_number,
-            'message' => 'Your OTP is: ' . $otp,
+        $number = $user->mobile_number;
+        $message = 'Your OTP is: ' . $otp;
+
+        $queryParams = http_build_query([
+            'api_key' => $apiKey,
+            'type' => 'text',
+            'number' => $number,
+            'senderid' => $senderId,
+            'message' => $message,
         ]);
 
-          if ($response->successful()) {
+        $url .= '?' . $queryParams;
+
+        // Initialize cURL session
+        $ch = curl_init();
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Only for testing, remove in production
+
+        // Execute cURL request
+        $response = curl_exec($ch);
+
+        // Check for errors
+        if (curl_errno($ch)) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            return response()->json(['error' => $error], 500);
+        }
+
+        // Close cURL session
+        curl_close($ch);
+
+        $data = json_decode($response, true);
+
+          if ($data['response_code'] == 202 ) {
               return true;
           }else{
               return false;

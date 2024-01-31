@@ -31,7 +31,7 @@ class UserController extends Controller
             return view('commissioner.users.create');
         }else{
 
-            Toastr::error('Something went wrong. Please try again.', 'Error');
+            Toastr::error('OTP Sendign failed. Please try again.', 'Error');
             return redirect()->route('commissioner.users');
         }
 
@@ -96,7 +96,7 @@ class UserController extends Controller
             return view('commissioner.users.edit', compact('user'));
         }else{
 
-            Toastr::error('Something went wrong. Please try again.', 'Error');
+            Toastr::error('OTP Sendign failed. Please try again.', 'Error');
             return redirect()->route('commissioner.users');
         }
     }
@@ -169,7 +169,7 @@ class UserController extends Controller
             return view('auth.passwords.reset');
         }else{
 
-            Toastr::error('Something went wrong. Please try again.', 'Error');
+            Toastr::error('OTP Sendign failed. Please try again.', 'Error');
             return redirect()->back();
         }
 
@@ -178,10 +178,16 @@ class UserController extends Controller
         
     }
 
+
+
+
     public function profile(){
         $user = Auth::user();
         return view('auth.profile', compact('user'));
     }
+
+
+
 
     public function passwordReset(Request $request){
         $savedOTP = Auth::user()->user_otp;
@@ -192,11 +198,15 @@ class UserController extends Controller
 
         };
 
+ 
+        
         $request->validate([
-            'password' => 'required',
-            'user_otp' => 'required | digits:6',
-
+            'password' => [
+                'required',
+            ],
+            'user_otp' => 'required|digits:8'  ,
         ]);
+        
 
         User::where('id', Auth::user()->id)->update([
             'password' => bcrypt($request->password),
