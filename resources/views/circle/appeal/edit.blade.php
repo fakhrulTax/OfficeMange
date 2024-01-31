@@ -11,7 +11,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Add Appeal</h1>
+                    <h1 class="m-0">Update Appeal</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -31,8 +31,9 @@
             <!-- /.card-header -->
             <div class="card-body">
 
-                <form action="{{ route('circle.appeal.store') }}" method="POST">
+                <form action="{{ route('circle.appeal.update', $appeal->id) }}" method="POST">
                     @csrf
+                    @method('PUT')
                     <div class="card-body">
                         <!-- Add your form fields here similar to the collection form -->
                         <!-- Example: -->
@@ -46,10 +47,10 @@
                                     @enderror
                                     <select class="form-control" name="type" id="type" required>
                                         <option value="">Select Register Type</option>
-                                        <option value="appeal">Appeal</option>
-                                        <option value="tribunal">Tribunal</option>
-                                        <option value="high_court">High Cour</option>
-                                        <option value="review">Review</option>
+                                        <option value="appeal" {{ ($appeal->type == 'appeal') ? 'selected' : '' }}>Appeal</option>
+                                        <option value="tribunal" {{ ($appeal->type == 'tribunal') ? 'selected' : '' }}>Tribunal</option>
+                                        <option value="high_court"{{ ($appeal->type == 'high_court') ? 'selected' : '' }}>High Cour</option>
+                                        <option value="review" {{ ($appeal->type == 'review') ? 'selected' : '' }}>Review</option>
                                     </select>
                                 </div>
                             </div>
@@ -61,7 +62,7 @@
                                         <div class="text text-danger">{{ $message }}</div>
                                     @enderror
                                     <input type="number" class="form-control" id="tin" placeholder="TIN" name="tin"
-                                        value="{{ old('tin') }}" required>
+                                        value="{{ $appeal->tin }}" required readOnly>
                                 </div>
                             </div>
 
@@ -72,7 +73,7 @@
                                         <div class="text text-danger">{{ $message }}</div>
                                     @enderror
                                     <input type="text" class="form-control" id="appeal_order" placeholder="Appeal Order" name="appeal_order"
-                                        value="{{ old('appeal_order') }}" required>
+                                        value="{{ $appeal->appeal_order }}" required>
                                 </div>
                             </div>
 
@@ -83,7 +84,7 @@
                                         <div class="text text-danger">{{ $message }}</div>
                                     @enderror
                                     <input type="text" class="form-control" id="appeal_order_date" placeholder="Appeal Order Date" name="appeal_order_date"
-                                        value="{{ old('appeal_order_date') }}" required>
+                                        value="{{ date('d-m-Y', strtotime($appeal->appeal_order_date)) }}" required>
                                 </div>
                             </div>
 
@@ -94,7 +95,7 @@
                                         <div class="text text-danger">{{ $message }}</div>
                                     @enderror
                                     <input type="text" class="form-control" id="appeal_disposal_date" placeholder="Appeal Disposal Date" name="appeal_disposal_date"
-                                        value="{{ old('appeal_disposal_date') }}" required>
+                                        value="{{ date('d-m-Y', strtotime($appeal->appeal_disposal_date)) }}" required>
                                 </div>
                             </div>
                             
@@ -105,7 +106,7 @@
                                         <div class="text text-danger">{{ $message }}</div>
                                     @enderror
                                     <input type="number" class="form-control" id="assessment_year" placeholder="202212022" name="assessment_year"
-                                        value="{{ old('assessment_year') }}" required>
+                                        value="{{ $appeal->assessment_year }}" required>
                                 </div>
                             </div>
                             
@@ -116,7 +117,7 @@
                                         <div class="text text-danger">{{ $message }}</div>
                                     @enderror
                                     <input type="number" class="form-control" id="main_income" placeholder="Main Income" name="main_income"
-                                        value="{{ old('main_income') }}" required>
+                                        value="{{ $appeal->main_income }}" required>
                                 </div>
                             </div>
                             
@@ -127,7 +128,7 @@
                                         <div class="text text-danger">{{ $message }}</div>
                                     @enderror
                                     <input type="number" class="form-control" id="main_tax" placeholder="Main Tax" name="main_tax"
-                                        value="{{ old('main_tax') }}" required>
+                                        value="{{ $appeal->main_tax }}" required>
                                 </div>
                             </div>
                             
@@ -137,10 +138,10 @@
                                     @error('arrear_type')
                                         <div class="text text-danger">{{ $message }}</div>
                                     @enderror
-                                    <select class="form-control" name="tax_type" id="arrear_type" required>
+                                    <select class="form-control" name="tax_type" id="tax_type" required readOnly>
                                         <option value="">Select Arrear Type</option>
-                                        <option value="tax">Regular Tax</option>
-                                        <option value="fine">Fine</option>
+                                        <option value="tax" {{ ($appeal->tax_type == 'tax') ? 'selected' : '' }}>Regular Tax</option>
+                                        <option value="fine" {{ ($appeal->tax_type == 'fine') ? 'selected' : '' }}>Fine</option>
                                     </select>
                                 </div>
                             </div>
@@ -152,7 +153,7 @@
                                         <div class="text text-danger">{{ $message }}</div>
                                     @enderror
                                     <input type="number" class="form-control" id="revise_income" placeholder="Revise Income" name="revise_income"
-                                        value="{{ old('revise_income') }}" required>
+                                        value="{{ $appeal->revise_income }}" required>
                                 </div>
                             </div>
                             
@@ -163,7 +164,7 @@
                                         <div class="text text-danger">{{ $message }}</div>
                                     @enderror
                                     <input type="number" class="form-control" id="revise_tax" placeholder="Revise Tax" name="revise_tax"
-                                        value="{{ old('revise_tax') }}" required>
+                                        value="{{ $appeal->revise_tax }}" required>
                                 </div>
                             </div>
 
@@ -192,8 +193,5 @@
    
     <script>
         
-
-
-
     </script>
 @endpush

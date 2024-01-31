@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('assessment_year');
             $table->integer('main_income');
             $table->integer('main_tax');
+            $table->string('tax_type');
             $table->integer('revise_income');
             $table->integer('revise_tax');
             $table->integer('circle');
