@@ -95,7 +95,38 @@ class AppealController extends Controller
     public function update(Request $request){
         
         return 'go';   
+    }
 
+    //Search
+    public function search(Request $request)
+    {
+        $appeals = Appeal::query();
+
+        if(!empty($request->type))
+        {
+            $appeals = $appeals->where('type', '=', $request->type);
+        }
+
+        if(!empty($request->tin))
+        {
+            $appeals = $appeals->where('tin', '=', $request->tin);
+        }
+
+        if(!empty($request->from_date) && !empty($request->to_date))
+        {
+            $from_date = date('Y-m-d', strtotime($request->from_date));
+            $to_date = date('Y-m-d', strtotime($request->to_date));            
+            $appeals = $appeals->whereBetween('appeal_disposal_date',[$from_date, $to_date]);
+        }
+        
+        $appeals = $appeals->where('circle', Auth::user()->circle);
+        $appeals = $appeals->paginate(100);
+
+        return view('circle.appeal.index',[
+            'title' => 'Appeal|Search', 
+            'appeals' => $appeals,
+            'search' => $request
+        ]);
     }
 
 

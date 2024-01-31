@@ -74,7 +74,7 @@
 
              @if( count($collections) < 1  )
 
-                <h2 class="text-danger">Sorry! There is no data to show!</h2>
+                <h2 class="text-danger p-5">Sorry! There is no data to show!</h2>
                 
              @else
 
