@@ -204,7 +204,7 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input type="submit" value="Add User" class="btn btn-primary btn-block">
+                                <input type="submit" value="Update User" class="btn btn-primary btn-block">
                             </div>
                         </div>
 
