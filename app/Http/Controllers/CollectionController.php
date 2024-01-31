@@ -13,7 +13,6 @@ class CollectionController extends Controller
 {
 
     //Search
-    //Search
     public function search(Request $request)
     {
         $collections = Collection::query();
