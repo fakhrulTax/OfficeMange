@@ -84,8 +84,8 @@
           </li>
 
           <li class="nav-item">
-            <a href="{{route('circle.appeal.index')}}" class="nav-link ">
-              <i class="nav-icon fa fa-bookmark text-primary"></i>
+            <a href="{{route('circle.appeal.index')}}" class="nav-link {{ ( Route::currentRouteName() == 'circle.appeal.index' ||  Route::currentRouteName() == 'circle.appeal.create' || Route::currentRouteName() == 'circle.appeal.search' ) ? 'active' : '' }}">
+              <i class="nav-icon fa fa-bookmark text-secondary"></i>
               <p>
                 Appeal
               </p>
