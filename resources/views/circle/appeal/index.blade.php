@@ -131,7 +131,7 @@
                             </td>
                             <td>{{ $appeal->circle }}</td>
                             <td>
-                                <a href="{{ route('circle.appeal.edit',$appeal->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                <a href="{{ route('circle.appeal.edit', $appeal->id) }}" class="btn btn-sm btn-primary">Edit</a>
                             </td>
                         </tr>
                     @endforeach       

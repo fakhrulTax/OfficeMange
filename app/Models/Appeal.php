@@ -19,6 +19,7 @@ class Appeal extends Model
         'assessment_year',
         'main_income',
         'main_tax',
+        'tax_type',
         'revise_income',
         'revise_tax',
         'circle',
