@@ -131,6 +131,12 @@
             </div>
             <!-- /.card-body -->
 
+            <div class="card-footer">
+              <ul class="pagination pagination-sm m-0 float-right">
+                {{ $collections->links("pagination::bootstrap-4") }}
+              </ul>
+            </div>
+
             @endif
 
         </div>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Stock;
 
 class Appeal extends Model
 {
@@ -22,4 +23,9 @@ class Appeal extends Model
         'revise_tax',
         'circle',
     ];
+
+    public function stock()
+    {
+        return $this->belongsTo(Stock::class, 'tin', 'tin');
+    }
 }
