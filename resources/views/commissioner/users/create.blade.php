@@ -189,6 +189,18 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="user_otp">OTP(6 digit) <span class="text-danger">*</span> </label>
+                                <input type="number" class="form-control" id="user_otp" name="user_otp" required>
+
+                                @error('user_otp')
+                                <span class="text-danger"> {{ $message }} </span>
+                            @enderror
+
+                            </div>
+                        </div>
+
                         <div class="col-md-12">
                             <div class="form-group">
                                 <input type="submit" value="Add User" class="btn btn-primary btn-block">

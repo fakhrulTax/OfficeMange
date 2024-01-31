@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use App\Helpers\MyHelper;
 use Toastr;
 
 class UserController extends Controller
@@ -19,12 +22,34 @@ class UserController extends Controller
  
 
     public function userCreate(){
-        return view('commissioner.users.create');
+
+        $otpResponse = MyHelper::sendOtp(Auth::user());
+
+        if($otpResponse){
+
+            Toastr::success('OTP Sending successfully');
+            return view('commissioner.users.create');
+        }else{
+
+            Toastr::error('Something went wrong. Please try again.', 'Error');
+            return redirect()->route('commissioner.users');
+        }
+
+  
+        
     }
 
     public function userStore(Request $request){
+
+        $savedOTP = Auth::user()->user_otp;
+
+        if ($request->user_otp != $savedOTP) {
+            Toastr::error('Invalid OTP. Please try again.', 'Error');
+            return redirect()->route('commissioner.users');
+        }
         
         $request->validate([
+
             'user_role' => 'required',
             'name' => 'required',
             'designation' => 'required',
@@ -33,10 +58,12 @@ class UserController extends Controller
             'password' => 'required',
             'range' => $request->user_role == 'range' ? 'required' : '',
             'circle' => $request->user_role == 'circle' ? 'required' : '',
+            'user_otp' => 'required | digits:6',
         ], [
             'range.required' => 'The range field is required when user Type is "Range".',
             'circle.required' => 'The circle field is required when user Type is "Circle".',
         ]);
+
 
 
 
@@ -53,24 +80,76 @@ class UserController extends Controller
         ]);
         Toastr::success('User Added Successfully!', 'Success');
         return redirect()->route('commissioner.users');
-        
 
-   
-       
 
     }
 
 
     public function userEdit($id){
         $user = User::find($id);
-        return view('commissioner.users.edit', compact('user'));
+
+        $otpResponse = MyHelper::sendOtp(Auth::user());
+
+        if($otpResponse){
+
+            Toastr::success('OTP Sending successfully');
+            return view('commissioner.users.edit', compact('user'));
+        }else{
+
+            Toastr::error('Something went wrong. Please try again.', 'Error');
+            return redirect()->route('commissioner.users');
+        }
+    }
+
+    public function userUpdate(Request $request, $id){
+
+        $savedOTP = Auth::user()->user_otp;
+
+        if ($request->user_otp != $savedOTP) {
+            Toastr::error('Invalid OTP. Please try again.', 'Error');
+            return redirect()->route('commissioner.users');
+        }
+        
+        $request->validate([
+
+            'user_role' => 'required',
+            'name' => 'required',
+            'designation' => 'required',
+            'mobile_number' => 'required | digits:11',
+            'email' => 'required | email',
+            'password' => 'required',
+            'range' => $request->user_role == 'range' ? 'required' : '',
+            'circle' => $request->user_role == 'circle' ? 'required' : '',
+            'user_otp' => 'required | digits:6',
+        ], [
+            'range.required' => 'The range field is required when user Type is "Range".',
+            'circle.required' => 'The circle field is required when user Type is "Circle".',
+        ]);
+
+
+        User::where('id', $id)->update([
+            'user_role' => $request->user_role,
+            'name' => $request->name,
+            'designation' => $request->designation,
+            'mobile_number' => $request->mobile_number,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'range' => $request->range,
+            'circle' => $request->circle,
+
+        ]);
+
+        Toastr::success('User Udated Successfully!', 'Success');
+        return redirect()->route('commissioner.users');
+
+        
     }
 
 
     public function userDelete($id){
-        $user = User::find($id);
-        $user->delete();
-        Toastr::success('User Deleted Successfully!', 'Success');
-        return redirect()->route('commissioner.users');
+
+        return "Delete Functionality will be added soon";
+
+        
     }
 }

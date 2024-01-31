@@ -90,15 +90,13 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('commissioner/users/create', [UserController::class, 'userCreate'])->name('user.create');
 
-    // ->middleware('verifyOTP')
-
     Route::post('commissioner/user/store', [UserController::class, 'userStore'])->name('user.store');
 
     Route::get('commissioner/users/edit/{id}', [UserController::class, 'userEdit'])->name('user.edit');
 
     Route::post('commissioner/user/update/{id}', [UserController::class, 'userUpdate'])->name('user.update');
 
-    Route::get('commissioner/user/delete/{id}', [UserController::class, 'userDelete'])->name('user.delete')->middleware('verifyOTP');
+    Route::get('commissioner/user/delete/{id}', [UserController::class, 'userDelete'])->name('user.delete');
 
 
 });
