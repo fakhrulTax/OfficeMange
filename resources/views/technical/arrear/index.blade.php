@@ -1,5 +1,6 @@
 @extends('app')
 
+@section('title', 'Arrear')
 @push('css')
 @endpush
 
