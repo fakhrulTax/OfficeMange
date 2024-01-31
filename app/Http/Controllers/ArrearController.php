@@ -11,7 +11,7 @@ class ArrearController extends Controller
 {
     public function index()
     {
-        $arrears = Arrear::with('stock')->latest()->get()->groupBy('tin');
+        $arrears = Arrear::where('circle', Auth::user()->circle)->with('stock')->latest()->get()->groupBy('tin');
 
         // $arrears = Arrear::with('stock')->latest()->get();
         
@@ -148,7 +148,9 @@ class ArrearController extends Controller
         $TotalDisputedArrear = $result['TotalDisputedArrear'];
         $TotalUndisputedArrear = $result['TotalUndisputedArrear'];
 
-        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear'));
+        $arrears = Arrear::with('stock')->latest()->get()->groupBy('tin');
+
+        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear', 'arrears' ));
 
     }
 

@@ -119,42 +119,7 @@
 
 
 
-                        {{-- @foreach ($arrears as $key => $arrear)
-                            <tr>
-                                <td>{{ $key + 1 }}</td>
-                                <td>
-
-                                    {{ $arrear->stock->name }} <br>
-                                    {{  str_replace('</p><p>', ', ', strip_tags($arrear->stock->address)) }} <br>
-                                    {{ $arrear->tin }}
-
-
-                                </td>
-                                @php
-                                    $year1 = substr($arrear->assessment_year, 0, 4);
-                                    $year2 = substr($arrear->assessment_year, 4, 4);
-                                @endphp     
-                                <td>{{ $year1}} - {{ $year2 }}</td>
-
-                                <td>{{ $arrear->arrear }}</td>
-                                <td>{{ $arrear->fine }}</td>
-
-                                <td>{{ $arrear->comments }}</td>
-
-                                <td>
-                                    <button class="btn btn-danger btn-sm"
-                                        onclick="ArreardEdit({{ $arrear->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
-
-                                    <button class="btn btn-info btn-sm"
-                                        onclick="ArreardNotice({{ $arrear->id }})">Notice</button>
-                                </td>
-
-
-
-
-
-                            </tr>
-                        @endforeach --}}
+                        
 
                     </tbody>
                     <tfoot>

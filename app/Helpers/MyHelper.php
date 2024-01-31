@@ -4,7 +4,10 @@
 namespace App\Helpers;
 use App\Models\Stock;
 use App\Models\Arrear;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+
+
 
 class MyHelper
 {
@@ -136,6 +139,35 @@ class MyHelper
     
         return $ranges[$range];
       
+    }
+
+
+    public static function sendOtp($user){
+          // Generate OTP
+          $otp = rand(100000, 999999);
+
+          // Store OTP in database
+  
+          User::where('id', $user->id)->update(['user_otp' => $otp, 'otp_expired_at' => now()->addMinutes(5)]);
+  
+       
+
+
+        //this line will be remove
+        return true;
+        //this line will be remove
+
+
+          $response = Http::post('https://api.smsapi.com/send-otp', [
+            'to' => $user->mobile_number,
+            'message' => 'Your OTP is: ' . $otp,
+        ]);
+
+          if ($response->successful()) {
+              return true;
+          }else{
+              return false;
+          }
     }
 
    
