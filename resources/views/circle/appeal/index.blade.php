@@ -79,8 +79,71 @@
              @else
 
             <!-- /.card-header -->
-            
+
+            <div class="card-body">
+                <table id="appeal" class="table table-primary table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Type</th>
+                            <th>TIN & Name</th>
+                            <th>Appeal Order And Date</th>
+                            <th>Disposal Date</th>
+                            <th>Assessment Year</th>
+                            <th>Main Income & Tax</th>
+                            <th>Revise Income & Tax</th>
+                            <th>Reduce</th>
+                            <th>Circle</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    @foreach ($appeals as $key => $appeal)
+                        <tr>
+                            <td>{{ ++$key }}</td>
+                            <td> {{ $appeal->type }}</td>
+                            <td>{{ $appeal->tin }} <br>
+                                {{ $appeal->stock->name }}
+                            </td>                            
+                            <td>
+                              {{ $appeal->appeal_order }} <br>
+                              {{ date('d-m-Y',strtotime($appeal->appeal_order_date)) }}
+                            </td>
+                            <td>{{ date('d-m-Y',strtotime($appeal->appeal_disposal_date)) }}</td>
+                            <td> {{ App\Helpers\MyHelper::assessment_year_format($appeal->assessment_year) }}</td>
+                            <td> 
+                              <span style="text-decoration: underline">{{ App\Helpers\MyHelper::moneyFormatBD($appeal->main_income) }} </span> <br>
+                              {{ App\Helpers\MyHelper::moneyFormatBD($appeal->main_tax) }}
+                            </td>
+                            <td> 
+                            <span style="text-decoration: underline">{{ App\Helpers\MyHelper::moneyFormatBD($appeal->revise_income) }}</span> <br>
+                              {{ App\Helpers\MyHelper::moneyFormatBD($appeal->revise_tax) }}
+                            </td>
+                            <td>
+                              {{ App\Helpers\MyHelper::moneyFormatBD($appeal->main_tax - $appeal->revise_tax) }}
+                            </td>
+                            <td>
+                                <a href="{{ route('circle.appeal.edit',$appeal->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                            </td>
+                        </tr>
+                    @endforeach       
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>   
+             
             <!-- /.card-body -->
+
+            <div class="card-footer">
+              <ul class="pagination pagination-sm m-0 float-right">
+                {{ $appeals->links("pagination::bootstrap-4") }}
+              </ul>
+            </div>
 
             @endif
 
