@@ -148,7 +148,9 @@ class ArrearController extends Controller
         $TotalDisputedArrear = $result['TotalDisputedArrear'];
         $TotalUndisputedArrear = $result['TotalUndisputedArrear'];
 
-        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear'));
+        $arrears = Arrear::with('stock')->latest()->get()->groupBy('tin');
+
+        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear', 'arrears' ));
 
     }
 

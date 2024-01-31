@@ -19,7 +19,7 @@
 
 
 
-                <form action="{{ route('commissioner.user.store') }}" method="POST">
+                <form action="{{ route('commissioner.user.update', $user->id) }}" method="POST">
                     @csrf
 
 
@@ -28,7 +28,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="user_role"> User Type <span class="text-danger">*</span> </label>
-                                <select name="user_role" class="form-control" id="user_role" required>
+                                <select name="user_role" class="form-control" id="user_role" >
                                     <option value="" >Select User Type</option>
 
                                     <option value="range" {{ $user->user_role == 'range' ? 'selected' : '' }} >Range</option>
@@ -54,7 +54,7 @@
                         <div class="col-md-6" id="range">
                             <div class="form-group">
                                 <label for="range"> Range <span class="text-danger">*</span> </label>
-                                <select name="range" class="form-control range" required>
+                                <select name="range" class="form-control range" >
                                     <option value="">Select Range</option>
 
                                     @php
@@ -80,7 +80,7 @@
                         <div class="col-md-6" id="circle">
                             <div class="form-group">
                                 <label for="circle"> Circle <span class="text-danger">*</span> </label>
-                                <select name="circle"class="form-control circle" required>
+                                <select name="circle"class="form-control circle" >
                                     <option value="">Select Circle</option>
 
                                     @php
@@ -108,7 +108,7 @@
                             <div class="form-group">
                                 <label for="name">Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="name" name="name"
-                                    placeholder="Mr. Kasem" value="{{ $user->name }}" required>
+                                    placeholder="Mr. Kasem" value="{{ $user->name }}" >
 
                                 @error('name')
                                     <span class="text-danger"> {{ $message }} </span>
@@ -126,7 +126,7 @@
                             <div class="form-group">
                                 <label for="designation">Designation <span class="text-danger">*</span> </label>
                                 <input type="text" class="form-control" id="designation" name="designation"
-                                    placeholder="Officer" value="{{ $user->designation }}" required>
+                                    placeholder="Officer" value="{{ $user->designation }}" >
 
                                 @error('designation')
                                     <span class="text-danger"> {{ $message }} </span>
@@ -144,7 +144,7 @@
                             <div class="form-group">
                                 <label for="mobile_number">Mobile Number <span class="text-danger">*</span> </label>
                                 <input type="tel" class="form-control" id="mobile_number" name="mobile_number"
-                                    placeholder="01811000000" value="{{ $user->mobile_number }}" required>
+                                    placeholder="01811000000" value="{{ $user->mobile_number }}" >
 
                                     @error('mobile_number')
                                     <span class="text-danger"> {{ $message }} </span>
@@ -169,7 +169,7 @@
                             <div class="form-group">
                                 <label for="email">Email <span class="text-danger">*</span> </label>
                                 <input type="email" class="form-control" id="email" name="email"
-                                    placeholder="abc@gmail.com" value="{{ $user->email }}" required>
+                                    placeholder="abc@gmail.com" value="{{ $user->email }}">
 
                                     @error('email')
                                     <span class="text-danger"> {{ $message }} </span>
@@ -184,6 +184,18 @@
                                 <input type="password" class="form-control" id="password" name="password" required>
 
                                 @error('password')
+                                <span class="text-danger"> {{ $message }} </span>
+                            @enderror
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="user_otp">OTP(6 digit) <span class="text-danger">*</span> </label>
+                                <input type="number" class="form-control" id="user_otp" name="user_otp" required>
+
+                                @error('user_otp')
                                 <span class="text-danger"> {{ $message }} </span>
                             @enderror
 
