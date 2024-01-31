@@ -9,7 +9,12 @@ use App\Http\Controllers\CommissionerController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ArrearController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\OTPController;
+
+
+
 use App\Http\Controllers\AppealController;
+
 
 
 Route::get('/', function () {
@@ -89,5 +94,27 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('commissioner/arrears/sort/{circle}', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
 
+
+    //User routes
+    Route::get('commissioner/users', [UserController::class, 'index'])->name('users');
+
+
+    Route::get('commissioner/users/create', [UserController::class, 'userCreate'])->name('user.create');
+
+    Route::post('commissioner/user/store', [UserController::class, 'userStore'])->name('user.store');
+
+    Route::get('commissioner/users/edit/{id}', [UserController::class, 'userEdit'])->name('user.edit');
+
+    Route::post('commissioner/user/update/{id}', [UserController::class, 'userUpdate'])->name('user.update');
+
+    Route::get('commissioner/user/delete/{id}', [UserController::class, 'userDelete'])->name('user.delete');
+
+
 });
+
+
+
+Route::get('/send-otp', [OTPController::class, 'sendOTP'])->name('sendOTP');
+Route::get('/verify-otp', [OTPController::class, 'showVerifyOTPForm'])->name('verifyOTPForm');
+Route::post('/verify-otp', [OTPController::class, 'verifyOTP'])->name('verifyOTP');
  

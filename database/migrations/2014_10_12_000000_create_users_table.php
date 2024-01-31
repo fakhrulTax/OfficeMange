@@ -17,10 +17,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('designation')->nullable();
             $table->string('mobile_number')->unique();
             $table->string('range')->nullable();
-            $table->integer('circle');
+            $table->integer('circle')->nullable();
             $table->string('user_role');
+            
+            $table->integer('user_otp')->nullable();
+            $table->timestamp('otp_expired_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
