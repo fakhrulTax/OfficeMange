@@ -159,6 +159,17 @@ class ArrearController extends Controller
 
     public function CommissionerArrearSort($circle) {
         $result = MyHelper::calculateArrearSum($circle);
+
+        $arrears = Arrear::with('stock')->where('circle', $circle)->latest()->get()->groupBy('tin');
+
+        $renderTable = view('commissioner.arrear.arrear_table', compact('arrears'))->render();
+
+        return response()->json([
+            'GrandArrear' => $result['GrandArrear'],
+            'TotalDisputedArrear' => $result['TotalDisputedArrear'],
+            'TotalUndisputedArrear' => $result['TotalUndisputedArrear'],
+            'renderTable' => $renderTable
+        ]);
         
         return response ()->json($result, 200);
 

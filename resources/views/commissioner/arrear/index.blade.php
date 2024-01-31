@@ -94,7 +94,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="tbody">
+                        <tbody>
     
                             @php
                                 $i = 0
@@ -116,14 +116,13 @@
                                             @foreach ($arrear as $key => $ar)
                                             <tr>
     
-                                                @php
-                                                    $year1 = substr($ar->assessment_year, 0, 4);
-                                                    $year2 = substr($ar->assessment_year, 4, 4);
-                                                @endphp  
+                                               
                                                 
-                                                    <td>{{ $year1 }} - {{ $year1 }}</td>
+                                                    <td>{{ App\Helpers\MyHelper::assessment_year_format($ar->assessment_year) }}</td>
     
-                                                    <td>{{$ar->arrear}}</td>
+                                                    <td>{{ $ar->arrear_type }}</td>
+                                                    
+                                                    <td class="text-right">{{App\Helpers\MyHelper::moneyFormatBD($ar->arrear)}}</td>
     
                                                     <td> 
     
@@ -133,8 +132,10 @@
    
                                             </tr>
                                             @endforeach
-                                            <tr> <td class="text-bold">Total</td>
-                                                <td class="text-bold" >{{ $arrear->sum('arrear') }}</td>
+                                            <tr> <td colspan="2" class="text-bold text-center">Total</td>
+
+                                                
+                                                <td class="text-bold text-right" >{{ App\Helpers\MyHelper::moneyFormatBD( $arrear->sum('arrear')) }}</td>
                                                 <td></td>
                                             </tr>
                                            
@@ -143,11 +144,11 @@
                                         
                                     </td>
     
-                                    <td>
-                                        {{ $arrear->sum('arrear') }}
+                                    <td class="text-right">
+                                        {{ App\Helpers\MyHelper::moneyFormatBD( $arrear->sum('arrear')) }}
                                     </td>
     
-                                    <td>{{ $arrear->sum('fine') }}</td>
+                                    <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('fine')) }}</td>
     
                                     <td>Circle-{{ $arrear[0]->circle }}</td>
                                     <td>Notice</td>
@@ -169,8 +170,8 @@
     
     
                             <th></th>
-                            <th></th>
-                            <th colspan="2"></th>
+                            <th class="text-right"> </th>
+                            <th colspan="2" class="text-right"></th>
     
                         </tfoot>
                     </table>
@@ -204,6 +205,46 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <!-- AdminLTE App -->
 
+
+    
+<script>
+    $(document).ready(function() {
+
+        // change function for circle
+            $('#circle').change(function() {
+                let circle = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('commissioner/arrears/sort') }}"+'/' + circle,
+                    success: function(data) {
+                       
+                        $('.arrear').html(data.GrandArrear);
+                        $('.disputed').html(data.TotalDisputedArrear);
+                        $('.undisputed').html(data.TotalUndisputedArrear);
+
+                        $('#example1').html(data.renderTable);
+                      
+
+                    }
+
+
+                });
+                
+
+            });
+
+        // $('.arrear').hide();
+        // $('.disputed').hide();
+        // $('.undisputed').hide();
+      
+    });
+
+
+    function numberWithCommas(x) {
+                    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                }
+
+</script>
 
     <script>
         $(function() {
@@ -241,7 +282,7 @@
             
  
         // Update footer
-        api.column(3).footer().innerHTML =arrearTotal;
+        api.column(3).footer().innerHTML = numberWithCommas(arrearTotal);
 
 
          // Fine Total over this page
@@ -251,7 +292,7 @@
             .reduce((a, b) => intVal(a) + intVal(b), 0);
 
             // Update footer
-        api.column(4).footer().innerHTML =fineTotal;
+        api.column(4).footer().innerHTML = numberWithCommas(fineTotal);
 
 
 
@@ -272,37 +313,4 @@
 
 
 
-<script>
-    $(document).ready(function() {
-
-        // change function for circle
-            $('#circle').change(function() {
-                let circle = $(this).val();
-                $.ajax({
-                    type: "GET",
-                    url: "{{ url('commissioner/arrears/sort') }}"+'/' + circle,
-                    success: function(data) {
-                       
-                        $('.arrear').html(data.GrandArrear);
-                        $('.disputed').html(data.TotalDisputedArrear);
-                        $('.undisputed').html(data.TotalUndisputedArrear);
-
-                        $('#tbody').html(data);
-                      
-
-                    }
-
-
-                });
-                
-
-            });
-
-        // $('.arrear').hide();
-        // $('.disputed').hide();
-        // $('.undisputed').hide();
-      
-    });
-
-</script>
 @endpush
