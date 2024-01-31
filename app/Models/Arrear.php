@@ -38,4 +38,35 @@ class Arrear extends Model
         return $arrear->isNotEmpty() ? $arrear : false;
     }
 
+    //Change Arrear Status and Amount
+    public static function updateArrearStatusAmountOrFine($tin, $assessmentYear, $newStatus, $newArrear, $newFine)
+    {
+        // Find the arrear based on TIN and assessment year
+        $arrear = self::where('tin', $tin)
+            ->where('assessment_year', $assessmentYear)
+            ->first();
+
+        // If arrear found, update the status
+        if ($arrear) {
+            $arrear->arrear_type = $newStatus;
+
+            if($newArrear)
+            {
+                $arrear->arrear =  $newArrear;
+            }
+
+            if( $newFine)
+            {
+                $arrear->fine =  $newFine;
+            }
+
+            
+            $arrear->save();
+
+            return true;
+        }
+
+        return false; // Arrear not found
+    }
+
 }
