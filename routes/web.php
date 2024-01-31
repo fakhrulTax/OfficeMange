@@ -117,4 +117,9 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 Route::get('/send-otp', [OTPController::class, 'sendOTP'])->name('sendOTP');
 Route::get('/verify-otp', [OTPController::class, 'showVerifyOTPForm'])->name('verifyOTPForm');
 Route::post('/verify-otp', [OTPController::class, 'verifyOTP'])->name('verifyOTP');
+
+
+Route::get('profile', [UserController::class, 'profile'])->name('profile');
+Route::get('/password-reset', [UserController::class, 'showPasswordResetForm'])->name('passwordResetForm');
+Route::post('/password-reset', [UserController::class, 'passwordReset'])->name('passwordReset');
  

@@ -152,4 +152,60 @@ class UserController extends Controller
 
         
     }
+
+
+
+    public function showPasswordResetForm(){
+
+        if(!Auth::check()){
+            return view('auth.login');
+        }
+
+        $otpResponse = MyHelper::sendOtp(Auth::user());
+
+        if($otpResponse){
+
+            Toastr::success('OTP Sending successfully');
+            return view('auth.passwords.reset');
+        }else{
+
+            Toastr::error('Something went wrong. Please try again.', 'Error');
+            return redirect()->back();
+        }
+
+
+
+        
+    }
+
+    public function profile(){
+        $user = Auth::user();
+        return view('auth.profile', compact('user'));
+    }
+
+    public function passwordReset(Request $request){
+        $savedOTP = Auth::user()->user_otp;
+
+        if ($request->user_otp != $savedOTP) {
+            Toastr::error('Invalid OTP. Please try again.', 'Error');
+            return redirect()->back();
+
+        };
+
+        $request->validate([
+            'password' => 'required',
+            'user_otp' => 'required | digits:6',
+
+        ]);
+
+        User::where('id', Auth::user()->id)->update([
+            'password' => bcrypt($request->password),
+
+        ]);
+
+        Toastr::success('Password Updated Successfully!', 'Success');
+
+        return redirect()->route('profile');
+
+    }
 }

@@ -1,6 +1,13 @@
 @extends('app')
 
+@section('title', 'Arrear')
+
 @push('css')
+    <!--  Datatable -->
+
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endpush
 
 
@@ -87,7 +94,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tbody">
     
                             @php
                                 $i = 0
@@ -123,11 +130,7 @@
                                                         <button class="btn btn-danger btn-sm"
                                             onclick="ArreardEdit({{ $ar->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
                                                     </td>
-    
-                                                   
-                                                    
-                                               
-                                                
+   
                                             </tr>
                                             @endforeach
                                             <tr> <td class="text-bold">Total</td>
@@ -186,6 +189,89 @@
 
 
 @push('js')
+    <!-- DataTables  & Plugins -->
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <!-- AdminLTE App -->
+
+
+    <script>
+        $(function() {
+            $("#example1").DataTable({
+
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                footerCallback: function (row, data, start, end, display) {
+        let api = this.api();
+ 
+        // Remove the formatting to get integer data for summation
+        let intVal = function (i) {
+            return typeof i === 'string'
+                ? i.replace(/[\$,]/g, '') * 1
+                : typeof i === 'number'
+                ? i
+                : 0;
+        };
+ 
+        // Total over all pages
+        total = api
+            .column([3])
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+
+        
+ 
+        // Total over this page
+        arrearTotal = api
+            .column(3, { page: 'current' })
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+            
+ 
+        // Update footer
+        api.column(3).footer().innerHTML =arrearTotal;
+
+
+         // Fine Total over this page
+         fineTotal = api
+            .column(4, { page: 'current' })
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+
+            // Update footer
+        api.column(4).footer().innerHTML =fineTotal;
+
+
+
+            
+    }
+           
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+ 
+
+        });
+        
+
+        
+
+       
+    </script>
+
+
+
+
 <script>
     $(document).ready(function() {
 
@@ -200,6 +286,8 @@
                         $('.arrear').html(data.GrandArrear);
                         $('.disputed').html(data.TotalDisputedArrear);
                         $('.undisputed').html(data.TotalUndisputedArrear);
+
+                        $('#tbody').html(data);
                       
 
                     }
