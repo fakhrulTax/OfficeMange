@@ -1,5 +1,7 @@
 @extends('app')
 
+@section('title', 'Arrear')
+
 @push('css')
     <!--  Datatable -->
 
@@ -70,18 +72,18 @@
                                         @foreach ($arrear as $key => $ar)
                                         <tr>
 
-                                            @php
-                                                $year1 = substr($ar->assessment_year, 0, 4);
-                                                $year2 = substr($ar->assessment_year, 4, 4);
-                                            @endphp  
+                                          
                                             
-                                                <td>{{ $year1 }} - {{ $year1 }}</td>
+                                                <td>{{App\Helpers\MyHelper::assessment_year_format($ar->assessment_year)}} </td>
 
-                                                <td>{{$ar->arrear}}</td>
+                                                <td>{{$ar->arrear_type}}</td>
+                                                <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($ar->arrear)}}</td>
 
-                                                <td> 
+                                                
 
-                                                    <button class="btn btn-danger btn-sm"
+                                                <td class="text-right"> 
+
+                                                    <button class="btn btn-danger btn-sm "
                                         onclick="ArreardEdit({{ $ar->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
                                                 </td>
 
@@ -92,8 +94,10 @@
                                         </tr>
                                         @endforeach
                                         <tr> <td class="text-bold">Total</td>
-                                            <td class="text-bold" >{{ $arrear->sum('arrear') }}</td>
                                             <td></td>
+                                            <td class="text-bold text-right" >{{  App\Helpers\MyHelper::moneyFormatBD($arrear->sum('arrear')) }}</td>
+                                            <td></td>
+                                            
                                         </tr>
                                        
 
@@ -101,11 +105,11 @@
                                     
                                 </td>
 
-                                <td>
-                                    {{ $arrear->sum('arrear') }}
+                                <td class="text-right">
+                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('arrear')) }}
                                 </td>
 
-                                <td>{{ $arrear->sum('fine') }}</td>
+                                <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('fine')) }}</td>
 
                                 <td>Circle-{{ $arrear[0]->circle }}</td>
                                 <td>Notice</td>
@@ -126,8 +130,8 @@
                         <th colspan="3" class="text-center">Total</th>
 
 
-                        <th></th>
-                        <th></th>
+                        <th class="text-right"></th>
+                        <th class="text-right"></th>
                         <th colspan="2"></th>
 
                     </tfoot>
@@ -291,6 +295,11 @@
 
 
     <script>
+        function numberWithCommas(x) {
+                    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                }
+
+                
         $(function() {
             $("#example1").DataTable({
 
@@ -326,7 +335,7 @@
             
  
         // Update footer
-        api.column(3).footer().innerHTML =arrearTotal;
+        api.column(3).footer().innerHTML = numberWithCommas(arrearTotal);
 
 
          // Fine Total over this page
@@ -336,7 +345,7 @@
             .reduce((a, b) => intVal(a) + intVal(b), 0);
 
             // Update footer
-        api.column(4).footer().innerHTML =fineTotal;
+        api.column(4).footer().innerHTML = numberWithCommas(fineTotal);
 
 
 
@@ -391,6 +400,14 @@
                     }
                 })
             });
+
+            function numberWithCommas(x) {
+                x = x.toString();
+                var pattern = /(-?\d+)(\d{3})/;
+                while (pattern.test(x))
+                    x = x.replace(pattern, "$1,$2");
+                return x;
+                    }
 
 
 
