@@ -9,6 +9,7 @@ use App\Http\Controllers\CommissionerController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ArrearController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\MovementController;
 use App\Http\Controllers\OTPController;
 
 
@@ -50,6 +51,11 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/appeal/{id}/edit', [AppealController::class, 'edit'])->name('appeal.edit');
 	Route::put('/appeal/{id}', [AppealController::class, 'update'])->name('appeal.update');
 	Route::get('/appeal/search', [AppealController::class, 'search'])->name('appeal.search');
+
+    //Movement
+    Route::get('/movement', [MovementController::class, 'index'])->name('movement.index');
+    Route::post('/movement/store', [MovementController::class, 'store'])->name('movement.store');
+	Route::put('/movement/{id}', [MovementController::class, 'update'])->name('movement.update');
 
 
     //Tin checker

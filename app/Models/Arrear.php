@@ -38,6 +38,17 @@ class Arrear extends Model
         return $arrear->isNotEmpty() ? $arrear : false;
     }
 
+    //Update Arrear Status
+    public static function updateStatus($tin, array $assessmentYears, $newStatus)
+    {
+        // Update status for matching records
+        self::where('tin', $tin)
+            ->whereIn('assessment_year', $assessmentYears)
+            ->update(['arrear_type' => $newStatus]);
+
+        return 'Status updated successfully';
+    }
+
     //Change Arrear Status and Amount
     public static function updateArrearStatusAmountOrFine($tin, $assessmentYear, $newStatus, $newArrear, $newFine)
     {
