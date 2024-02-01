@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
+
 use App\Helpers\MyHelper;
 use Toastr;
 
@@ -55,7 +58,9 @@ class UserController extends Controller
             'designation' => 'required',
             'mobile_number' => 'required | digits:11 | unique:users',
             'email' => 'required | email | unique:users',
-            'password' => 'required',
+            'password' => ['required', Password::min(8)
+            ->mixedCase()
+            ->symbols()],
             'range' => $request->user_role == 'range' ? 'required' : '',
             'circle' => $request->user_role == 'circle' ? 'required' : '',
             'user_otp' => 'required | digits:6',
@@ -117,7 +122,11 @@ class UserController extends Controller
             'designation' => 'required',
             'mobile_number' => 'required | digits:11',
             'email' => 'required | email',
-            'password' => 'required',
+
+            'password' => ['required', Password::min(8)
+            ->mixedCase()
+            ->symbols()],
+
             'range' => $request->user_role == 'range' ? 'required' : '',
             'circle' => $request->user_role == 'circle' ? 'required' : '',
             'user_otp' => 'required | digits:6',
@@ -156,7 +165,7 @@ class UserController extends Controller
 
 
     public function showPasswordResetForm(){
-
+     
         if(!Auth::check()){
             return view('auth.login');
         }
@@ -190,6 +199,8 @@ class UserController extends Controller
 
 
     public function passwordReset(Request $request){
+
+        
         $savedOTP = Auth::user()->user_otp;
 
         if ($request->user_otp != $savedOTP) {
@@ -198,14 +209,14 @@ class UserController extends Controller
 
         };
 
- 
-        
         $request->validate([
-            'password' => [
-                'required',
-            ],
+            'password' => ['required', Password::min(8)
+            ->mixedCase()
+            ->symbols()],
             'user_otp' => 'required|digits:8'  ,
         ]);
+        
+       
         
 
         User::where('id', Auth::user()->id)->update([
@@ -215,7 +226,8 @@ class UserController extends Controller
 
         Toastr::success('Password Updated Successfully!', 'Success');
 
-        return redirect()->route('profile');
+        Auth::logout();
+        return redirect()->route('login');
 
     }
 }
