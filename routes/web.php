@@ -55,7 +55,10 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     //Movement
     Route::get('/movement', [MovementController::class, 'index'])->name('movement.index');
     Route::post('/movement/store', [MovementController::class, 'store'])->name('movement.store');
+    Route::get('/movement/{id}/edit', [MovementController::class, 'edit'])->name('movement.edit');
 	Route::put('/movement/{id}', [MovementController::class, 'update'])->name('movement.update');
+    Route::get('/movement/{id}/receive', [MovementController::class, 'receive'])->name('movement.receive');
+    Route::put('/movement/receive/{id}', [MovementController::class, 'receiveUpdate'])->name('movement.receive.update');
 
 
     //Tin checker

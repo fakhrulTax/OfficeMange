@@ -28,7 +28,7 @@
         @if( isset($editMovement) )
             @include('pages.Movement.edit')
         @elseif( isset($receiveMovement) )
-            @include('pages.Movement.receive')
+            @include('circle.movement.receive')
         @else              
             @include('circle.movement.create')    
         @endif
@@ -52,7 +52,6 @@
                             <th>Moved Date</th>
                             <th>Office Name</th>
                             <th>Receive Date</th>
-                            <th>Assessment Year</th>
                             <th>Circle</th>
                             <th>Option</th>
                         </tr>
@@ -67,25 +66,22 @@
                             {{ $movement->tin }}<br>
                             {{ $movement->stock->name }}
                         </td>
+                        <td> {{ date('d-m-Y', strtotime($movement->move_date)) }} </td>
+                        <td> {{ $movement->office_name }} </td>
                         <td>
-                          {{ date('d-m-Y', strtotime($movement->move_date)) }}
+                            @if( $movement->receive_date != null )
+
+                            {{ date('d-m-Y', strtotime($movement->receive_date)) }}
+
+                            @else
+
+                            <a href="{{ route('circle.movement.receive', $movement->id) }}" class="btn btn-sm btn-success">Receive</a>
+
+                            @endif
                         </td>
-                        <td>
-                          {{ yearSlice($collection->assessment_year) }}
-                        </td>
-                        <td>
-                          {{ moneyFormatBD($collection->amount) }}
-                        </td>
-                        <td>
-                          {{ $collection->po_challan_no }}
-                        </td>
-                        <td>{{ date('d-m-Y', strtotime($collection->po_challan_date)) }}</td>
-                        <td>{{ date('d-m-Y', strtotime($collection->po_challan_date)) }}</td>
-                        <td>
-                            <a href="{{ route('collection.edit',$collection->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                        </td>
+                        <td>  {{ $movement->circle }} </td>
+                        <td> <a href="{{ route('circle.movement.edit', $movement->id) }}" class="btn btn-sm btn-danger">Edit</a></td>
                       </tr>
-                      <?php $i++; $sum = $sum + $collection->amount; ?>
                     @endforeach
 
                     </tbody>
@@ -115,7 +111,7 @@
     <script>     
         $(document).ready(function() {
             $('#assessment_year').select2({
-                placeholder: 'Select Assessment Year'
+                placeholder: 'Select All Assessment Year'
             });
         });
 

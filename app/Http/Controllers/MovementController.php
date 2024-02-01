@@ -96,7 +96,7 @@ class MovementController extends Controller
         // Validate and update the data
         $request->validate([
             'tin' => 'required|numeric',
-            'move_date' => 'required|date',
+            'move_date' => 'required|date_format:d-m-Y',
             'office_name' => 'required|string',
             'receive_date' => 'nullable|date',
             'assessment_year' => 'nullable|json',
@@ -109,12 +109,28 @@ class MovementController extends Controller
         return redirect()->route('movements.index')->with('success', 'Movement updated successfully!');
     }
 
-    // Remove the specified movement from the database.
-    public function destroy($id)
+    public function receive($id)
     {
-        $movement = Movement::findOrFail($id);
-        $movement->delete();
+        $movements = Movement::orderBy('move_date', 'DESC')->paginate(100);
+        $receiveMovement = Movement::find($id);
+        return view('circle.movement.index')->with([
+                    'title'     => 'Movement Receive',
+                    'movements' => $movements,
+                    'receiveMovement' => $receiveMovement
+        ]);
+    }
 
-        return redirect()->route('movements.index')->with('success', 'Movement deleted successfully!');
+    public function receiveUpdate(Request $request, $id)
+    {
+        $request->validate([
+    		'receive_date' => 'required|date_format:d-m-Y',
+    	]);
+
+    	$movement = Movement::find($id);
+    	$movement->receive_date = date('Y-m-d', strtotime($request->receive_date));
+        $movement->save();
+
+        Toastr::success('File Received successful.', 'success');
+        return redirect()->route('circle.movement.index');
     }
 }
