@@ -47,7 +47,7 @@
           <div class="form-group">
           <select id="assessment_year" name="assessment_year[]" multiple="multiple" class="form-control" value="{{ old( 'move_date') }}" required>
                 @for ($i = 20232024; $i >= 20052006; $i -= 10001)
-                    <option value="{{ $i }}">{{ $i }}</option>
+                    <option value="{{ $i }}" {{ (in_array($i, old('assessment_year') ?? [])) ? 'selected' : '' }}>{{ App\Helpers\MyHelper::assessment_year_format($i) }}</option>
                 @endfor
             </select>
             @error('assessment_year')

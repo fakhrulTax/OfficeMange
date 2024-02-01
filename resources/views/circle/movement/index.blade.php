@@ -2,6 +2,11 @@
 @section('title',$title)
 @push('css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+   <!--  Datatable -->
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endpush
 
 
@@ -26,7 +31,7 @@
     <section class="content">
 
         @if( isset($editMovement) )
-            @include('pages.Movement.edit')
+            @include('circle.movement.edit')
         @elseif( isset($receiveMovement) )
             @include('circle.movement.receive')
         @else              
@@ -67,7 +72,7 @@
                             {{ $movement->stock->name }}
                         </td>
                         <td> {{ date('d-m-Y', strtotime($movement->move_date)) }} </td>
-                        <td> {{ $movement->office_name }} </td>
+                        <td> {{ ucfirst($movement->office_name) }} </td>
                         <td>
                             @if( $movement->receive_date != null )
 
@@ -79,7 +84,7 @@
 
                             @endif
                         </td>
-                        <td>  {{ $movement->circle }} </td>
+                        <td>  {{ 'circle-'.$movement->circle }} </td>
                         <td> <a href="{{ route('circle.movement.edit', $movement->id) }}" class="btn btn-sm btn-danger">Edit</a></td>
                       </tr>
                     @endforeach
@@ -107,13 +112,52 @@
 
 
 @push('js')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- DataTables  & Plugins -->
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script>     
-        $(document).ready(function() {
-            $('#assessment_year').select2({
-                placeholder: 'Select All Assessment Year'
+            $(document).ready(function() {
+
+                $(function() {
+            $("#movement_table").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#movement_table_wrapper .col-md-6:eq(0)');
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
             });
         });
+               
+                $('#assessment_year').select2({
+                    placeholder: 'Select All Assessment Year'
+                });
+
+
+            });
+    
 
     </script>
+
 @endpush

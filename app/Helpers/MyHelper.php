@@ -151,8 +151,6 @@ class MyHelper
           User::where('id', $user->id)->update(['user_otp' => $otp, 'otp_expired_at' => now()->addMinutes(5)]);
   
        
-
-
         $apiKey = 'igrlK8G7BaluoUkj9Egh';
         $senderId = '8809617615162';
 
