@@ -100,7 +100,7 @@
                     <!-- Add icons to the links using the .nav-icon class
      with font-awesome or any other icon font library -->
                     <li class="nav-item">
-                        <a href="{{ route('commissioner.dashboard') }}" class="nav-link ">
+                        <a href="{{ route('commissioner.dashboard') }}" class="nav-link {{ Route::currentRouteName() == 'commissioner.dashboard' ? 'active' : '' }} ">
                             <i class="nav-icon fas fa-home text-light"></i>
                             <p>
                                 Home
@@ -118,7 +118,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('commissioner.arrears') }}" class="nav-link">
+                        <a href="{{ route('commissioner.arrears', 'all') }}" class="nav-link {{ Route::currentRouteName() == 'commissioner.arrears' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-money-check-alt text-danger"></i>
                             <p>
                                 Arrear
@@ -138,8 +138,8 @@
                     
 
                     <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
+                        <a href="{{ route('commissioner.sms') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'commissioner.sms' ? 'active' : '' }} ">
                             <i class="nav-icon fas fa-envelope"></i>
                             <p>
                                 SMS

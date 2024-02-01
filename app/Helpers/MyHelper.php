@@ -5,7 +5,9 @@ namespace App\Helpers;
 use App\Models\Stock;
 use App\Models\Arrear;
 use App\Models\User;
+use App\Models\SMSModel;
 use Illuminate\Support\Facades\Auth;
+
 
 
 
@@ -149,17 +151,35 @@ class MyHelper
           // Store OTP in database
   
           User::where('id', $user->id)->update(['user_otp' => $otp, 'otp_expired_at' => now()->addMinutes(5)]);
-  
-       
+
+          $reciver = $user->mobile_number;
+          $text = 'Your OTP is: ' . $otp;
+          $type = 'otp';
+
+          $response = MyHelper::sendMessage($reciver, $text, $type);
+
+          $data = json_decode($response, true);
+
+          
+
+          if ($data['response_code'] == 202 ) {
+              return true;
+          }else{
+              return false;
+          }
+
+        
+    }
 
 
+    public static function sendMessage($reciver, $text, $type) {
         $apiKey = 'igrlK8G7BaluoUkj9Egh';
         $senderId = '8809617615162';
 
         $url = 'http://bulksmsbd.net/api/smsapi';
 
-        $number = $user->mobile_number;
-        $message = 'Your OTP is: ' . $otp;
+        $number =$reciver;
+        $message = $text;
 
         $queryParams = http_build_query([
             'api_key' => $apiKey,
@@ -192,15 +212,22 @@ class MyHelper
         // Close cURL session
         curl_close($ch);
 
-        $data = json_decode($response, true);
+        SMSModel::create([
+            'sms_body' => $text,
+            'receiver_number' => $reciver,
+            'response'=>  json_encode(json_decode($response)),
+            'sms_type' => $type
+        ]);
 
-          if ($data['response_code'] == 202 ) {
-              return true;
-          }else{
-              return false;
-          }
+        return $response;
     }
 
+
+  
+
+
+
+   
    
     
     

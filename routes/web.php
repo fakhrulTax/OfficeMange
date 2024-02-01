@@ -9,7 +9,8 @@ use App\Http\Controllers\CommissionerController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ArrearController;
 use App\Http\Controllers\CollectionController;
-use App\Http\Controllers\OTPController;
+use App\Http\Controllers\SMSController;
+
 
 
 
@@ -90,9 +91,9 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('/commissioner-dashboard', [CommissionerController::class, 'index'])->name('dashboard');
 
-    Route::get('commissioner/arrears', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
+    Route::get('commissioner/arrears/{circle}', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
 
-    Route::get('commissioner/arrears/sort/{circle}', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
+    Route::post('commissioner/arrear/', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
 
 
     //User routes
@@ -109,6 +110,9 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('commissioner/user/delete/{id}', [UserController::class, 'userDelete'])->name('user.delete');
 
+    //SMS routes
+
+    Route::get('commissioner/sms', [SMSController::class, 'index'])->name('sms');
 
 });
 
