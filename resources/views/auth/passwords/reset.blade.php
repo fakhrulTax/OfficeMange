@@ -1,5 +1,7 @@
 @extends('app')
 
+@section('title', 'Reset Password')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -16,8 +18,14 @@
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control" name="password" required>
-                                <div id="passwordError" class="invalid-feedback" style="display: none;"></div>
+
+                                <div id="passwordError" class="invalid-feedback" style="display: none;">
+                                </div>
+                                @error('password')
+                                <div id="" class="text-danger" style="">{{$message}}</div>
+                                @enderror
                             </div>
+                           
                         </div>
 
                         <div class="row mb-3">
@@ -25,6 +33,10 @@
 
                             <div class="col-md-6">
                                 <input id="user_otp" type="number" class="form-control" name="user_otp" required>
+
+                                @error('user_otp')
+                            <div id="" class="text-danger" style="">{{$message}}</div>
+                            @enderror
                             </div>
                         </div>
 
