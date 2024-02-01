@@ -137,10 +137,14 @@ class ArrearController extends Controller
             ]);
          }
     }
+ 
 
+    public function CommissionerArrear($circle){
 
-    public function CommissionerArrear(){
-
+        $arrears = Arrear::with('stock')->latest()->get()->groupBy('tin');
+        if($circle != 'all'){
+            $arrears = Arrear::with('stock')->where('circle', $circle)->latest()->get()->groupBy('tin');
+        }
 
         $result = MyHelper::calculateArrearSum('all');
 
@@ -148,31 +152,33 @@ class ArrearController extends Controller
         $TotalDisputedArrear = $result['TotalDisputedArrear'];
         $TotalUndisputedArrear = $result['TotalUndisputedArrear'];
 
-        $arrears = Arrear::with('stock')->latest()->get()->groupBy('tin');
+       
 
-        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear', 'arrears' ));
+        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear', 'arrears', 'circle' ));
 
     }
 
 
 
 
-    public function CommissionerArrearSort($circle) {
-        $result = MyHelper::calculateArrearSum($circle);
-
-        $arrears = Arrear::with('stock')->where('circle', $circle)->latest()->get()->groupBy('tin');
-
-        $renderTable = view('commissioner.arrear.arrear_table', compact('arrears'))->render();
-
-        return response()->json([
-            'GrandArrear' => $result['GrandArrear'],
-            'TotalDisputedArrear' => $result['TotalDisputedArrear'],
-            'TotalUndisputedArrear' => $result['TotalUndisputedArrear'],
-            'renderTable' => $renderTable
-        ]);
+    public function CommissionerArrearSort(Request $request ) {
         
-        return response ()->json($result, 200);
+        $circle = $request->circle;
+        if( $circle == 'all'){
+            $arrears = Arrear::with('stock')->latest()->get()->groupBy('tin');
+            $result = MyHelper::calculateArrearSum('all');
+        }else{
+            $arrears = Arrear::with('stock')->where('circle', $circle)->latest()->get()->groupBy('tin');
+            $result = MyHelper::calculateArrearSum($circle);
+        }
 
+        $GrandArrear = $result['GrandArrear'];
+        $TotalDisputedArrear = $result['TotalDisputedArrear'];
+        $TotalUndisputedArrear = $result['TotalUndisputedArrear'];
+
+       
+
+        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear', 'arrears', 'circle' ));
 
     }
     
