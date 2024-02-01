@@ -9,9 +9,13 @@ use App\Http\Controllers\CommissionerController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ArrearController;
 use App\Http\Controllers\CollectionController;
+
 use App\Http\Controllers\MovementController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\OTPController;
+
+use App\Http\Controllers\SMSController;
+
 
 
 
@@ -85,9 +89,9 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
     Route::get('/range-dashboard', [RangeController::class, 'index'])->name('dashboard');
 
 
-    Route::get('range/arrears', [RangeController::class, 'RangeArrear'])->name('arrears');
+    Route::get('range/arrears/{circle}', [RangeController::class, 'RangeArrear'])->name('arrears');
 
-    Route::get('range/arrears/sort/{circle}', [RangeController::class, 'RangeArrearSort'])->name('arrearssort');
+    Route::post('range/arrear', [RangeController::class, 'RangeArrearSort'])->name('arrearssort');
 });
 
 
@@ -95,18 +99,18 @@ Route::middleware(['auth', 'role:technical'])->name('technical.')->group(functio
 
     Route::get('/technical-dashboard', [TechnicalController::class, 'index'])->name('dashboard');
 
-    Route::get('technical/arrears', [TechnicalController::class, 'TechnicalArrear'])->name('arrears');
+    Route::get('technical/arrears/{circle}', [TechnicalController::class, 'TechnicalArrear'])->name('arrears');
 
-    Route::get('technical/arrears/sort/{circle}', [TechnicalController::class, 'TechnicalArrearSort'])->name('arrearssort');
+    Route::post('technical/arrear', [TechnicalController::class, 'TechnicalArrearSort'])->name('arrearssort');
 });
 
 Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(function () {
 
     Route::get('/commissioner-dashboard', [CommissionerController::class, 'index'])->name('dashboard');
 
-    Route::get('commissioner/arrears', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
+    Route::get('commissioner/arrears/{circle}', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
 
-    Route::get('commissioner/arrears/sort/{circle}', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
+    Route::post('commissioner/arrear/', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
 
 
     //User routes
@@ -123,6 +127,10 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('commissioner/user/delete/{id}', [UserController::class, 'userDelete'])->name('user.delete');
 
+    //SMS routes
+
+    Route::get('commissioner/sms', [SMSController::class, 'index'])->name('sms');
+    Route::get('commissioner/sms/delete/{id}', [SMSController::class, 'delete'])->name('sms.delete');
 
 });
 
