@@ -10,6 +10,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\ArrearController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\MovementController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\OTPController;
 
 
@@ -71,6 +72,10 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::post('/arrear', [ArrearController::class, 'store'])->name('arrearStore');
     Route::get('/arrear/edit', [ArrearController::class, 'edit'])->name('arrearEdit');
     Route::post('/arrear/edit', [ArrearController::class, 'update'])->name('arrearUpdate');
+
+    //Settings
+	Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+	Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
 });
 
 
