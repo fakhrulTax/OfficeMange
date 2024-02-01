@@ -15,6 +15,13 @@ class Stock extends Model
         return $this->hasMany(Collection::class, 'tin', 'tin');
     }
 
+    //TIN Check
+    public static function stockCheck($tin)
+    {
+        $stock = self::where('tin', '=', $tin)->first();       
+        return $stock;
+    }
+
 
     protected $fillable = [
         'tin',

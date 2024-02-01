@@ -93,6 +93,25 @@
                             </p>
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('circle.movement.index') }}" class="nav-link {{ (Route::currentRouteName() == 'circle.movement.index' ) ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-running text-warning"></i>
+                            <p>
+                                Movement
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('circle.setting.index') }}" class="nav-link {{ (Route::currentRouteName() == 'circle.setting.index' ) ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                            Settings
+                        </p>
+                        </a>
+                    </li> 
+
                 @endif
 
                 {{-- commissioner sidebar start from here   --}}

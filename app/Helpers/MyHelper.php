@@ -173,6 +173,7 @@ class MyHelper
 
 
     public static function sendMessage($reciver, $text, $type) {
+
         $apiKey = 'igrlK8G7BaluoUkj9Egh';
         $senderId = '8809617615162';
 
