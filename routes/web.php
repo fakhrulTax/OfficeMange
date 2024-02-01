@@ -9,6 +9,11 @@ use App\Http\Controllers\CommissionerController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ArrearController;
 use App\Http\Controllers\CollectionController;
+
+use App\Http\Controllers\MovementController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\OTPController;
+
 use App\Http\Controllers\SMSController;
 
 
@@ -52,6 +57,14 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 	Route::put('/appeal/{id}', [AppealController::class, 'update'])->name('appeal.update');
 	Route::get('/appeal/search', [AppealController::class, 'search'])->name('appeal.search');
 
+    //Movement
+    Route::get('/movement', [MovementController::class, 'index'])->name('movement.index');
+    Route::post('/movement/store', [MovementController::class, 'store'])->name('movement.store');
+    Route::get('/movement/{id}/edit', [MovementController::class, 'edit'])->name('movement.edit');
+	Route::put('/movement/{id}', [MovementController::class, 'update'])->name('movement.update');
+    Route::get('/movement/{id}/receive', [MovementController::class, 'receive'])->name('movement.receive');
+    Route::put('/movement/receive/{id}', [MovementController::class, 'receiveUpdate'])->name('movement.receive.update');
+
 
     //Tin checker
 
@@ -63,6 +76,10 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::post('/arrear', [ArrearController::class, 'store'])->name('arrearStore');
     Route::get('/arrear/edit', [ArrearController::class, 'edit'])->name('arrearEdit');
     Route::post('/arrear/edit', [ArrearController::class, 'update'])->name('arrearUpdate');
+
+    //Settings
+	Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+	Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
 });
 
 
