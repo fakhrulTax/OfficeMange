@@ -174,7 +174,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('technical.arrears') }}" class="nav-link">
+                        <a href="{{ route('technical.arrears', 'all') }}" class="nav-link">
                             <i class="nav-icon fas fa-money-check-alt text-danger"></i>
                             <p>
                                 Arrear
@@ -192,7 +192,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="{{ route('range.dashboard') }}" class="nav-link ">
+                    <a href="{{ route('range.dashboard') }}" class="nav-link {{ Route::currentRouteName() == 'range.dashboard' ? 'active' : '' }} ">
                         <i class="nav-icon fas fa-home text-light"></i>
                         <p>
                             Home
@@ -210,7 +210,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('range.arrears') }}" class="nav-link">
+                    <a href="{{ route('range.arrears', 'all') }}" class="nav-link {{ Route::currentRouteName() == 'range.arrears' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-money-check-alt text-danger"></i>
                         <p>
                             Arrear

@@ -58,7 +58,7 @@
                             <td>{{ isset($response->response_code) ? $response->response_code : '' }}</td>
                             <td>{{ isset($response->success_message) ? $response->success_message : (isset($response->error_message) ? $response->error_message : '') }}</td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-danger">Action</a>
+                                <a href="{{ route('commissioner.sms.delete', $sms->id)}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')" >Delete</a>
                             </td>
                         </tr>
                     @endforeach
