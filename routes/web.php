@@ -39,7 +39,12 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::post('/stock', [StockController::class, 'store'])->name('stockStore');
 
     Route::get('/stock/edit', [StockController::class, 'edit'])->name('stockEdit');
+    
     Route::post('/stock/edit', [StockController::class, 'update'])->name('stockUpdate');
+
+    Route::get('stock/view/{id}', [StockController::class, 'view'])->name('stock.view');
+    Route::get('/stock/editbyid', [StockController::class, 'stockEditByid'])->name('stockEditByid');
+    Route::post('/stock/editbyid', [StockController::class, 'stockUpdateByid'])->name('stockUpdateByid');
 
     //Collection Route
     Route::get('/collection', [CollectionController::class, 'index'])->name('collection.index');

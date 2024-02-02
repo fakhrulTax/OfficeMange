@@ -88,6 +88,14 @@ class StockController extends Controller
 
     }
 
+    public function stockEditByid(Request $request){
+
+ 
+        $StockInfo = Stock::find($request->id);
+        return view('circle.stock.edit_modal2', compact('StockInfo'))->render();
+
+    }
+
 
 
     public function update(Request $request){
@@ -157,6 +165,64 @@ class StockController extends Controller
 
 
 
+    public function stockUpdateByid(Request $request){
+        try {
+
+    
+            $stock = Stock::find($request->id);
+
+            if(!$stock){
+                return response()->json([
+                    'message' => 'Tax payer not found',
+                    'status' => 404
+                ]);
+            }
+
+
+
+            if($request->mobile != null){
+                $request->validate([
+                    'mobile' => 'min:11|max:11',
+                ]);
+            }
+            //check existing court name for current user
+
+            $sort_name = MyHelper::sortName($request->name);
+           
+            if($request->address_line_one != null && $request->address_line_two != null && $request->address_line_three != null){
+               
+                // $address = $request->address_line_one . ' | ' . $request-> address_line_two . ' | '. $request->address_line_three;
+
+                $address = '<p>'. $request->address_line_one .'</p>, <p>' . $request-> address_line_two .'</p>, <p>' . $request->address_line_three .'</p>';
+            }else{
+
+                $address = null;
+            }
+
+            
+
+            $stock->update([
+                'bangla_name' => $request->bangla_name,
+                'mobile'=>$request->mobile,
+                'address'=> $address,
+            ]);
+
+            return response()->json([
+                'message' => 'Tax payer updated successfully',
+                'status' => 200
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage(),
+                'status' => 500
+            ]);
+        }
+    }
+
+
+
+
 
 
     public function tinChecker($tin){
@@ -171,5 +237,15 @@ class StockController extends Controller
                 'status' => 404
             ]);
         }
+    }
+
+
+
+
+
+    public function view($id){
+
+        $stock = Stock::find($id);
+        return view('circle.stock.view', compact('stock'));
     }
 }
