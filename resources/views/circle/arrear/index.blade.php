@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Arrear({{count($arrears)}})</h1>
+                    <h1 class="m-0">Arrear({{ count($arrears) }})</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -37,6 +37,9 @@
 
             <!-- /.card-header -->
             <div class="card-body">
+               
+
+
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -53,56 +56,60 @@
                     <tbody>
 
                         @php
-                            $i = 0
+                            $i = 0;
                         @endphp
 
-                        @foreach ($arrears as $key => $arrear )
-
+                        @foreach ($arrears as $key => $arrear)
                             <tr>
-                                <td>{{  $i+1 }}</td>
+                                <td>{{ $i + 1 }}</td>
                                 <td>
                                     {{ $arrear[0]->stock->name }} <br>
-                                    {{  str_replace('</p><p>', ', ', strip_tags($arrear[0]->stock->address)) }} <br>
+                                    {{ str_replace('</p><p>', ', ', strip_tags($arrear[0]->stock->address)) }} <br>
                                     {{ $arrear[0]->tin }}
-                                    </td>
+                                </td>
 
                                 <td>
 
                                     <table class="table table-bordered table-striped">
                                         @foreach ($arrear as $key => $ar)
-                                        <tr>
+                                            <tr>
 
-                                          
-                                            
-                                                <td>{{App\Helpers\MyHelper::assessment_year_format($ar->assessment_year)}} </td>
 
-                                                <td>{{$ar->arrear_type}}</td>
-                                                <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($ar->arrear)}}</td>
 
-                                                
-
-                                                <td class="text-right"> 
-
-                                                    <button class="btn btn-danger btn-sm "
-                                        onclick="ArreardEdit({{ $ar->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
+                                                <td>{{ App\Helpers\MyHelper::assessment_year_format($ar->assessment_year) }}
                                                 </td>
 
-                                               
-                                                
-                                           
-                                            
-                                        </tr>
+                                                <td>{{ $ar->arrear_type }}</td>
+                                                <td class="text-right">
+                                                    {{ App\Helpers\MyHelper::moneyFormatBD($ar->arrear) }}</td>
+
+
+
+                                                <td class="text-right">
+
+                                                    <button class="btn btn-danger btn-sm "
+                                                        onclick="ArreardEdit({{ $ar->id }})" data-toggle="modal"
+                                                        data-target="#editModal">Edit</button>
+                                                </td>
+
+
+
+
+
+                                            </tr>
                                         @endforeach
-                                        <tr> <td class="text-bold">Total</td>
+                                        <tr>
+                                            <td class="text-bold">Total</td>
                                             <td></td>
-                                            <td class="text-bold text-right" >{{  App\Helpers\MyHelper::moneyFormatBD($arrear->sum('arrear')) }}</td>
+                                            <td class="text-bold text-right">
+                                                {{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('arrear')) }}</td>
                                             <td></td>
-                                            
+
                                         </tr>
-                                       
+
 
                                     </table>
-                                    
+
                                 </td>
 
                                 <td class="text-right">
@@ -114,16 +121,16 @@
                                 <td>Circle-{{ $arrear[0]->circle }}</td>
                                 <td>Notice</td>
 
-                                
+
                             </tr>
                             @php
-                                $i++
+                                $i++;
                             @endphp
                         @endforeach
 
 
 
-                        
+
 
                     </tbody>
                     <tfoot>
@@ -181,8 +188,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="tin">TIN Number</label>
-                                        <input type="number" class="form-control text-danger" id="tin"
-                                            name="tin" placeholder="6540656206">
+                                        <input type="number" class="form-control text-danger" id="tin" name="tin"
+                                            placeholder="6540656206">
                                     </div>
                                 </div>
 
@@ -260,9 +267,9 @@
                     </div>
                     <div class="modal-body">
 
-                        
+
                     </div>
-                    
+
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" id="updateBtn">Save changes</button>
@@ -291,15 +298,16 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
     <!-- AdminLTE App -->
 
 
     <script>
         function numberWithCommas(x) {
-                    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-                }
+            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        }
 
-                
+
         $(function() {
             $("#example1").DataTable({
 
@@ -307,60 +315,66 @@
                 "lengthChange": true,
                 "autoWidth": false,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                footerCallback: function (row, data, start, end, display) {
-        let api = this.api();
- 
-        // Remove the formatting to get integer data for summation
-        let intVal = function (i) {
-            return typeof i === 'string'
-                ? i.replace(/[\$,]/g, '') * 1
-                : typeof i === 'number'
-                ? i
-                : 0;
-        };
- 
-        // Total over all pages
-        total = api
-            .column([3])
-            .data()
-            .reduce((a, b) => intVal(a) + intVal(b), 0);
+                footerCallback: function(row, data, start, end, display) {
+                    let api = this.api();
 
-        
- 
-        // Total over this page
-        arrearTotal = api
-            .column(3, { page: 'current' })
-            .data()
-            .reduce((a, b) => intVal(a) + intVal(b), 0);
-            
- 
-        // Update footer
-        api.column(3).footer().innerHTML = numberWithCommas(arrearTotal);
+                    // Remove the formatting to get integer data for summation
+                    let intVal = function(i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i :
+                            0;
+                    };
 
-
-         // Fine Total over this page
-         fineTotal = api
-            .column(4, { page: 'current' })
-            .data()
-            .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-            // Update footer
-        api.column(4).footer().innerHTML = numberWithCommas(fineTotal);
+                    // Total over all pages
+                    total = api
+                        .column([3])
+                        .data()
+                        .reduce((a, b) => intVal(a) + intVal(b), 0);
 
 
 
-            
-    }
-           
+                    // Total over this page
+                    arrearTotal = api
+                        .column(3, {
+                            page: 'current'
+                        })
+                        .data()
+                        .reduce((a, b) => intVal(a) + intVal(b), 0);
+
+
+                    // Update footer
+                    api.column(3).footer().innerHTML = numberWithCommas(arrearTotal);
+
+
+                    // Fine Total over this page
+                    fineTotal = api
+                        .column(4, {
+                            page: 'current'
+                        })
+                        .data()
+                        .reduce((a, b) => intVal(a) + intVal(b), 0);
+
+                    // Update footer
+                    api.column(4).footer().innerHTML = numberWithCommas(fineTotal);
+
+
+
+
+                }
+
+
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
- 
+
+
+
 
         });
-        
+
+
 
         
-
-       
     </script>
 
 
@@ -379,7 +393,7 @@
 
                             $('.error').text(data.message);
                         } else {
-                            
+
                             $.toast({
                                 heading: "Success",
                                 text: "Tax Payer Added successfully",
@@ -407,7 +421,7 @@
                 while (pattern.test(x))
                     x = x.replace(pattern, "$1,$2");
                 return x;
-                    }
+            }
 
 
 
@@ -455,7 +469,7 @@
         });
 
 
-        function ArreardEdit (id) {
+        function ArreardEdit(id) {
             $.ajax({
                 url: "{{ route('circle.arrearEdit') }}",
                 type: "GET",
@@ -464,7 +478,7 @@
                 },
                 success: function(data) {
 
-                  
+
                     $('#editModal').modal('show');
                     $('#editModal').find('.modal-body').html(data);
                 }
@@ -476,12 +490,12 @@
         $(document).ready(function() {
             $('#updateBtn').on('click', function() {
                 $data = $('#edit-arrear-form').serialize();
-             
+
                 $.ajax({
                     url: "{{ route('circle.arrearUpdate') }}",
                     type: "POST",
                     data: $data,
-                  
+
                     success: function(data) {
                         if (data.status != 200) {
 
@@ -489,7 +503,7 @@
                             $('.error').text(data.message);
 
                         } else {
-                            
+
                             $.toast({
                                 heading: "Success",
                                 text: "Tax Payer Updated successfully",
@@ -499,7 +513,7 @@
                                 hideAfter: 3e3,
                                 stack: 1,
 
-                            }) ;
+                            });
 
                             $('#editModal').modal('hide');
                             $('#edit-arrear-form')[0].reset();
@@ -511,6 +525,5 @@
                 })
             })
         })
-
     </script>
 @endpush

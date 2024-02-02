@@ -73,8 +73,8 @@
                                 <td>
                                     <button class="btn btn-primary btn-sm"
                                         onclick="edit({{ $stock->id }})">Edit</button>
-                                    <button class="btn btn-success btn-sm"
-                                        onclick="view({{ $stock->id }})">View</button>
+                                    <a href="{{ route('circle.stock.view', $stock->id) }}" class="btn btn-success btn-sm" 
+                                      >View</a>
                                     <button class="btn btn-danger btn-sm"
                                         onclick="notice({{ $stock->id }})">Notice</button>
                                 </td>
