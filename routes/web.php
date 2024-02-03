@@ -124,6 +124,11 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::put('/forward_dairy/{id}/update_status', [TaskController::class, 'updateStatus'])->name('task.updateStatus');
 
 
+    //Collection routes
+    Route::get('commissioner/collection', [CollectionController::class, 'CommissionerCollectionsindex'])->name('collection.index');
+    
+    Route::get('commissioner/collection/search', [CollectionController::class, 'CommissionerCollectionsSearch'])->name('collection.search');
+
     //User routes
     Route::get('commissioner/users', [UserController::class, 'index'])->name('users');
 
