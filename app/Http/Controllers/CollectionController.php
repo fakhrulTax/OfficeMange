@@ -160,5 +160,52 @@ class CollectionController extends Controller
 
 
 
+    public function CommissionerCollectionsindex(){
+        $collections = Collection::orderBy('id', 'DESC')
+        ->paginate(100);
+
+        
+        return view('commissioner.collection.index',[
+        'title' => 'Collection|All Collection', 
+        'collections' => $collections
+]);
+    }
+
+
+    public function CommissionerCollectionsSearch(Request $request){
+        $collections = Collection::query();
+        if(!empty($request->type))
+        {
+            $collections = $collections->where('type', '=', $request->type);
+        }
+
+        if(!empty($request->tin))
+        {
+            $collections = $collections->where('tin', '=', $request->tin);
+        }
+
+        if(!empty($request->from_date) && !empty($request->to_date))
+        {
+            $from_date = date('Y-m-d', strtotime($request->from_date));
+            $to_date = date('Y-m-d', strtotime($request->to_date));            
+            $collections = $collections->whereBetween('pay_date',[$from_date, $to_date]);
+        }
+        if(!empty($request->circle))
+        {
+            $collections = $collections->where('circle', '=', $request->circle);
+        }
+
+        $collections = $collections->paginate(100);
+
+        return view('commissioner.Collection.index',[
+            'title' => 'Collection|Search', 
+            'collections' => $collections,
+            'search' => $request
+        ]);
+
+    }
+
+
+
 
 }
