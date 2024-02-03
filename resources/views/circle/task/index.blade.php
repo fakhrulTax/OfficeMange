@@ -76,23 +76,25 @@
                     <tbody>
                         @foreach($tasks as $task)
                         <tr>
-                            <td>@if ($task->status) <del>{{ $task->type }}</del> @else{{ $task->type }}@endif</td>
-                            <td>@if ($task->status) <del>{!! $task->description !!}</del> @else {!! $task->description !!}@endif</td>
+                            <td style="{{ ($task->priority == 1) ? 'color:blue' : '' }}">@if ($task->status) <del>{{ $task->type }}</del> @else{{ $task->type }}@endif</td>
+                            <td style="{{ ($task->priority == 1) ? 'color:blue' : '' }}">@if ($task->status) <del>{!! $task->description !!}</del> @else {!! $task->description !!}@endif</td>
                             <td style="@if ($task->deadline <= now()) color: red; @endif">{{ date('d-m-Y', strtotime($task->deadline)) }}</td>
                             <td>
-                            @if (!$task->status)
-                                <form method="POST" action="{{ route('circle.task.updateStatus', $task->id) }}" class="d-inline">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-success btn-sm">Done</button>
-                                </form>
-                            @else
-                            <form method="POST" action="{{ route('circle.task.destroy', $task->id) }}" class="d-inline">
-                                @csrf
-                                @method('DELETE')                              
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
-                                </form>
-                            @endif
+                                @if($task->type != 'commissioner' && $task->type != 'rage' && $task->type != 'technical')
+                                    @if (!$task->status)
+                                        <form method="POST" action="{{ route('circle.task.updateStatus', $task->id) }}" class="d-inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-success btn-sm">Done</button>
+                                        </form>
+                                    @else
+                                    <form method="POST" action="{{ route('circle.task.destroy', $task->id) }}" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')                              
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
+                                        </form>
+                                    @endif
+                                @endif
                             </td>
                         </tr>
                         @endforeach

@@ -25,7 +25,7 @@ class TaskController extends Controller
 
         });
     
-        $perPage = 1;
+        $perPage = 100;
         $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage();
         $currentPageTasks = $filteredTasks->slice(($currentPage - 1) * $perPage, $perPage)->all();
         $paginatedTasks = new \Illuminate\Pagination\LengthAwarePaginator($currentPageTasks, count($filteredTasks), $perPage, $currentPage);
