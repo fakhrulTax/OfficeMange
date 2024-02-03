@@ -53,10 +53,14 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h3 >File</h3>
+                    <h3 >Notice</h3>
                 </div>
                 <div class="card-body">
-
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#oneEightyThree">183(3)</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,7 +100,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-
+@include('circle.stock.modal.one_eighty_three');
 
 
 @endsection

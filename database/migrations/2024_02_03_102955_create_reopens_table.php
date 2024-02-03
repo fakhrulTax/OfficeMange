@@ -24,6 +24,7 @@ return new class extends Migration
             $table->date('disposal_date')->nullable();
             $table->bigInteger('assessed_income')->nullable();
             $table->bigInter('demand')->nullable();
+            $table->integer('circle');
             $table->timestamps();
         });
 
