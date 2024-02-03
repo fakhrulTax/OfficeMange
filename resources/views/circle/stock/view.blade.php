@@ -39,6 +39,7 @@
                   
                   <h5>  Mobile Number: {{$stock->mobile}}</h5>
                   <h5>  Address:   {{ str_replace('</p><p>', ', ', strip_tags($stock->address)) }}</h5>
+                 
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

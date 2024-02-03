@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Models\Stock;
 use App\Models\ForwardDairy;
 use PDF;
+use App\Helpers\MyHelper;
+use Illuminate\Support\Facades\Auth;
 
 class NoticeController extends Controller
 { 
@@ -122,6 +124,15 @@ class NoticeController extends Controller
     //183
     public function notice183(Request $request, $tin)
     {
+
+        $data = [
+            'foo' => 'bar'
+        ];
+
+        $pdf = PDF::loadView('pdf.document', $data);
+
+
+
         //Validation
         $request->validate([
             'assessment_year' => 'required',
@@ -129,15 +140,19 @@ class NoticeController extends Controller
             'hearing_date' => 'required',
         ]);
 
+
         
 
 
         //Get Stock Information
         $stock = Stock::where('tin',$tin)->firstOrFail();
 
-        if( $stock->mobile_number )
+        $circle = config('settings.circle_name_'.Auth::user()->circle);
+ 
+        if( $stock->mobile )
         {
-            api('আপনার নিকট ১৮৩(৩) ধারার একটি নোটিশ প্রেরণ করা হয়েছে। শুনানি '. $request->hearing_date . 'খ্রি.।'. config('settings.circle_name_'.Auth::user()->circle));
+            $text = 'আপনার নিকট ১৮৩(৩) ধারার একটি নোটিশ প্রেরণ করা হয়েছে। শুনানি '. $request->hearing_date . 'খ্রি.। '. $circle;
+           $response =  Myhelper::sendMessage($stock->mobile, $text, 'Notice 183(3)');
         }
 
         
@@ -152,12 +167,13 @@ class NoticeController extends Controller
 
       
         //Convert Numeric Digit English To Bangla
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));       
+        $request->assessment_year = MyHelper::en2bn($request->assessment_year);
+        $request->issue_date =  MyHelper::en2bn(date('d-m-Y',strtotime($request->issue_date)));
+        $request->hearing_date =  MyHelper::en2bn(date('d-m-Y',strtotime($request->hearing_date)));
+        // $stock->tin =  MyHelper::en2bn(tinSlice($stock->tin));   
+        $stock->tin =  MyHelper::en2bn($stock->tin);    
 
-        $pdf = PDF::loadView('pages.Notice.one_eighty_three', ['stock' => $stock, 'data' => $request]);
+        $pdf = PDF::loadView('circle.notice.one_eighty_three', ['stock' => $stock, 'data' => $request]);
         return $pdf->stream('document.pdf');                
     }
     
