@@ -16,51 +16,20 @@
 
             $words = explode(' ', $name);
 
-           
             $first_two_words = implode(' ', array_slice($words, 0, 2));
-
-           
 
         @endphp
 
         <div class="col-md-8 mt-4">
             <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
-                {{  ucfirst($first_two_words) }}</h4>
+                {{ ucfirst($first_two_words) }}</h4>
 
-                <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
-                    {{  ucfirst(Auth::user()->designation) }}</h4>
+            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
+                {{ ucfirst(Auth::user()->designation) }}</h4>
         </div>
 
     </div>
 
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <!-- Sidebar user (optional) -->
-        <!--
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="{{ asset('img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-          <a href="#" class="d-block">{{ config('settings.circle_name') }}</a>
-        </div>
-      </div>
--->
-        <!-- SidebarSearch Form -->
-        <!---
-        <div class="form-inline">
-          <div class="input-group" data-widget="sidebar-search">
-            <input class="form-control form-control-sidebar" type="tin" placeholder="TIN" aria-label="Search" placeholder="TIN">
-            <div class="input-group-append">
-              <button  type="submit" class="btn btn-sidebar">
-                <i class="fas fa-search fa-fw"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-        --->
-        <!-- Sidebar Menu -->
 
         @php
             $user = Auth::user();
@@ -78,7 +47,7 @@
                with font-awesome or any other icon font library -->
                 @if ($user->user_role == 'circle')
                     <li class="nav-item">
-                        <a href="{{ route('circle.dashboard') }}" class="nav-link ">
+                        <a href="{{ route('circle.dashboard') }}" class="nav-link {{ Route::currentRouteName() == 'circle.dashboard' ? 'active' : ''}} ">
                             <i class="nav-icon fas fa-home text-light"></i>
                             <p>
                                 Home
@@ -97,7 +66,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('circle.stock') }}" class="nav-link ">
+                        <a href="{{ route('circle.stock') }}" class="nav-link {{ Route::currentRouteName() == 'circle.stock' ? 'active' : ''}} ">
                             <i class="nav-icon fas fa-list text-light"></i>
                             <p>
                                 Stock
@@ -106,7 +75,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('circle.arrears') }}" class="nav-link">
+                        <a href="{{ route('circle.arrears') }}" class="nav-link {{ Route::currentRouteName() == 'circle.arrears' ? 'active' : ''}}">
                             <i class="nav-icon fas fa-money-check-alt text-danger"></i>
                             <p>
                                 Arrear
@@ -171,7 +140,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route('commissioner.task.index') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'circle.task.index' ? 'active' : '' }}">
+                            class="nav-link {{ Route::currentRouteName() == 'commissioner.task.index' ? 'active' : '' }}">
                             <i class="nav-icon fab fa-dailymotion text-danger"></i>
                             <p>
                                 Forward Dairy
@@ -239,7 +208,7 @@
                     <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
                     <li class="nav-item">
-                        <a href="{{ route('technical.dashboard') }}" class="nav-link ">
+                        <a href="{{ route('technical.dashboard') }}" class="nav-link {{ Route::currentRouteName() == 'technical.dashboard' ? 'active' : '' }} ">
                             <i class="nav-icon fas fa-home text-light"></i>
                             <p>
                                 Home
@@ -257,7 +226,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('technical.arrears', 'all') }}" class="nav-link">
+                        <a href="{{ route('technical.arrears', 'all') }}" class="nav-link {{ Route::currentRouteName() == 'technical.arrears' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-money-check-alt text-danger"></i>
                             <p>
                                 Arrear
@@ -305,11 +274,11 @@
                 @endif
 
                 <li class="nav-header">Profile</li>
-                <li class="nav-item">
+                <li class="nav-item {{ Route::currentRouteName() == 'passwordResetForm' ||Route::currentRouteName() == 'profile' ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
-                            {{  ucfirst($first_two_words) }}
+                            {{ ucfirst($first_two_words) }}
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
@@ -317,7 +286,7 @@
 
                         <li class="nav-item">
                             <a href="{{ route('profile') }}"
-                                class="nav-link {{ Route::currentRouteName() == 'profile' ? 'active' : '' }}">
+                                class="nav-link {{ Route::currentRouteName() == 'profile' ? 'active' : ''  }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Profile</p>
                             </a>
@@ -325,7 +294,7 @@
 
                         <li class="nav-item">
                             <a href="{{ route('passwordResetForm') }}"
-                                class="nav-link {{ Route::currentRouteName() == 'passwordResetForm' ? 'active' : '' }}">
+                                class="nav-link {{ Route::currentRouteName() == 'passwordResetForm' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Password Reset</p>
                             </a>
