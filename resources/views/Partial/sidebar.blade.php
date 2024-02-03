@@ -163,6 +163,16 @@
                         </a>
                     </li>
 
+
+                      <li class="nav-item">
+                        <a href="{{ route('commissioner.collection.index') }}" class="nav-link {{ Route::currentRouteName() == 'commissioner.arrears' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-money-check-alt text-danger"></i>
+                            <p>
+                                Collection
+                            </p>
+                        </a>
+                    </li>
+
                     <li class="nav-item">
                         <a href="{{ route('commissioner.users') }}"
                             class="nav-link {{ Route::currentRouteName() == 'commissioner.users' ? 'active' : '' }} ">
