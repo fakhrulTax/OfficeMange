@@ -1,5 +1,7 @@
 @extends('app')
 
+@section('title', 'Stocks')
+
 @push('css')
     <!--  Datatable -->
 
