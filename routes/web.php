@@ -9,17 +9,12 @@ use App\Http\Controllers\CommissionerController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\ArrearController;
 use App\Http\Controllers\CollectionController;
-
 use App\Http\Controllers\MovementController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\OTPController;
-
 use App\Http\Controllers\SMSController;
-
-
-
-
 use App\Http\Controllers\AppealController;
+use App\Http\Controllers\TaskController;
 
 
 
@@ -35,13 +30,11 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     
     Route::get('/circle-dashboard', [CircleController::class, 'index'])->name('dashboard');
 
+    //Stock Route
     Route::get('/stock', [StockController::class, 'index'])->name('stock');
     Route::post('/stock', [StockController::class, 'store'])->name('stockStore');
-
-    Route::get('/stock/edit', [StockController::class, 'edit'])->name('stockEdit');
-    
+    Route::get('/stock/edit', [StockController::class, 'edit'])->name('stockEdit');    
     Route::post('/stock/edit', [StockController::class, 'update'])->name('stockUpdate');
-
     Route::get('stock/view/{id}', [StockController::class, 'view'])->name('stock.view');
     Route::get('/stock/editbyid', [StockController::class, 'stockEditByid'])->name('stockEditByid');
     Route::post('/stock/editbyid', [StockController::class, 'stockUpdateByid'])->name('stockUpdateByid');
@@ -82,6 +75,13 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/arrear/edit', [ArrearController::class, 'edit'])->name('arrearEdit');
     Route::post('/arrear/edit', [ArrearController::class, 'update'])->name('arrearUpdate');
 
+     //Task routes
+     Route::get('/circle/forward_dairy', [TaskController::class, 'index'])->name('task.index');
+     Route::post('/circle/forward_dairy', [TaskController::class, 'store'])->name('task.store');
+     Route::delete('/circle/forward_dairy/{id}', [TaskController::class, 'destroy'])->name('task.destroy');
+     Route::put('/circle/forward_dairy/{id}/update_status', [TaskController::class, 'updateStatus'])->name('task.updateStatus');
+ 
+
     //Settings
 	Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 	Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
@@ -116,6 +116,12 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::get('commissioner/arrears/{circle}', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
 
     Route::post('commissioner/arrear/', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
+
+    //Task routes
+    Route::get('/forward_dairy', [TaskController::class, 'index'])->name('task.index');
+    Route::post('/forward_dairy', [TaskController::class, 'store'])->name('task.store');
+    Route::delete('/forward_dairy/{id}', [TaskController::class, 'destroy'])->name('task.destroy');
+    Route::put('/forward_dairy/{id}/update_status', [TaskController::class, 'updateStatus'])->name('task.updateStatus');
 
 
     //User routes
