@@ -75,8 +75,6 @@
                                         onclick="edit({{ $stock->id }})">Edit</button>
                                     <a href="{{ route('circle.stock.view', $stock->id) }}" class="btn btn-success btn-sm" 
                                       >View</a>
-                                    <button class="btn btn-danger btn-sm"
-                                        onclick="notice({{ $stock->id }})">Notice</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -217,9 +215,6 @@
 
                                     <input type="text" class="form-control mt-1" id="address_line_three"
                                         name="address_line_three" placeholder="Address Line Three">
-
-
-
 
 
                                 </div>
