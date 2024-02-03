@@ -9,28 +9,36 @@ use Toastr;
 
 class TaskController extends Controller
 {
+
     public function index()
     {
-        if( Auth::user()->user_role == 'commissioner' )
-        {
-            $tasks = Task::where('type', 'commissioner')
-            // ->orWhere(function ($query) {
-            //     $query->whereIn('circle', [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]);
-            // })
-            ->orderByRaw('status ASC, priority ASC, deadline ASC')
-            ->paginate(100);
-        }else{
-            $tasks = Task::whereIn('circle', [Auth::user()->circle])            
-            ->orderByRaw('status ASC, priority ASC, deadline ASC')
-            ->paginate(100);
-        }        
+        $tasks = Task::orderByRaw('status ASC, priority ASC, deadline ASC')
+            ->get();
+    
+        $filteredTasks = $tasks->filter(function ($task) {
 
-        return view(Auth::user()->user_role.'.task.index', [
-            'tasks' => $tasks,
+            if (Auth::user()->user_role == 'commissioner') {
+                return $task->type == 'commissioner';
+            } else {
+                return in_array(Auth::user()->circle, json_decode($task->circle));
+            }
+
+        });
+    
+        $perPage = 1;
+        $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage();
+        $currentPageTasks = $filteredTasks->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $paginatedTasks = new \Illuminate\Pagination\LengthAwarePaginator($currentPageTasks, count($filteredTasks), $perPage, $currentPage);
+    
+        // Use withPath to specify the base path for pagination links
+        $paginatedTasks->withPath(route(Auth::user()->user_role . '.task.index'));
+    
+        return view(Auth::user()->user_role . '.task.index', [
+            'tasks' => $paginatedTasks,
             'title' => 'Forward Dairy'
-        ]);
+        ])->withQueryString(['page']);
     }
-
+    
     //Store Data
     public function store(Request $request)
     {
@@ -64,7 +72,7 @@ class TaskController extends Controller
         //Circle Name 
         if( Auth::user()->user_role == 'circle' )
         {
-            $validatedData['circle'] = Auth::user()->circle;
+            $validatedData['circle'] = json_encode(Auth::user()->circle);
         }
         else
         {
