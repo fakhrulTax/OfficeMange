@@ -24,7 +24,12 @@ return new class extends Migration
             $table->date('expire_date');
             $table->date('disposal_date')->nullable();
             $table->bigInteger('assessed_income')->nullable();
+
             $table->bigInteger('demand')->nullable();
+
+
+            $table->integer('circle');
+
             $table->timestamps();
         });
 
