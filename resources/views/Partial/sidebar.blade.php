@@ -1,9 +1,38 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ route('circle.dashboard') }}" class="brand-link elevation-4">
-        <img src="{{ asset('img/logo.png') }}" class="img-circle elevation-2" alt="User Image" style="width: 55px">
-        <span class="brand-text font-weight-light" style="font-size: 16px"></span>
-    </a>
+
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{{ route('circle.dashboard') }}" class="brand-link elevation-4">
+                <img src="{{ asset('img/logo.png') }}" class="img-circle elevation-2" alt="User Image" style="width: 55px">
+                <span class="brand-text font-weight-light" style="font-size: 16px"></span>
+
+
+            </a>
+        </div>
+
+        @php
+            $name = Auth::user()->name;
+
+            $words = explode(' ', $name);
+
+           
+            $first_two_words = implode(' ', array_slice($words, 0, 2));
+
+           
+
+        @endphp
+
+        <div class="col-md-8 mt-4">
+            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
+                {{  ucfirst($first_two_words) }}</h4>
+
+                <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
+                    {{  ucfirst(Auth::user()->designation) }}</h4>
+        </div>
+
+    </div>
+
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -58,13 +87,14 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('circle.task.index') }}" class="nav-link {{ (Route::currentRouteName() == 'circle.task.index' ) ? 'active' : '' }}">
-                        <i class="nav-icon fab fa-dailymotion text-danger"></i>
-                        <p>
-                            Forward Dairy
-                        </p>
+                        <a href="{{ route('circle.task.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'circle.task.index' ? 'active' : '' }}">
+                            <i class="nav-icon fab fa-dailymotion text-danger"></i>
+                            <p>
+                                Forward Dairy
+                            </p>
                         </a>
-                    </li> 
+                    </li>
 
                     <li class="nav-item">
                         <a href="{{ route('circle.stock') }}" class="nav-link ">
@@ -95,7 +125,8 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('circle.appeal.index') }}" class="nav-link {{ (Route::currentRouteName() == 'circle.appeal.index' || Route::currentRouteName() == 'circle.appeal.create' || Route::currentRouteName() == 'circle.appeal.search') ? 'active' : '' }}">
+                        <a href="{{ route('circle.appeal.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'circle.appeal.index' || Route::currentRouteName() == 'circle.appeal.create' || Route::currentRouteName() == 'circle.appeal.search' ? 'active' : '' }}">
                             <i class="nav-icon fa fa-bookmark text-danger"></i>
                             <p>
                                 Appeal
@@ -104,7 +135,8 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('circle.movement.index') }}" class="nav-link {{ (Route::currentRouteName() == 'circle.movement.index' ) ? 'active' : '' }}">
+                        <a href="{{ route('circle.movement.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'circle.movement.index' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-running text-warning"></i>
                             <p>
                                 Movement
@@ -113,14 +145,14 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('circle.setting.index') }}" class="nav-link {{ (Route::currentRouteName() == 'circle.setting.index' ) ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-cogs"></i>
-                        <p>
-                            Settings
-                        </p>
+                        <a href="{{ route('circle.setting.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'circle.setting.index' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-cogs"></i>
+                            <p>
+                                Settings
+                            </p>
                         </a>
-                    </li> 
-
+                    </li>
                 @endif
 
                 {{-- commissioner sidebar start from here   --}}
@@ -128,7 +160,8 @@
                     <!-- Add icons to the links using the .nav-icon class
      with font-awesome or any other icon font library -->
                     <li class="nav-item">
-                        <a href="{{ route('commissioner.dashboard') }}" class="nav-link {{ Route::currentRouteName() == 'commissioner.dashboard' ? 'active' : '' }} ">
+                        <a href="{{ route('commissioner.dashboard') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'commissioner.dashboard' ? 'active' : '' }} ">
                             <i class="nav-icon fas fa-home text-light"></i>
                             <p>
                                 Home
@@ -137,13 +170,14 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('commissioner.task.index') }}" class="nav-link {{ (Route::currentRouteName() == 'circle.task.index' ) ? 'active' : '' }}">
-                        <i class="nav-icon fab fa-dailymotion text-danger"></i>
-                        <p>
-                            Forward Dairy
-                        </p>
+                        <a href="{{ route('commissioner.task.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'circle.task.index' ? 'active' : '' }}">
+                            <i class="nav-icon fab fa-dailymotion text-danger"></i>
+                            <p>
+                                Forward Dairy
+                            </p>
                         </a>
-                    </li> 
+                    </li>
 
                     <li class="nav-item">
                         <a href="" class="nav-link ">
@@ -155,7 +189,8 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('commissioner.arrears', 'all') }}" class="nav-link {{ Route::currentRouteName() == 'commissioner.arrears' ? 'active' : '' }}">
+                        <a href="{{ route('commissioner.arrears', 'all') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'commissioner.arrears' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-money-check-alt text-danger"></i>
                             <p>
                                 Arrear
@@ -164,8 +199,9 @@
                     </li>
 
 
-                      <li class="nav-item">
-                        <a href="{{ route('commissioner.collection.index') }}" class="nav-link {{ Route::currentRouteName() == 'commissioner.arrears' ? 'active' : '' }}">
+                    <li class="nav-item">
+                        <a href="{{ route('commissioner.collection.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'commissioner.collection.index' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-money-check-alt text-danger"></i>
                             <p>
                                 Collection
@@ -182,7 +218,7 @@
                             </p>
                         </a>
                     </li>
-                    
+
 
                     <li class="nav-item">
                         <a href="{{ route('commissioner.sms') }}"
@@ -234,78 +270,84 @@
 
 
 
-            {{-- Range sidebar start from here   --}}
-            @if ($user->user_role == 'range')
-                <!-- Add icons to the links using the .nav-icon class
+                {{-- Range sidebar start from here   --}}
+                @if ($user->user_role == 'range')
+                    <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
+                    <li class="nav-item">
+                        <a href="{{ route('range.dashboard') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'range.dashboard' ? 'active' : '' }} ">
+                            <i class="nav-icon fas fa-home text-light"></i>
+                            <p>
+                                Home
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="" class="nav-link ">
+                            <i class="nav-icon fas fa-list text-light"></i>
+                            <p>
+                                Stock
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('range.arrears', 'all') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'range.arrears' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-money-check-alt text-danger"></i>
+                            <p>
+                                Arrear
+                            </p>
+                        </a>
+                    </li>
+                @endif
+
+                <li class="nav-header">Profile</li>
                 <li class="nav-item">
-                    <a href="{{ route('range.dashboard') }}" class="nav-link {{ Route::currentRouteName() == 'range.dashboard' ? 'active' : '' }} ">
-                        <i class="nav-icon fas fa-home text-light"></i>
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user"></i>
                         <p>
-                            Home
+                            {{  ucfirst($first_two_words) }}
+                            <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
-                </li>
+                    <ul class="nav nav-treeview">
 
-                <li class="nav-item">
-                    <a href="" class="nav-link ">
-                        <i class="nav-icon fas fa-list text-light"></i>
-                        <p>
-                            Stock
-                        </p>
-                    </a>
-                </li>
+                        <li class="nav-item">
+                            <a href="{{ route('profile') }}"
+                                class="nav-link {{ Route::currentRouteName() == 'profile' ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Profile</p>
+                            </a>
+                        </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('range.arrears', 'all') }}" class="nav-link {{ Route::currentRouteName() == 'range.arrears' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-money-check-alt text-danger"></i>
-                        <p>
-                            Arrear
-                        </p>
-                    </a>
-                </li>
-            @endif
-
-            <li class="nav-header">Profile</li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-user"></i>
-                <p>
-                  {{Auth::user()->name}}
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-
-                <li class="nav-item">
-                  <a href="{{ route('profile') }}" class="nav-link {{ Route::currentRouteName() == 'profile' ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Profile</p>
-                  </a>
-                </li>
-
-                <li class="nav-item">
-                  <a href="{{ route('passwordResetForm') }}" class="nav-link {{ Route::currentRouteName() == 'passwordResetForm' ? 'active' : '' }}" >
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Password Reset</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault();
+                        <li class="nav-item">
+                            <a href="{{ route('passwordResetForm') }}"
+                                class="nav-link {{ Route::currentRouteName() == 'passwordResetForm' ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Password Reset</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('logout') }}" class="nav-link"
+                                onclick="event.preventDefault();
                   document.getElementById('logout-form').submit();">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Log Out</p>
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Log Out</p>
 
-                  </a>
+                            </a>
 
-                  <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf</form>
+                        </li>
+                    </ul>
                 </li>
-              </ul>
-            </li>
 
 
 
-          </ul>
+            </ul>
 
         </nav>
 
