@@ -14,15 +14,20 @@
         @php
             $name = Auth::user()->name;
 
-            $words = explode(' ', $name);
+            if(strlen($name) > 15){
+                $words = explode(' ', $name);
 
-            $first_two_words = implode(' ', array_slice($words, 0, 2));
+                $name = implode(' ', array_slice($words, 0, 2));
+         
+            }
+
+         
 
         @endphp
 
-        <div class="col-md-8 mt-4">
+        <div class="col-md-8 mt-3">
             <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
-                {{ ucfirst($first_two_words) }}</h4>
+                {{ ucfirst($name) }}</h4>
 
             <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
                 {{ ucfirst(Auth::user()->designation) }}</h4>
@@ -58,7 +63,7 @@
                     <li class="nav-item">
                         <a href="{{ route('circle.task.index') }}"
                             class="nav-link {{ Route::currentRouteName() == 'circle.task.index' ? 'active' : '' }}">
-                            <i class="nav-icon fab fa-dailymotion text-danger"></i>
+                            <i class="nav-icon fab fa-dailymotion text-light"></i>
                             <p>
                                 Forward Dairy
                             </p>
@@ -76,7 +81,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route('circle.arrears') }}" class="nav-link {{ Route::currentRouteName() == 'circle.arrears' ? 'active' : ''}}">
-                            <i class="nav-icon fas fa-money-check-alt text-danger"></i>
+                            <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Arrear
                             </p>
@@ -86,7 +91,7 @@
                     <li class="nav-item">
                         <a href="{{ route('circle.collection.index') }}"
                             class="nav-link {{ Route::currentRouteName() == 'circle.collection.index' || Route::currentRouteName() == 'circle.collection.create' || Route::currentRouteName() == 'circle.collection.search' ? 'active' : '' }}">
-                            <i class="nav-icon fab fa-speakap text-warning"></i>
+                            <i class="nav-icon fab fa-speakap text-light"></i>
                             <p>
                                 Collection
                             </p>
@@ -96,17 +101,49 @@
                     <li class="nav-item">
                         <a href="{{ route('circle.appeal.index') }}"
                             class="nav-link {{ Route::currentRouteName() == 'circle.appeal.index' || Route::currentRouteName() == 'circle.appeal.create' || Route::currentRouteName() == 'circle.appeal.search' ? 'active' : '' }}">
-                            <i class="nav-icon fa fa-bookmark text-danger"></i>
+                            <i class="nav-icon fa fa-bookmark text-light"></i>
                             <p>
                                 Appeal
                             </p>
                         </a>
                     </li>
 
+
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-folder text-light"></i>
+                            <p>
+                                ReOpen
+                            </p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-calculator text-light"></i>
+                            <p>
+                                Audit
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-file text-light"></i>
+                            <p>
+                                Sonchoy Potra
+                            </p>
+                        </a>
+                    </li>
+
+
                     <li class="nav-item">
                         <a href="{{ route('circle.movement.index') }}"
                             class="nav-link {{ Route::currentRouteName() == 'circle.movement.index' ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-running text-warning"></i>
+                            <i class="nav-icon fas fa-running text-light"></i>
                             <p>
                                 Movement
                             </p>
@@ -141,26 +178,19 @@
                     <li class="nav-item">
                         <a href="{{ route('commissioner.task.index') }}"
                             class="nav-link {{ Route::currentRouteName() == 'commissioner.task.index' ? 'active' : '' }}">
-                            <i class="nav-icon fab fa-dailymotion text-danger"></i>
+                            <i class="nav-icon fab fa-dailymotion text-light"></i>
                             <p>
                                 Forward Dairy
                             </p>
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a href="" class="nav-link ">
-                            <i class="nav-icon fas fa-list text-light"></i>
-                            <p>
-                                Stock
-                            </p>
-                        </a>
-                    </li>
+           
 
                     <li class="nav-item">
                         <a href="{{ route('commissioner.arrears', 'all') }}"
                             class="nav-link {{ Route::currentRouteName() == 'commissioner.arrears' ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-money-check-alt text-danger"></i>
+                            <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Arrear
                             </p>
@@ -171,9 +201,38 @@
                     <li class="nav-item">
                         <a href="{{ route('commissioner.collection.index') }}"
                             class="nav-link {{ Route::currentRouteName() == 'commissioner.collection.index' ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-money-check-alt text-danger"></i>
+                            <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Collection
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-folder text-light"></i>
+                            <p>
+                                ReOpen
+                            </p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-calculator text-light"></i>
+                            <p>
+                                Audit
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-file text-light"></i>
+                            <p>
+                                Sonchoy Potra
                             </p>
                         </a>
                     </li>
@@ -181,7 +240,7 @@
                     <li class="nav-item">
                         <a href="{{ route('commissioner.users') }}"
                             class="nav-link {{ Route::currentRouteName() == 'commissioner.users' ? 'active' : '' }} ">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-users text-light"></i>
                             <p>
                                 Users
                             </p>
@@ -192,7 +251,7 @@
                     <li class="nav-item">
                         <a href="{{ route('commissioner.sms') }}"
                             class="nav-link {{ Route::currentRouteName() == 'commissioner.sms' ? 'active' : '' }} ">
-                            <i class="nav-icon fas fa-envelope"></i>
+                            <i class="nav-icon fas fa-envelope text-light"></i>
                             <p>
                                 SMS
                             </p>
@@ -227,9 +286,39 @@
 
                     <li class="nav-item">
                         <a href="{{ route('technical.arrears', 'all') }}" class="nav-link {{ Route::currentRouteName() == 'technical.arrears' ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-money-check-alt text-danger"></i>
+                            <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Arrear
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-folder text-light"></i>
+                            <p>
+                                ReOpen
+                            </p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-calculator text-light"></i>
+                            <p>
+                                Audit
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-file text-light"></i>
+                            <p>
+                                Sonchoy Potra
                             </p>
                         </a>
                     </li>
@@ -265,9 +354,38 @@
                     <li class="nav-item">
                         <a href="{{ route('range.arrears', 'all') }}"
                             class="nav-link {{ Route::currentRouteName() == 'range.arrears' ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-money-check-alt text-danger"></i>
+                            <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Arrear
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-folder text-light"></i>
+                            <p>
+                                ReOpen
+                            </p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-calculator text-light"></i>
+                            <p>
+                                Audit
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href=" "
+                            class="nav-link ">
+                            <i class="nav-icon fa fa-file text-light"></i>
+                            <p>
+                                Sonchoy Potra
                             </p>
                         </a>
                     </li>
@@ -276,9 +394,9 @@
                 <li class="nav-header">Profile</li>
                 <li class="nav-item {{ Route::currentRouteName() == 'passwordResetForm' ||Route::currentRouteName() == 'profile' ? 'menu-is-opening menu-open' : '' }}">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-user"></i>
+                        <i class="nav-icon fas fa-user text-light"></i>
                         <p>
-                            {{ ucfirst($first_two_words) }}
+                            {{ ucfirst($name) }}
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
@@ -287,7 +405,7 @@
                         <li class="nav-item">
                             <a href="{{ route('profile') }}"
                                 class="nav-link {{ Route::currentRouteName() == 'profile' ? 'active' : ''  }}">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="far fa-circle nav-icon text-light"></i>
                                 <p>Profile</p>
                             </a>
                         </li>
@@ -295,7 +413,7 @@
                         <li class="nav-item">
                             <a href="{{ route('passwordResetForm') }}"
                                 class="nav-link {{ Route::currentRouteName() == 'passwordResetForm' }}">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="far fa-circle nav-icon text-light"></i>
                                 <p>Password Reset</p>
                             </a>
                         </li>
