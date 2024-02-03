@@ -58,6 +58,15 @@
                     </li>
 
                     <li class="nav-item">
+                        <a href="{{ route('circle.task.index') }}" class="nav-link {{ (Route::currentRouteName() == 'circle.task.index' ) ? 'active' : '' }}">
+                        <i class="nav-icon fab fa-dailymotion text-danger"></i>
+                        <p>
+                            Forward Dairy
+                        </p>
+                        </a>
+                    </li> 
+
+                    <li class="nav-item">
                         <a href="{{ route('circle.stock') }}" class="nav-link ">
                             <i class="nav-icon fas fa-list text-light"></i>
                             <p>
@@ -126,6 +135,15 @@
                             </p>
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('commissioner.task.index') }}" class="nav-link {{ (Route::currentRouteName() == 'circle.task.index' ) ? 'active' : '' }}">
+                        <i class="nav-icon fab fa-dailymotion text-danger"></i>
+                        <p>
+                            Forward Dairy
+                        </p>
+                        </a>
+                    </li> 
 
                     <li class="nav-item">
                         <a href="" class="nav-link ">
