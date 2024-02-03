@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Stocks({{count($Stocks)}})</h1>
+                    <h1 class="m-0">Stocks({{ count($Stocks) }})</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -59,13 +59,31 @@
                             <tr>
                                 <td>{{ ++$key }}</td>
                                 <td>{{ $stock->tin }}</td>
-                                <td>{{ $stock->name }} <br>
-                                    
-                                {{ str_replace('</p><p>', ', ', strip_tags($stock->address)) }}
+                                <td> <span class="text-capitalize font-weight-bold">{{ $stock->name }} </span> <br>
+
+                                    {{-- {{ str_replace('</p><p>', ', ', strip_tags($stock->address)) }} --}}
+
+                                    @php
+                                        $address =  $stock->address;
+
+                                        // Remove HTML paragraph tags
+                                        $address = strip_tags($address);
+
+                                        // Split address by comma
+                                        $parts = explode(',', $address);
+
+                                        // Print the address in 3 lines
+                                       
+
+                                    @endphp
+
+                                        @foreach ($parts as $part) 
+                                            {{ trim($part)}} <br>
+
+                                        @endforeach
 
 
-                                
-                                
+
                                 </td>
                                 <td> {{ $stock->type }}</td>
                                 <td>{{ $stock->file_in_stock ? 'Yes' : 'No' }}</td>
@@ -75,8 +93,8 @@
                                 <td>
                                     <button class="btn btn-primary btn-sm"
                                         onclick="edit({{ $stock->id }})">Edit</button>
-                                    <a href="{{ route('circle.stock.view', $stock->id) }}" class="btn btn-success btn-sm" 
-                                      >View</a>
+                                    <a href="{{ route('circle.stock.view', $stock->id) }}"
+                                        class="btn btn-success btn-sm">View</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -377,7 +395,7 @@
                             $('.error').text(data.message);
 
                         } else {
-                            
+
                             $.toast({
                                 heading: "Success",
                                 text: "Tax Payer Updated successfully",
@@ -387,7 +405,7 @@
                                 hideAfter: 3e3,
                                 stack: 1,
 
-                            }) ;
+                            });
 
                             $('#editModal').modal('hide');
                             $('#edit-tax-payer-form')[0].reset();
@@ -399,7 +417,5 @@
                 })
             })
         })
-
-
     </script>
 @endpush
