@@ -1,5 +1,7 @@
 @extends('app')
 
+@section('title','Collections')
+
 @push('css')
    
 @endpush

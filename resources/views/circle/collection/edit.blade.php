@@ -1,5 +1,6 @@
 @extends('app')
 
+@section('title','Update Collection')
 @push('css')
 @endpush
 
