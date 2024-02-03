@@ -63,15 +63,19 @@
                 @endphp
 
                 <input type="text" class="form-control" id="address_line_one"
-                    name="address_line_one" value="{{ $add[0]??'' }}">
+                    name="address_line_one" value="{{ $add[0]??'' }}" id="address1" placeholder="Address line one">
 
+                <p class="address1"></p>
 
                 <input type="text" class="form-control mt-1" id="address_line_two"
-                    name="address_line_two" value="{{ $add[1] ??'' }}">
+                    name="address_line_two" value="{{ $add[1] ??'' }}" id="address2" placeholder="Address line two">
 
+                    <p class="address2"></p>
 
                 <input type="text" class="form-control mt-1" id="address_line_three"
-                    name="address_line_three"  value="{{ $add[2] ??'' }}">
+                    name="address_line_three"  value="{{ $add[2] ??'' }}"id="address3" placeholder="Address line three">
+
+                    <p class="address3"></p>
 
 
 
