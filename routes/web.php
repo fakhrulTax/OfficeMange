@@ -15,6 +15,7 @@ use App\Http\Controllers\OTPController;
 use App\Http\Controllers\SMSController;
 use App\Http\Controllers\AppealController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\NoticeController;
 
 
 
@@ -85,6 +86,9 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     //Settings
 	Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 	Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
+
+    //Notice
+    Route::post('notice/{tin}/{section}', [NoticeController::class, 'notice183'])->name('notice.183');
 });
 
 
@@ -160,4 +164,9 @@ Route::post('/verify-otp', [OTPController::class, 'verifyOTP'])->name('verifyOTP
 Route::get('profile', [UserController::class, 'profile'])->name('profile');
 Route::get('/password-reset', [UserController::class, 'showPasswordResetForm'])->name('passwordResetForm');
 Route::post('/password-reset', [UserController::class, 'passwordReset'])->name('passwordReset');
+
+
+
+//Notice controler
+
  
