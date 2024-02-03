@@ -140,7 +140,7 @@ class NoticeController extends Controller
             api('আপনার নিকট ১৮৩(৩) ধারার একটি নোটিশ প্রেরণ করা হয়েছে। শুনানি '. $request->hearing_date . 'খ্রি.।'. config('settings.circle_name_'.Auth::user()->circle));
         }
 
-        dd('message sent');
+        
         
         //Add or create Task in Forward Dairy
         $notice = '183(3)';
@@ -148,7 +148,7 @@ class NoticeController extends Controller
         $deadline = date('Y-m-d',strtotime($request->hearing_date));
 
         //Add Forward Dairy
-        ForwardDairy::addOrUpdateTaskFromNotice($notice, $description, $deadline);
+        //ForwardDairy::addOrUpdateTaskFromNotice($notice, $description, $deadline);
 
       
         //Convert Numeric Digit English To Bangla
