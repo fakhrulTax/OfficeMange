@@ -162,6 +162,9 @@ Route::post('/verify-otp', [OTPController::class, 'verifyOTP'])->name('verifyOTP
 
 
 Route::get('profile', [UserController::class, 'profile'])->name('profile');
+Route::get('profile/{id}', [UserController::class, 'profileEdit'])->name('profile.edit');
+Route::post('profile/{id}', [UserController::class, 'profileUpdate'])->name('profile.update');
+
 Route::get('/password-reset', [UserController::class, 'showPasswordResetForm'])->name('passwordResetForm');
 Route::post('/password-reset', [UserController::class, 'passwordReset'])->name('passwordReset');
 
