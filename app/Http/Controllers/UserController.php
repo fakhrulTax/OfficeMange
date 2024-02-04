@@ -154,10 +154,42 @@ class UserController extends Controller
         
     }
 
+    public function profileEdit($id){
+        $user = User::find($id);
+        return view ('auth.profile_edit', compact('user'));
+    }
+
+    public function profileUpdate(Request $request, $id){
+        
+        $request->validate([
+            'name' => 'required',
+            'designation' => 'required',
+            'mobile_number' => 'required | digits:11',
+            'office_name' => 'required',
+
+        ]);
+        User::where('id', $id)->update([
+            'name' => $request->name,
+            'designation' => $request->designation,
+            'mobile_number' => $request->mobile_number,
+            'office_name' => $request->office_name,
+        ]);
+
+        Toastr::success('Profile Updated Successfully!', 'Success');
+        return redirect()->route('profile');
+        
+    }
+
 
     public function userDelete($id){
 
-        return "Delete Functionality will be added soon";
+        if($id == Auth::user()->id){
+            Toastr::error('You can not delete yourself!', 'Error');
+            return redirect()->back();
+        }
+        User::where('id', $id)->delete();
+        Toastr::success('User Deleted Successfully!', 'Success');
+        return redirect()->back();
 
         
     }

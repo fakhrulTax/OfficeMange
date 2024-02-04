@@ -74,7 +74,7 @@
                   
                             <td>
                                 <a href="{{ route('commissioner.user.edit', $user->id)}}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
-                                <a href="{{ route('commissioner.user.delete', $user->id)}}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+                                <a href="{{ route('commissioner.user.delete', $user->id)}}" class="btn btn-danger btn-sm  @if($user->id == Auth::user()->id) d-none @endif" onclick="return confirm('Are you sure?')" ><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
 
