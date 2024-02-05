@@ -6,11 +6,20 @@ use Illuminate\Http\Request;
 use App\Models\Arrear;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\MyHelper;
+use PDF;
 
 class ArrearController extends Controller
 {
     public function index()
     {
+
+        $pdf = PDF::loadView('circle.notice.envelop', ['stock' => 'stock']);
+        return $pdf->stream('document.pdf'); 
+
+
+
+
+
         $arrears = Arrear::where('circle', Auth::user()->circle)->with('stock')->latest()->get()->groupBy('tin');
 
         // $arrears = Arrear::with('stock')->latest()->get();
