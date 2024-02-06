@@ -11,17 +11,19 @@ use App\Models\Organization;
 class Upazila extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'zilla_id'
 
     ];
 
-    public function Zilla(){
+    public function zilla(){
         return $this->belongsTo(Zilla::class);
     }
 
-    function Organization(){
+    function organizations(){
         return $this->belongsToMany(Organization::class, 'organization_upazilas');
     }
+
 }
