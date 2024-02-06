@@ -17,9 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('zilla_id');
             $table->string('name');
-            //relation with zella table
-             $table->foreign('zilla_id')->references('id')->on('zellas')->onDelete('cascade');
-            
+            $table->foreign('zilla_id')->references('id')->on('zillas')->onDelete('cascade');
             $table->timestamps();
         });
     }
