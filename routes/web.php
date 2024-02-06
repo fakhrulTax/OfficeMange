@@ -16,6 +16,7 @@ use App\Http\Controllers\SMSController;
 use App\Http\Controllers\AppealController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\UpazilaController;
 
 
 
@@ -120,6 +121,12 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::get('commissioner/arrears/{circle}', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
 
     Route::post('commissioner/arrear/', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
+
+    //TDS
+    Route::get('/tds/upazila', [UpazilaController::class, 'index'])->name('tds.upazila.index');
+    Route::post('/tds/upazila', [UpazilaController::class, 'store'])->name('tds.upazila.store');
+    Route::get('/tds/upazila/{id}', [UpazilaController::class, 'edit'])->name('tds.upazila.edit');
+    Route::put('/tds/upazila/{id}', [UpazilaController::class, 'update'])->name('tds.upazila.update');
 
     //Task routes
     Route::get('/forward_dairy', [TaskController::class, 'index'])->name('task.index');

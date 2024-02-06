@@ -17,11 +17,11 @@ class Upazila extends Model
 
     ];
 
-    public function Zilla(){
+    public function zilla(){
         return $this->belongsTo(Zilla::class);
     }
 
-    function Organization(){
+    function organizations(){
         return $this->belongsToMany(Organization::class, 'organization_upazilas');
     }
 
