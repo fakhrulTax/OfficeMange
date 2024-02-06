@@ -16,6 +16,7 @@ use App\Http\Controllers\SMSController;
 use App\Http\Controllers\AppealController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\OrganizationController;
 
 
 
@@ -89,6 +90,11 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
     //Notice
     Route::post('notice/{tin}/{section}', [NoticeController::class, 'notice183'])->name('notice.183');
+
+
+    //
+
+
 });
 
 
@@ -151,6 +157,11 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('commissioner/sms', [SMSController::class, 'index'])->name('sms');
     Route::get('commissioner/sms/delete/{id}', [SMSController::class, 'delete'])->name('sms.delete');
+
+
+
+    //Organization routes
+    Route::get('commissioner/organization', [OrganizationController::class, 'organizations'])->name('organization.index');
 
 });
 

@@ -205,6 +205,27 @@
                     </li>
 
                     <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-user text-light"></i>
+                            <p>
+                                TDS
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+    
+                            <li class="nav-item">
+                                <a href="{{ route('commissioner.organization.index') }}"
+                                    class="nav-link">
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>Organization</p>
+                                </a>
+                            </li>  
+                       
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
                         <a href="{{ route('commissioner.task.index') }}"
                             class="nav-link {{ Route::currentRouteName() == 'commissioner.task.index' ? 'active' : '' }}">
                             <i class="nav-icon fab fa-dailymotion text-light"></i>
