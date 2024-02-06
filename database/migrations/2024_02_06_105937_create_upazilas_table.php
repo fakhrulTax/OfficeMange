@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreign('zilla_id')->references('id')->on('zillas')->onDelete('cascade');
             $table->timestamps();
+            
         });
     }
 

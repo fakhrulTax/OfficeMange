@@ -10,6 +10,7 @@ class Zilla extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
+    
 
     public function upazilas(){
         return $this->hasMany(Upazila::class);
