@@ -16,11 +16,8 @@ use App\Http\Controllers\SMSController;
 use App\Http\Controllers\AppealController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\NoticeController;
-<<<<<<< HEAD
 use App\Http\Controllers\OrganizationController;
-=======
 use App\Http\Controllers\UpazilaController;
->>>>>>> 03f9b9a1bcae3e226ae91c1197f84672d9d9835d
 
 
 
@@ -95,10 +92,6 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     //Notice
     Route::post('notice/{tin}/{section}', [NoticeController::class, 'notice183'])->name('notice.183');
 
-
-    //
-
-
 });
 
 
@@ -136,6 +129,11 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::post('/tds/upazila', [UpazilaController::class, 'store'])->name('tds.upazila.store');
     Route::get('/tds/upazila/{id}', [UpazilaController::class, 'edit'])->name('tds.upazila.edit');
     Route::put('/tds/upazila/{id}', [UpazilaController::class, 'update'])->name('tds.upazila.update');
+
+    Route::get('/tds/organization', [OrganizationController::class, 'index'])->name('tds.organization.index');
+    Route::post('/tds/organization', [OrganizationController::class, 'store'])->name('tds.organization.store');
+    Route::get('/tds/organization/{id}', [OrganizationController::class, 'edit'])->name('tds.organization.edit');
+    Route::put('/tds/organization/{organization}', [OrganizationController::class, 'update'])->name('tds.organization.update');
 
     //Task routes
     Route::get('/forward_dairy', [TaskController::class, 'index'])->name('task.index');
