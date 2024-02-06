@@ -25,6 +25,7 @@ return new class extends Migration
 
             $table->string('comments')->nullable();
             $table->timestamps();
+            
         });
     }
 
