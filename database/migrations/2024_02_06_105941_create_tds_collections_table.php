@@ -21,7 +21,11 @@ return new class extends Migration
             $table->bigInteger('bill');
             $table->bigInteger('tds');
             $table->integer('circle');
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 03f9b9a1bcae3e226ae91c1197f84672d9d9835d
             $table->foreign('upazila_id')->references('id')->on('upazilas')->onDelete('cascade');
             $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
 

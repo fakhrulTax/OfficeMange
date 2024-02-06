@@ -214,6 +214,7 @@
                         </a>
                         <ul class="nav nav-treeview">
     
+<<<<<<< HEAD
                             <li class="nav-item">
                                 <a href="{{ route('commissioner.organization.index') }}"
                                     class="nav-link">
@@ -222,6 +223,22 @@
                                 </a>
                             </li>  
                        
+=======
+                        <li class="nav-item">
+                            <a href="{{ route('commissioner.tds.upazila.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon text-light"></i>
+                                <p>Upazilla</p>
+                            </a>
+                        </li>    
+                        
+                        <li class="nav-item">
+                                <a href=" " class="nav-link">
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>Organization</p>
+                                </a>
+                            </li> 
+                                                   
+>>>>>>> 03f9b9a1bcae3e226ae91c1197f84672d9d9835d
                         </ul>
                     </li>
 
