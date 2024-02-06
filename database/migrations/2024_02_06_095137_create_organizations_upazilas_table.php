@@ -13,8 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('zillas', function (Blueprint $table) {
+        Schema::create('organizations_upazilas', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('upazilas_id');
+            $table->unsignedBigInteger('organizations_id');
+
+            $table->foreign('upazilas_id')->references('id')->on('upazilas')->onDelete('cascade');
+            $table->foreign('organizations_id')->references('id')->on('organizations')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -26,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('zillas');
+        Schema::dropIfExists('organizations_upazilas');
     }
 };
