@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('reopens', function (Blueprint $table) {
             $table->id();
             $table->integer('tin');
-            $table->integer('circle');
             $table->integer('assessment_year');
             $table->date('reopen_date');
             $table->bigInteger('main_income');
