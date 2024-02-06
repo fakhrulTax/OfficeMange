@@ -11,6 +11,7 @@ use App\Models\Organization;
 class Upazila extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'zilla_id'
@@ -24,4 +25,5 @@ class Upazila extends Model
     function organizations(){
         return $this->belongsToMany(Organization::class, 'organization_upazilas');
     }
+
 }
