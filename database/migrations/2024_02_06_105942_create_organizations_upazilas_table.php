@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('organizations_upazilas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('upazilas_id');
-            $table->unsignedBigInteger('organizations_id');
+            $table->unsignedBigInteger('upazila_id');
+            $table->unsignedBigInteger('organization_id');
 
-            $table->foreign('upazilas_id')->references('id')->on('upazilas')->onDelete('cascade');
-            $table->foreign('organizations_id')->references('id')->on('organizations')->onDelete('cascade');
+            $table->foreign('upazila_id')->references('id')->on('upazilas')->onDelete('cascade');
+            $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
 
             $table->timestamps();
         });
