@@ -4,20 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Zilla;
+use App\Models\Organization;
 
 class Upazila extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'zilla_id',
         'name',
+        'zilla_id'
+
     ];
 
-    function zilla(){
-        return $this->belongsTo(Zilla::class, 'zilla_id');
+    public function Zilla(){
+        return $this->belongsTo(Zilla::class);
     }
 
-    function organizations(){
+    function Organization(){
         return $this->belongsToMany(Organization::class, 'organization_upazilas');
     }
 }
