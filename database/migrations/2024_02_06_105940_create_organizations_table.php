@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->tinyInteger ('is_govt');
             $table->timestamps();
+            
         });
     }
 

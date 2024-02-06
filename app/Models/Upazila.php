@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Zilla;
 use App\Models\Organization;
 
+
 class Upazila extends Model
 {
     use HasFactory;
