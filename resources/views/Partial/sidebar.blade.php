@@ -50,6 +50,8 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+
+
                 @if ($user->user_role == 'circle')
                     <li class="nav-item">
                         <a href="{{ route('circle.dashboard') }}" class="nav-link {{ Route::currentRouteName() == 'circle.dashboard' ? 'active' : ''}} ">
@@ -59,6 +61,33 @@
                             </p>
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-user text-light"></i>
+                            <p>
+                                TDS
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+    
+                            <li class="nav-item">
+                                <a href=" "
+                                    class="nav-link">
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>Organization</p>
+                                </a>
+                            </li>
+    
+                           
+                       
+                        </ul>
+                    </li>
+
+
+
+
 
                     <li class="nav-item">
                         <a href="{{ route('circle.task.index') }}"
