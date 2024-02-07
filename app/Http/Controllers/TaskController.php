@@ -72,7 +72,7 @@ class TaskController extends Controller
         //Circle Name 
         if( Auth::user()->user_role == 'circle' )
         {
-            $validatedData['circle'] = json_encode(Auth::user()->circle);
+            $validatedData['circle'] = json_encode([Auth::user()->circle]);
         }
         else
         {

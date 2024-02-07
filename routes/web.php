@@ -16,6 +16,9 @@ use App\Http\Controllers\SMSController;
 use App\Http\Controllers\AppealController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\UpazilaController;
+use App\Http\Controllers\TdsController;
 
 
 
@@ -89,6 +92,20 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
     //Notice
     Route::post('notice/{tin}/{section}', [NoticeController::class, 'notice183'])->name('notice.183');
+
+    //TDS routes
+    Route::get('/tds', [TdsController::class, 'index'])->name('tds.index');
+    Route::post('/tds', [TdsController::class, 'store'])->name('tds.store');
+    Route::get('/tds/edit/{id}', [TdsController::class, 'edit'])->name('tds.edit');
+    Route::post('/tds/edit/{id}', [TdsController::class, 'update'])->name('tds.update');
+
+
+    Route::get('/tds/delete/{id}', [TdsController::class, 'destroy'])->name('tds.destroy');
+
+    Route::get('/tds/search', [TdsController::class, 'tdsSearch'])->name('tds.search');
+
+    Route::get('/upazilla/{zilla}', [TdsController::class, 'upazilaList'])->name('upazilaList');
+    Route::get('/ogranization/{upazilla}', [TdsController::class, 'ogranizationList'])->name('ogranizationList');
 });
 
 
@@ -121,6 +138,27 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::post('commissioner/arrear/', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
 
+    //TDS
+    Route::get('/tds/upazila', [UpazilaController::class, 'index'])->name('tds.upazila.index');
+    Route::post('/tds/upazila', [UpazilaController::class, 'store'])->name('tds.upazila.store');
+    Route::get('/tds/upazila/{id}', [UpazilaController::class, 'edit'])->name('tds.upazila.edit');
+    Route::put('/tds/upazila/{id}', [UpazilaController::class, 'update'])->name('tds.upazila.update');
+    Route::get('/commissioner/tds/upazila/organization', [UpazilaController::class, 'upazilaOrganization'])->name('tds.upazila.organization');    
+    Route::get('/commissioner/tds/upazila/{upazial_id}/organization', [UpazilaController::class, 'upazilaOrganizationWithOrg'])->name('tds.upazilaSelected.organization');
+    Route::delete('/remove-organization/{upazilaId}/{organizationId}', [UpazilaController::class, 'removeOrganization'])->name('removeOrganization');
+    Route::post('/upazila/{upazilaId}/add-organizations', [UpazilaController::class, 'addSelectedOrganizations'])
+    ->name('tds.upazilaSelected.addOrganizations');
+
+    Route::get('/tds/organization', [OrganizationController::class, 'index'])->name('tds.organization.index');
+    Route::post('/tds/organization', [OrganizationController::class, 'store'])->name('tds.organization.store');
+    Route::get('/tds/organization/{id}', [OrganizationController::class, 'edit'])->name('tds.organization.edit');
+    Route::put('/tds/organization/{organization}', [OrganizationController::class, 'update'])->name('tds.organization.update');
+
+    Route::get('/tds/collection', function(){
+        return view('commissioner.tds.tds_das.index');
+    });
+
+
     //Task routes
     Route::get('/forward_dairy', [TaskController::class, 'index'])->name('task.index');
     Route::post('/forward_dairy', [TaskController::class, 'store'])->name('task.store');
@@ -152,6 +190,10 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::get('commissioner/sms', [SMSController::class, 'index'])->name('sms');
     Route::get('commissioner/sms/delete/{id}', [SMSController::class, 'delete'])->name('sms.delete');
 
+
+
+   
+
 });
 
 
@@ -162,6 +204,9 @@ Route::post('/verify-otp', [OTPController::class, 'verifyOTP'])->name('verifyOTP
 
 
 Route::get('profile', [UserController::class, 'profile'])->name('profile');
+Route::get('profile/{id}', [UserController::class, 'profileEdit'])->name('profile.edit');
+Route::post('profile/{id}', [UserController::class, 'profileUpdate'])->name('profile.update');
+
 Route::get('/password-reset', [UserController::class, 'showPasswordResetForm'])->name('passwordResetForm');
 Route::post('/password-reset', [UserController::class, 'passwordReset'])->name('passwordReset');
 

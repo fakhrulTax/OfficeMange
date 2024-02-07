@@ -124,6 +124,8 @@ class NoticeController extends Controller
     //183
     public function notice183(Request $request, $tin)
     {
+
+
         //Validation
         $request->validate([
             'assessment_year' => 'required',
@@ -137,11 +139,11 @@ class NoticeController extends Controller
 
         $circle = config('settings.circle_name_'.Auth::user()->circle);
  
-        if( $stock->mobile )
-        {
-            $text = 'আপনার নিকট ১৮৩(৩) ধারার একটি নোটিশ প্রেরণ করা হয়েছে। শুনানি '. $request->hearing_date . 'খ্রি.। '. $circle;
-            $response =  Myhelper::sendMessage($stock->mobile, $text, 'Notice 183(3)');
-        }
+        // if( $stock->mobile )
+        // {
+        //     $text = 'আপনার নিকট ১৮৩(৩) ধারার একটি নোটিশ প্রেরণ করা হয়েছে। শুনানি '. $request->hearing_date . 'খ্রি.। '. $circle;
+        //    $response =  Myhelper::sendMessage($stock->mobile, $text, 'Notice 183(3)');
+        // }
 
         
         
