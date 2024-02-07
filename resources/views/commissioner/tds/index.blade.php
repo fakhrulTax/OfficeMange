@@ -12,9 +12,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <a href="{{ route('circle.tds.create') }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add New TDS</a>
-                    </ol>
+                 
                 </div>
 
             </div>
@@ -28,7 +26,7 @@
 
         <div class="card">
             <div class="card-body">
-              <form action="{{ route('circle.tds.search') }}" method="GET">
+              <form action="{{ route('commissioner.tdsList.search') }}" method="GET">
                 <div class="row">
           
                     <div class="col-md-2">
@@ -54,6 +52,8 @@
                             </select>
                         </div>
                     </div>
+
+
           
                     <div class="col-md-2">
                         <div class="form-group">
@@ -62,6 +62,23 @@
                                 <option value="">Select Organization</option>
           
           
+                            </select>
+                        </div>
+                    </div>
+
+                    
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="circle">Circle</label>
+                            <select class="form-control" name="circle" id="circle">
+                                <option value="">Select Circle</option>
+
+                               @for ($circle = 1; $circle <= 22; $circle++)
+                                    <option value="{{ $circle }}" @if (!empty($search->circle) && $search->circle == $circle) {{ 'selected' }} @endif> Circle
+                                        {{ $circle }}</option>
+                                 
+                               @endfor
+                               
                             </select>
                         </div>
                     </div>
@@ -105,11 +122,12 @@
                                 <th>Zilla</th>
                                 <th>Upazila</th>
                                 <th>Orginization</th>
+                                <th>Circle</th>
                                 <th>TDS</th>
                                 <th>Bill</th>
                                 
                                 <th>Comments</th>
-                                <th>Action</th>
+                                
                             </tr>
                         </thead>
 
@@ -125,17 +143,14 @@
                                     <td> {{ ucfirst($tds->upazila->zilla->name ) }}</td>
                                     <td> {{ ucfirst($tds->upazila->name) }}</td>
                                     <td> {{ ucfirst($tds->organization->name )}} </td>
+                                    <td> Circle-{{ ($tds->circle )}} </td>
                                     <td>
                                         {{ App\Helpers\MyHelper::moneyFormatBD($tds->tds) }}
                                     </td>
                                     <td> {{ App\Helpers\MyHelper::moneyFormatBD($tds->bill) }} </td>
                                     
                                     <td> {{ $tds->comments }} </td>
-                                    <td> 
-                                      <a href="{{ route('circle.tds.edit', $tds->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                      <a href="{{ route('circle.tds.destroy', $tds->id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this TDS?')">Delete</a>
-                                    
-                                    </td>
+                                  
 
                                 </tr>
                             @endforeach
@@ -146,7 +161,7 @@
                                 <td colspan="5" class="font-weight-bold text-center">Total</td>
                                 <td>{{ App\Helpers\MyHelper::moneyFormatBD($tds->sum('tds')) }}</td>
                                 <td>{{ App\Helpers\MyHelper::moneyFormatBD($tds->sum('bill')) }}</td>
-                                <td colspan="2"></td>
+                                <td ></td>
                             </tr>
 
                         </tfoot>
