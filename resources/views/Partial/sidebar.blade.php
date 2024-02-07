@@ -73,7 +73,7 @@
                         <ul class="nav nav-treeview">
     
                             <li class="nav-item">
-                                <a href=" "
+                                <a href="{{ route('circle.tds.index') }}"
                                     class="nav-link">
                                     <i class="far fa-circle nav-icon text-light"></i>
                                     <p>Organization</p>

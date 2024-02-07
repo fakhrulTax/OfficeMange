@@ -18,6 +18,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\UpazilaController;
+use App\Http\Controllers\TdsController;
 
 
 
@@ -92,6 +93,19 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     //Notice
     Route::post('notice/{tin}/{section}', [NoticeController::class, 'notice183'])->name('notice.183');
 
+    //TDS routes
+    Route::get('/tds', [TdsController::class, 'index'])->name('tds.index');
+    Route::post('/tds', [TdsController::class, 'store'])->name('tds.store');
+    Route::get('/tds/edit/{id}', [TdsController::class, 'edit'])->name('tds.edit');
+    Route::post('/tds/edit/{id}', [TdsController::class, 'update'])->name('tds.update');
+
+
+    Route::get('/tds/delete/{id}', [TdsController::class, 'destroy'])->name('tds.destroy');
+
+    Route::get('/tds/search', [TdsController::class, 'tdsSearch'])->name('tds.search');
+
+    Route::get('/upazilla/{zilla}', [TdsController::class, 'upazilaList'])->name('upazilaList');
+    Route::get('/ogranization/{upazilla}', [TdsController::class, 'ogranizationList'])->name('ogranizationList');
 });
 
 
@@ -168,8 +182,7 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
 
 
-    //Organization routes
-    Route::get('commissioner/organization', [OrganizationController::class, 'organizations'])->name('organization.index');
+   
 
 });
 
