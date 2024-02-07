@@ -143,11 +143,15 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::post('/tds/upazila', [UpazilaController::class, 'store'])->name('tds.upazila.store');
     Route::get('/tds/upazila/{id}', [UpazilaController::class, 'edit'])->name('tds.upazila.edit');
     Route::put('/tds/upazila/{id}', [UpazilaController::class, 'update'])->name('tds.upazila.update');
+    Route::get('/tds/upazila/organizaiation', [UpazilaController::class, 'upazilaOrganization'])->name('tds.upazila.organization');
 
     Route::get('/tds/organization', [OrganizationController::class, 'index'])->name('tds.organization.index');
     Route::post('/tds/organization', [OrganizationController::class, 'store'])->name('tds.organization.store');
     Route::get('/tds/organization/{id}', [OrganizationController::class, 'edit'])->name('tds.organization.edit');
     Route::put('/tds/organization/{organization}', [OrganizationController::class, 'update'])->name('tds.organization.update');
+
+  
+
 
     //Task routes
     Route::get('/forward_dairy', [TaskController::class, 'index'])->name('task.index');
