@@ -63,5 +63,18 @@ class UpazilaController extends Controller
         Toastr::success('Upazila Update Successful', 'success');
         return redirect()->route('commissioner.tds.upazila.index');
     }
+
+    //UPazila and Organization Relation
+    public function upazilaOrganization()
+    {
+        dd('go');
+        return 'go';
+        $zillas = Zilla::orderBy('name', 'ASC')->get();
+
+        return view('commissioner.tds.upazila_organization',[
+            'title' => 'TDS | Upazila & Organization', 
+            'zillas' => $zillas
+        ]);
+    }
     
 }
