@@ -16,10 +16,9 @@ class Organization extends Model
     ];
 
     function upazilas(){
-<<<<<<< HEAD
-        return $this->belongsToMany(Upazila::class, 'organization_upazilas', ''); 
-=======
+
+
         return $this->belongsToMany(Upazila::class, 'organization_upazilas');
->>>>>>> 03f9b9a1bcae3e226ae91c1197f84672d9d9835d
+
     }
 }
