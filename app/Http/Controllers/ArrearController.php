@@ -13,11 +13,6 @@ class ArrearController extends Controller
     public function index()
     {
 
-        $pdf = PDF::loadView('circle.notice.envelop', ['stock' => 'stock']);
-        return $pdf->stream('document.pdf'); 
-
-
-
 
 
         $arrears = Arrear::where('circle', Auth::user()->circle)->with('stock')->latest()->get()->groupBy('tin');
