@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Zilla;
 use App\Models\Upazila;
+use App\Models\Organization;
 use Toastr;
 
 class UpazilaController extends Controller
@@ -63,5 +64,75 @@ class UpazilaController extends Controller
         Toastr::success('Upazila Update Successful', 'success');
         return redirect()->route('commissioner.tds.upazila.index');
     }
+
+    //UPazila and Organization Relation
+    public function upazilaOrganization()
+    {        
+        $zillas = Zilla::orderBy('name', 'ASC')->get();
+        $organizations = Organization::orderBy('name', 'ASC')->get();
+
+        return view('commissioner.tds.upazila_organization',[
+            'title' => 'TDS | Upazila & Organization', 
+            'zillas' => $zillas, 
+            'organizations' => $organizations,
+            
+        ]);
+    }
+
+    public function upazilaOrganizationWithOrg($upazilaId)
+    {
+        $selectedUpazila = Upazila::findOrFail($upazilaId);
+        $zillas = Zilla::orderBy('name', 'ASC')->get();
+        $organizations = Organization::orderBy('name', 'ASC')->get();
+
+        return view('commissioner.tds.upazila_organization', [
+            'title' => 'TDS | Upazila & Organization',
+            'zillas' => $zillas,
+            'organizations' => $organizations,
+            'selectedUpazila' => $selectedUpazila,
+        ]);
+    }
+
+    public function removeOrganization($upazilaId, $organizationId)
+    {   
+        $upazila = Upazila::findOrFail($upazilaId);
+        $upazila->organizations()->detach($organizationId);
+
+        Toastr::success('Organization Removed From Upazila', 'success');
+        return redirect()->back();
+    }
+
+
+    
+    public function addSelectedOrganizations(Request $request, $upazilaId)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'selected_organizations' => 'required|array',
+            'selected_organizations.*' => 'exists:organizations,id',
+        ]);
+    
+        // Get the selected Upazila
+        $upazila = Upazila::findOrFail($upazilaId);
+    
+        // Handle the selected organizations and save them
+        $selectedOrganizationIds = $request->input('selected_organizations');
+    
+        // Filter out organizations that are already related to the Upazila
+        $newOrganizationIds = array_diff($selectedOrganizationIds, $upazila->organizations->pluck('id')->toArray());
+    
+        // Attach the selected organizations to the Upazila only if they are not already related
+        if (!empty($newOrganizationIds)) {
+            $upazila->organizations()->attach($newOrganizationIds);
+            Toastr::success('Selected organizations added successfully', 'success');
+        } else {
+            Toastr::info('Selected organizations were already related', 'info');
+        }
+    
+        return redirect()->back();
+    }
+    
+
+
     
 }

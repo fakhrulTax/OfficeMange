@@ -226,7 +226,15 @@
                                     <i class="far fa-circle nav-icon text-light"></i>
                                     <p>Organization</p>
                                 </a>
-                            </li> 
+                        </li> 
+
+                        <li class="nav-item">
+                            <a href="{{ route('commissioner.tds.upazila.organization') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon text-light"></i>
+                                <p>Upazilla & Org</p>
+                            </a>
+                        </li>    
+                        
                                                    
                         </ul>
                     </li>
