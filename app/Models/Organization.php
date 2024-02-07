@@ -16,6 +16,9 @@ class Organization extends Model
     ];
 
     function upazilas(){
+
+
         return $this->belongsToMany(Upazila::class, 'organization_upazilas');
+
     }
 }

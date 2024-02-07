@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->tinyInteger ('is_govt');
+            $table->tinyInteger ('is_govt')->comment('1 = govt, 0 = private');
             $table->timestamps();
             
         });
