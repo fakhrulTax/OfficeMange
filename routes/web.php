@@ -95,6 +95,9 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
     //TDS routes
     Route::get('/tds', [TdsController::class, 'index'])->name('tds.index');
+    
+    Route::get('/tds/create', [TdsController::class, 'create'])->name('tds.create');
+     
     Route::post('/tds', [TdsController::class, 'store'])->name('tds.store');
     Route::get('/tds/edit/{id}', [TdsController::class, 'edit'])->name('tds.edit');
     Route::post('/tds/edit/{id}', [TdsController::class, 'update'])->name('tds.update');
@@ -104,8 +107,7 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
     Route::get('/tds/search', [TdsController::class, 'tdsSearch'])->name('tds.search');
 
-    Route::get('/upazilla/{zilla}', [TdsController::class, 'upazilaList'])->name('upazilaList');
-    Route::get('/ogranization/{upazilla}', [TdsController::class, 'ogranizationList'])->name('ogranizationList');
+
 });
 
 
@@ -150,9 +152,16 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     ->name('tds.upazilaSelected.addOrganizations');
 
     Route::get('/tds/organization', [OrganizationController::class, 'index'])->name('tds.organization.index');
+
+
     Route::post('/tds/organization', [OrganizationController::class, 'store'])->name('tds.organization.store');
     Route::get('/tds/organization/{id}', [OrganizationController::class, 'edit'])->name('tds.organization.edit');
     Route::put('/tds/organization/{organization}', [OrganizationController::class, 'update'])->name('tds.organization.update');
+
+
+    //TDS Routes
+    Route::get('/tds-list', [TdsController::class, 'commissionTdsIndex'])->name('tdsList.index');
+    Route::get('/tds-list/search', [TdsController::class, 'commissionTdsSearch'])->name('tdsList.search');
 
   
 
@@ -210,6 +219,8 @@ Route::post('/password-reset', [UserController::class, 'passwordReset'])->name('
 
 
 
-//Notice controler
+//Zill to Upazilla to organization 
+Route::get('/upazilla/{zilla}', [TdsController::class, 'upazilaList'])->name('upazilaList');
+Route::get('/ogranization/{upazilla}', [TdsController::class, 'ogranizationList'])->name('ogranizationList');
 
  
