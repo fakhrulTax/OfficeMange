@@ -218,7 +218,6 @@
                           <select class="form-control" name="upazila_search" id="upazila_search">
                               <option value="">Select Upazilla</option>
     
-    
                           </select>
                       </div>
                   </div>
@@ -310,25 +309,23 @@
 
                         </tbody>
                         <tfoot>
+                            <tr>
+                                <td colspan="5" class="font-weight-bold text-center">Total</td>
+                                <td>{{ $tds->sum('bill') }}</td>
+                                <td>{{ $tds->sum('tds') }}</td>
+                                <td colspan="2"></td>
+                            </tr>
 
                         </tfoot>
                     </table>
                 </div>
                 <!-- /.card-body -->
-                -
+             
 
             @endif
 
         </div>
         <!-- /.card -->
-
-
-
-     
-
-
-
-
 
 
 
@@ -424,7 +421,7 @@
                             
 
 
-                            $('#upazila_search').append('<option>Select Upazilla</option>');
+                            $('#upazila_search').append('<option value="">Select Upazilla</option>');
                             $.each(res.upazilla, function(key, value) {
                                 $('#upazila_search').append('<option value="' + value.id + '">' + value
                                     .name + '</option>');
@@ -455,7 +452,7 @@
 
                             $('#organization_search').empty();
 
-                            $('#organization_search').append('<option>Select Organization</option>');
+                            $('#organization_search').append('<option value="">Select Organization</option>');
                             $.each(res.organization, function(key, value) {
 
                                 $.each(value.organizations, function(key, org) {
