@@ -106,27 +106,33 @@ class TdsController extends Controller
         $zillas = Zilla::all();
         
 
-        $tds = Tds_collection::where('circle', Auth::user()->circle);
+        $tds = Tds_collection::query();
 
-        if($request->upazila_search){
+      
+
+        if(!empty($request->upazila_search)){
             $tds = $tds->where('upazila_id', $request->upazila_search);
         }
        
-        if($request->organization_search){
+        if(!empty($request->organization_search)){
             $tds = $tds->where('organization_id', $request->organization_search);
         }
-        if($request->collection_month){
+        if(!empty($request->collection_month)){
             $tds = $tds->where('collection_month', $request->collection_month);
         }
 
 
-        $tds = $tds->get()->load('upazila','organization');
-       
-       
+        $tds = $tds->where('circle', Auth::user()->circle)
+        ->with('upazila', 'organization')->get();
+
+
         
      
         return view ('circle.tds.index', compact('tds', 'zillas'));
     }
+
+
+
 
 
 
