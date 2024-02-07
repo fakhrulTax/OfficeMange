@@ -62,7 +62,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item {{ Route::currentRouteName() == 'circle.tds.index' || Route::currentRouteName() == 'circle.tds.create' ? 'menu-is-opening menu-open' : ''}}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-user text-light"></i>
                             <p>
@@ -74,9 +74,9 @@
     
                             <li class="nav-item">
                                 <a href="{{ route('circle.tds.index') }}"
-                                    class="nav-link">
+                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.index' ? 'active' : ''}}">
                                     <i class="far fa-circle nav-icon text-light"></i>
-                                    <p>Organization</p>
+                                    <p>TDS Collection</p>
                                 </a>
                             </li>
     
@@ -213,6 +213,13 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
+
+                            <li class="nav-item">
+                                <a href="{{ route('commissioner.tdsList.index') }}" class="nav-link ">
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>TDS Collection Table</p>
+                                </a>
+                            </li>   
     
                         <li class="nav-item">
                             <a href="{{ route('commissioner.tds.upazila.index') }}" class="nav-link">
