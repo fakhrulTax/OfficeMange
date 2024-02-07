@@ -14,6 +14,16 @@ class Tds_collection extends Model
         'upazila_id',
         'organization_id',
         'tds',
+        'bill',
+        'circle',
         'comments',
     ];
+
+    public function upazila(){
+        return $this->belongsTo(Upazila::class, 'upazila_id');
+    }
+
+    public function organization(){
+        return $this->belongsTo(Organization::class, 'organization_id');
+    }
 }

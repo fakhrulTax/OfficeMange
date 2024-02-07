@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Organizations_upazila extends Model
+class Organization_upazila extends Model
 {
     use HasFactory;
 }

@@ -15,13 +15,12 @@ return new class extends Migration
     {
         Schema::create('tds_collections', function (Blueprint $table) {
             $table->id();
-            $table->date('collection_month');
+            $table->text('collection_month');
             $table->unsignedBigInteger('upazila_id');
             $table->unsignedBigInteger('organization_id');
             $table->bigInteger('bill');
             $table->bigInteger('tds');
             $table->integer('circle');
-            
             $table->foreign('upazila_id')->references('id')->on('upazilas')->onDelete('cascade');
             $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
 
