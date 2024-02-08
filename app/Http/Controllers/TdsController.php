@@ -126,8 +126,9 @@ class TdsController extends Controller
         if(!empty($request->organization_search)){
             $tdsList = $tdsList->where('organization_id', $request->organization_search);
         }
-        if(!empty($request->collection_month)){
-            $tdsList = $tdsList->where('collection_month', $request->collection_month);
+        if(!empty($request->start_month)){
+
+            $tdsList = $tdsList->whereBetween('collection_month', [$request->start_month, $request->end_month]);
         }
     
         $tdsList = $tdsList->where('circle', Auth::user()->circle)
@@ -192,11 +193,6 @@ class TdsController extends Controller
     public function commissionTdsSearch(Request $request){
 
 
-       
-        
-
-        
-
         $zillas = Zilla::orderBy('name')->get();
         
         $tdsList = Tds_collection::query();
@@ -221,8 +217,9 @@ class TdsController extends Controller
             $tdsList = $tdsList->where('circle', $request->circle);
         }
 
-        if(!empty($request->collection_month)){
-            $tdsList = $tdsList->where('collection_month', $request->collection_month);
+        if(!empty($request->start_month)){
+
+            $tdsList = $tdsList->whereBetween('collection_month', [$request->start_month, $request->end_month]);
         }
     
         $tdsList = $tdsList->where('circle', Auth::user()->circle)
