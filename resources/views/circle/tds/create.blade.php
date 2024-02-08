@@ -111,10 +111,10 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="zilla">Zilla</label>
-                        <select class="form-control" id="zilla" required>
+                        <select class="form-control" id="zilla" name="zilla_id" required>
                             <option value="">Select Zilla</option>
                             @foreach ($zillas as $zilla)
-                                <option value="{{ $zilla->id }}">{{ ucfirst($zilla->name) }}</option>
+                                <option value="{{ $zilla->id }}" {{ old('zilla_id') == $zilla->id ? 'selected' : ''}} >{{ ucfirst($zilla->name) }}</option>
                             @endforeach
 
                         </select>
@@ -174,7 +174,7 @@
                     <div class="form-group">
                         <label for="collection_month">Collection Month</label>
                         <input type="month" id="collection_month" name="collection_month"
-                            placeholder="collection month" class="form-control" required>
+                            placeholder="collection month" class="form-control" value="{{ old('collection_month') }}" required>
 
                             @error('collection_month')
                             <span class="text-danger" role="alert">
@@ -189,7 +189,7 @@
                     <div class="form-group">
                         <label for="tds">TDS</label>
                         <input type="number" id="tds" name="tds" placeholder="TDS" class="form-control"
-                            autofocus required>
+                            autofocus >
                             @error('tds')
                             <span class="text-danger" role="alert">
                                 <strong> {{ $message }}</strong>
@@ -203,7 +203,7 @@
 
                     <div class="form-group">
                         <label for="bill">Bill</label>
-                        <input type="number" id="bill" name="bill" placeholder="bill" class="form-control"
+                        <input type="number" id="bill" name="bill" placeholder="bill" class="form-control" value="{{ old('bill') }}"
                             autofocus>
 
                             @error('bill')
@@ -222,7 +222,7 @@
                 <div class="col-md-4">
                     <label for="comments">Comment</label>
                     <div class="form-group">
-                        <textarea name="comments" id="" cols="30" rows="1" class="form-control"></textarea>
+             <textarea name="comments" id="" cols="30" rows="1" class="form-control">{{old('comments')}}</textarea>
                     </div>
 
                     @error('comments')
