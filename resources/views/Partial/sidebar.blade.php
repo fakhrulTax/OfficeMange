@@ -78,26 +78,20 @@
                                     <i class="far fa-circle nav-icon text-light"></i>
                                     <p>TDS Collection</p>
                                 </a>
-                            </li>
-    
+                            </li>   
+
+                            <li class="nav-item">
+                                <a href="{{ route('circle.tds.upazila.organization') }}"
+                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.upazila.organization' ? 'active' : ''}}">
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>Upazila & Organization</p>
+                                </a>
+                            </li> 
                            
                        
                         </ul>
                     </li>
 
-
-
-
-
-                    <li class="nav-item">
-                        <a href="{{ route('circle.task.index') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'circle.task.index' ? 'active' : '' }}">
-                            <i class="nav-icon fab fa-dailymotion text-light"></i>
-                            <p>
-                                Forward Dairy
-                            </p>
-                        </a>
-                    </li>
 
                     <li class="nav-item">
                         <a href="{{ route('circle.stock') }}" class="nav-link {{ Route::currentRouteName() == 'circle.stock' ? 'active' : ''}} ">
@@ -136,39 +130,7 @@
                             </p>
                         </a>
                     </li>
-
-
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-folder text-light"></i>
-                            <p>
-                                ReOpen
-                            </p>
-                        </a>
-                    </li>
                     
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-calculator text-light"></i>
-                            <p>
-                                Audit
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-file text-light"></i>
-                            <p>
-                                Sonchoy Potra
-                            </p>
-                        </a>
-                    </li>
-
-
                     <li class="nav-item">
                         <a href="{{ route('circle.movement.index') }}"
                             class="nav-link {{ Route::currentRouteName() == 'circle.movement.index' ? 'active' : '' }}">
@@ -213,6 +175,13 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
+
+                            <li class="nav-item">
+                                <a href="{{ route('commissioner.tds.collection.index') }}" class="nav-link ">
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>TDS Collection</p>
+                                </a>
+                            </li>
 
                             <li class="nav-item">
                                 <a href="{{ route('commissioner.tdsList.index') }}" class="nav-link ">

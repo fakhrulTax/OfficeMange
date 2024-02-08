@@ -233,11 +233,31 @@ class MyHelper
 
 
   
+    public static function dateRangeAssessmentYear($assessmentYear = 20232024)
+    {
+        $months = [];
+    
+        $startYear = substr($assessmentYear, 0, 4);
+        $endYear = substr($assessmentYear, 4, 4);
 
+        $currentYear = $startYear;
+        $currentMonth = 7; // Start from July
 
+        while ($currentYear < $endYear || ($currentYear == $endYear && $currentMonth <= 6)) {
+            // Format the month and year
+            $formattedMonth = date('F Y', strtotime("$currentMonth/01/$currentYear"));
+            $months[] = $formattedMonth;
 
-   
-   
+            // Move to the next month
+            $currentMonth++;
+            if ($currentMonth > 12) {
+                $currentMonth = 1;
+                $currentYear++;
+            }
+        }
+
+        return $months;
+    }
     
     
     
