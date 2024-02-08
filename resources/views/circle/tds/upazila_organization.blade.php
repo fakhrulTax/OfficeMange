@@ -78,6 +78,63 @@
     </div>
 
     <section class="content">
+        
+        <div class="card">
+           <div class="card-body">
+                <form action="{{ route('circle.tds.organization.store') }}" method="POST">
+                    @csrf
+                    <div class="row">
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <select class="form-control" name="zilla_search" id="zilla_search" required>
+                                    <option value="">Select Zilla</option>
+                                    @foreach ($zillas as $zilla)
+                                        <option value="{{ $zilla->id }}">{{ ucfirst($zilla->name) }}</option>
+                                    @endforeach
+            
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <select class="form-control" name="upazila_search" id="upazila_search" required>
+                                    <option value="">Select Upazilla</option>            
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <!-- Organization Type -->
+                            <div class="form-group">
+                                <select name="is_govt" id="is_govt" class="form-control" requi  red>
+                                    <option value="">Select Type</option>
+                                    <option value="1" >Govt.</option>
+                                    <option value="0" >Non Govt.</option>
+                                </select>
+                                @error('is_govt') 
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <input type="text" name="name" class="form-control" value="{{ old('name') }}" id="name" placeholder="Organization Name" required>
+                            </div>                            
+                        </div>
+
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary">Add Organization</button>
+                        </div>
+
+
+                    </div>
+                </form>
+           </div>
+        </div>
+
         <div class="card">
             @if (count($zillas) < 1)
                 <h2 class="text-danger p-5">Sorry! There is no data to show!</h2>
@@ -107,7 +164,7 @@
                                             @endif
                                                 @foreach($zilla->upazilas as $upazila)
                                                     <li class="{{ (isset($selectedUpazila) && $selectedUpazila->id == $upazila->id) ? 'active' : '' }}">
-                                                        <a href="{{ route('commissioner.tds.upazilaSelected.organization', $upazila->id) }}">
+                                                        <a href="{{ route('circle.tds.upazilaSelected.organization', $upazila->id) }}">
                                                             {{ ucfirst($upazila->name) }}
                                                         </a>
                                                     </li>
@@ -131,7 +188,7 @@
                                             @foreach($selectedUpazila->organizations as $key => $organization)
                                                 <li class="organization-list-item">
                                                     {{ ++$key.'. '. $organization->name }}
-                                                    <form action="{{ route('commissioner.removeOrganization', ['upazilaId' => $selectedUpazila->id, 'organizationId' => $organization->id]) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('circle.removeOrganization', ['upazilaId' => $selectedUpazila->id, 'organizationId' => $organization->id]) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm">remove</button>
@@ -151,9 +208,9 @@
                                 <h5 class="card-header">Organization List</h5>
                                 <div class="card-body">
                                     @if(isset($selectedUpazila))
-                                    <form class="multiple-select-form" method="post" action="{{ route('commissioner.tds.upazilaSelected.addOrganizations', ['upazilaId' => $selectedUpazila->id]) }}">
+                                    <form class="multiple-select-form" method="post" action="{{ route('circle.tds.upazilaSelected.addOrganizations', ['upazilaId' => $selectedUpazila->id]) }}">
                                     @else 
-                                    <form class="multiple-select-form" method="post" action="{{ route('commissioner.tds.upazilaSelected.addOrganizations', false) }}">
+                                    <form class="multiple-select-form" method="post" action="{{ route('circle.tds.upazilaSelected.addOrganizations', false) }}">
                                     @endif
                                         @csrf
                                         <div class="form-group">
@@ -189,6 +246,36 @@
 
 @push('js')
     <script>
+        $('#zilla_search').change(function() {
+            var zilla = $(this).val();
+            $('#upazila_search').empty();
+            if (zilla) {
+             
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('upazilla') }}/" + zilla,
+                    dataType: "json",
+
+                    success: function(res) {
+                        if (res) {
+
+                            $('#upazila_search').append('<option value="">Select Upazilla</option>');
+                            $.each(res.upazilla, function(key, value) {
+                                $('#upazila_search').append('<option value="' + value.id + '">' + value
+                                    .name + '</option>').css("text-transform", "capitalize");
+                            });
+
+                        }
+                    }
+
+
+
+                });
+            }
+
+        });
+
+
         document.addEventListener('DOMContentLoaded', function() {
             var toggler = document.getElementsByClassName("caret");
 
@@ -209,5 +296,6 @@
                 });
             }
         });
+        
     </script>
 @endpush
