@@ -67,12 +67,20 @@
                     </div>
           
                     <div class="col-md-2">
-                      <div class="form-group">
-                          <label for="collection_month">Collection Month</label>
-                        <input type="month" name="collection_month" class="form-control">
-          
-                      </div>
-                  </div>
+                        <div class="form-group">
+                            <label for="start_month">Start Month</label>
+                            <input type="month" name="start_month" class="form-control">
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="end_month">End Month</label>
+                            <input type="month" name="end_month" class="form-control">
+
+                        </div>
+                    </div>
           
                     <div class="col-md-2">
                       <div class="form-group mt-4">
