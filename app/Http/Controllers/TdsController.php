@@ -35,7 +35,6 @@ class TdsController extends Controller
             'collection_month' => 'required',
             'upazila_id' => 'required',
             'organization_id' => 'required',
-            'bill' => 'required',
         ]);
 
        //check exists for same month and upazila and organization
