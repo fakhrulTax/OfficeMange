@@ -177,6 +177,13 @@
                         <ul class="nav nav-treeview">
 
                             <li class="nav-item">
+                                <a href="{{ route('commissioner.tds.collection.index') }}" class="nav-link ">
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>TDS Collection</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a href="{{ route('commissioner.tdsList.index') }}" class="nav-link ">
                                     <i class="far fa-circle nav-icon text-light"></i>
                                     <p>TDS Collection Table</p>
