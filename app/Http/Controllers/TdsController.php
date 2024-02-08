@@ -7,6 +7,7 @@ use App\Models\Tds_collection;
 use App\Models\Zilla;
 use App\Models\Upazila;
 use App\Models\Organization_upazila;
+use Illuminate\Support\Facades\DB;
 use Auth;
 use Toastr;
 
@@ -35,7 +36,6 @@ class TdsController extends Controller
             'collection_month' => 'required',
             'upazila_id' => 'required',
             'organization_id' => 'required',
-            'bill' => 'required',
         ]);
 
        //check exists for same month and upazila and organization
@@ -229,4 +229,16 @@ class TdsController extends Controller
         return view ('commissioner.tds.index', compact('tdsList', 'zillas'));
         
     }
+    public function collectionIndex()
+    {
+            
+        return view('commissioner.tds.collection_index');
+    }
+    
+   
+    
+    
+    
+    
+
 }

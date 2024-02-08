@@ -18,12 +18,11 @@ return new class extends Migration
             $table->text('collection_month');
             $table->unsignedBigInteger('upazila_id');
             $table->unsignedBigInteger('organization_id');
-            $table->bigInteger('bill');
+            $table->bigInteger('bill')->nullable();
             $table->bigInteger('tds')->nullable();
             $table->integer('circle');
             $table->foreign('upazila_id')->references('id')->on('upazilas')->onDelete('cascade');
             $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
-
             $table->string('comments')->nullable();
             $table->timestamps();
             

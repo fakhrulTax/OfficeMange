@@ -80,8 +80,7 @@
 
                 <div class="form-group">
                     <label for="bill">Bill</label>
-                    <input type="number" value="{{ $editTds->bill }}"  name="bill" placeholder="bill" class="form-control"
-                        autofocus>
+                    <input type="number" value="{{ $editTds->bill }}"  name="bill" placeholder="bill" class="form-control">
                 </div>
             </div>
 
