@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Zilla;
 use App\Models\Upazila;
 use App\Models\Organization;
@@ -71,6 +72,15 @@ class UpazilaController extends Controller
         $zillas = Zilla::orderBy('name', 'ASC')->get();
         $organizations = Organization::orderBy('name', 'ASC')->get();
 
+        if( Auth::user()->user_role == 'circle' )
+        {
+            return view('circle.tds.upazila_organization',[
+                'title' => 'TDS | Upazila & Organization', 
+                'zillas' => $zillas, 
+                'organizations' => $organizations,                
+            ]);
+        }
+
         return view('commissioner.tds.upazila_organization',[
             'title' => 'TDS | Upazila & Organization', 
             'zillas' => $zillas, 
@@ -85,6 +95,16 @@ class UpazilaController extends Controller
         $zillas = Zilla::orderBy('name', 'ASC')->get();
         $organizations = Organization::orderBy('name', 'ASC')->get();
 
+        if( Auth::user()->user_role == 'circle' )
+        {
+            return view('circle.tds.upazila_organization', [
+                'title' => 'TDS | Upazila & Organization',
+                'zillas' => $zillas,
+                'organizations' => $organizations,
+                'selectedUpazila' => $selectedUpazila,
+            ]);
+        }
+        
         return view('commissioner.tds.upazila_organization', [
             'title' => 'TDS | Upazila & Organization',
             'zillas' => $zillas,
