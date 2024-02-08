@@ -37,7 +37,7 @@
                             <select class="form-control" name="zilla_search" id="zilla_search">
                                 <option value="">Select Zilla</option>
                                 @foreach ($zillas as $zilla)
-                                    <option value="{{ $zilla->id }}">{{ ucfirst($zilla->name) }}</option>
+                                    <option value="{{ $zilla->id }}" {{ Request::get('zilla_search') == $zilla->id ? 'selected' : ''}} >{{ ucfirst($zilla->name) }} </option>
                                 @endforeach
           
                             </select>
@@ -50,6 +50,18 @@
                             <label for="upazila_search">Upazilla</label>
                             <select class="form-control" name="upazila_search" id="upazila_search">
                                 <option value="">Select Upazilla</option>
+
+                                @if (Request::get('zilla_search'))
+
+                                @php
+                                    $uapzilas = App\Models\Upazila::where('zilla_id', Request::get('zilla_search'))->get();
+                                @endphp
+                                
+                                @foreach ($uapzilas as $uapzila )
+                                <option value="{{ $uapzila->id }}" {{ Request::get('upazila_search') == $uapzila->id ? 'selected' : ''}} > {{ ucfirst($uapzila->name)}} </option>
+                                @endforeach
+                                    
+                                @endif
           
                             </select>
                         </div>
@@ -60,16 +72,31 @@
                             <label for="organization_search">Organization</label>
                             <select class="form-control" name="organization_search" id="organization_search" >
                                 <option value="">Select Organization</option>
+                                @if (Request::get('upazila_search'))
+
+                                @php
+                                    $organizations = App\Models\Upazila::where('id', Request::get('upazila_search'))->first()->organizations;
+                                    
+                                @endphp
+
+                                @foreach ($organizations as $organization )
+                                <option value="{{ $organization->id }}" {{ Request::get('organization_search') == $organization->id ? 'selected' : ''}} > {{ ucfirst($organization->name) }} </option>
+                                @endforeach
+                                    
+                                @endif
+                               
           
           
                             </select>
+
+                          
                         </div>
                     </div>
           
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="start_month">Start Month</label>
-                            <input type="month" name="start_month" class="form-control">
+                            <input type="month" name="start_month" value="{{ Request::get('start_month') }}" class="form-control">
 
                         </div>
                     </div>
@@ -77,14 +104,14 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="end_month">End Month</label>
-                            <input type="month" name="end_month" class="form-control">
+                            <input type="month" name="end_month" value="{{ Request::get('end_month') }}" class="form-control">
 
                         </div>
                     </div>
           
                     <div class="col-md-2">
-                      <div class="form-group mt-4">
-                        <input type="submit" class="btn btn-primary mt-2" value="Search">
+                      <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Search">
                       </div>
                   </div>
           
@@ -190,6 +217,7 @@
         $('#zilla_search').change(function() {
             var zilla = $(this).val();
             $('#upazila_search').empty();
+            $('#organization_search').empty();
             if (zilla) {
              
                 $.ajax({
@@ -221,7 +249,7 @@
 
         $('#upazila_search').change(function() {
             var upazila = $(this).val();
-
+            $('#organization_search').empty();
             if (upazila) {
                 $.ajax({
                     type: "GET",
@@ -231,7 +259,7 @@
                     success: function(res) {
                         if (res) {
 
-                            $('#organization_search').empty();
+                            
 
                             $('#organization_search').append('<option value="">Select Organization</option>');
                             $.each(res.organization, function(key, value) {
