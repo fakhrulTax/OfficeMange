@@ -69,7 +69,6 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
 
     //Tin checker
-
     Route::get('/tin-checker/{tin}', [StockController::class, 'tinChecker'])->name('tinChecker');
 
 
@@ -94,14 +93,18 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::post('notice/{tin}/{section}', [NoticeController::class, 'notice183'])->name('notice.183');
 
     //TDS routes
-    Route::get('/tds', [TdsController::class, 'index'])->name('tds.index');
-    
+    Route::get('/tds', [TdsController::class, 'index'])->name('tds.index');    
     Route::get('/tds/create', [TdsController::class, 'create'])->name('tds.create');
      
     Route::post('/tds', [TdsController::class, 'store'])->name('tds.store');
     Route::get('/tds/edit/{id}', [TdsController::class, 'edit'])->name('tds.edit');
     Route::post('/tds/edit/{id}', [TdsController::class, 'update'])->name('tds.update');
-
+    Route::get('/circle/tds/upazila/organization', [UpazilaController::class, 'upazilaOrganization'])->name('tds.upazila.organization'); 
+    Route::post('/circle/tds/organization', [OrganizationController::class, 'store'])->name('tds.organization.store');
+    Route::get('/circle/tds/upazila/{upazial_id}/organization', [UpazilaController::class, 'upazilaOrganizationWithOrg'])->name('tds.upazilaSelected.organization');
+    Route::delete('/circle/remove-organization/{upazilaId}/{organizationId}', [UpazilaController::class, 'removeOrganization'])->name('removeOrganization');
+    Route::post('/circle/upazila/{upazilaId}/add-organizations', [UpazilaController::class, 'addSelectedOrganizations'])
+    ->name('tds.upazilaSelected.addOrganizations');
 
     Route::get('/tds/delete/{id}', [TdsController::class, 'destroy'])->name('tds.destroy');
 
@@ -145,6 +148,7 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::post('/tds/upazila', [UpazilaController::class, 'store'])->name('tds.upazila.store');
     Route::get('/tds/upazila/{id}', [UpazilaController::class, 'edit'])->name('tds.upazila.edit');
     Route::put('/tds/upazila/{id}', [UpazilaController::class, 'update'])->name('tds.upazila.update');
+
     Route::get('/commissioner/tds/upazila/organization', [UpazilaController::class, 'upazilaOrganization'])->name('tds.upazila.organization');    
     Route::get('/commissioner/tds/upazila/{upazial_id}/organization', [UpazilaController::class, 'upazilaOrganizationWithOrg'])->name('tds.upazilaSelected.organization');
     Route::delete('/remove-organization/{upazilaId}/{organizationId}', [UpazilaController::class, 'removeOrganization'])->name('removeOrganization');
@@ -152,8 +156,6 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     ->name('tds.upazilaSelected.addOrganizations');
 
     Route::get('/tds/organization', [OrganizationController::class, 'index'])->name('tds.organization.index');
-
-
     Route::post('/tds/organization', [OrganizationController::class, 'store'])->name('tds.organization.store');
     Route::get('/tds/organization/{id}', [OrganizationController::class, 'edit'])->name('tds.organization.edit');
     Route::put('/tds/organization/{organization}', [OrganizationController::class, 'update'])->name('tds.organization.update');
