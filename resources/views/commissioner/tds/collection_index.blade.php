@@ -4,15 +4,27 @@
 
 @section('content')
 
-@php
-    $assessment_year = 20232024;
-    $monthRange = App\Helpers\MyHelper::dateRangeAssessmentYear($assessmentYear = 20232024);
-    
-    $circleData = App\Models\Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
-    
-    $zillas =  App\Models\Zilla::getAllZillas();
-    
-@endphp
+
+    @php
+        $assessment_year = 20232024;
+        $monthRange = App\Helpers\MyHelper::dateRangeAssessmentYear($assessmentYear = 20232024);
+
+        $circleData = App\Models\Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
+
+
+        
+        $zillas = App\Models\Zilla::orderBy('name')->get()->load('upazilas');
+        // $zillaWiseCollection =;
+
+        $data = [];
+        foreach ($zillas as $key => $zilla) {
+            $AllupazilasColllection = App\Models\Tds_collection::whereIn('upazila_id', $zilla->upazilas->pluck('id'))->get()->groupBy('collection_month');
+
+            $data[] = $AllupazilasColllection;
+        }
+
+    @endphp
+
 
     <div class="content-header">
         <div class="container-fluid">
@@ -36,36 +48,38 @@
 
         <div class="card">
             <div class="card-body">
-                
-                <div class="row">                    
-                    
+
+                <div class="row">
+
                     <div class="col-lg-4 col-6">
                         <!-- small box -->
                         <div class="small-box bg-success">
-                        <div class="inner">
-                            <h5>Total Collection:  </h5>
-                            <p>Govt: </p>
-                            <p>Non Govt: </p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                            <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <div class="inner">
+                                <h5>Total Collection: </h5>
+                                <p>Govt: </p>
+                                <p>Non Govt: </p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-6">
                         <!-- small box -->
                         <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h5>Total Organization:  </h5>
-                            <p>Govt: </p>
-                            <p>Non Govt: </p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                            <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <div class="inner">
+                                <h5>Total Organization: </h5>
+                                <p>Govt: </p>
+                                <p>Non Govt: </p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -120,6 +134,7 @@
                                             @php
                                                 $totalAllMonths += $columnTotals[$month];
                                             @endphp
+
                                         @endforeach
                                         <td>{{ App\Helpers\MyHelper::moneyFormatBD($totalAllMonths) }}</td>
                                     </tr>
@@ -141,7 +156,7 @@
                                     <thead>
                                         <tr>
                                             <th>Distict</th>
-                                            @foreach( $monthRange as $month )
+                                            @foreach ($monthRange as $month)
                                                 <th> {{ $month }} </th>
                                             @endforeach
                                             <th>Total</th>
@@ -176,7 +191,30 @@
                                         </tr>
                                         @endforeach
 
+
+                                        @foreach ($zillas as $key => $zilla)
+                                            <tr>
+
+                                                <td> {{ ucfirst($zilla->name) }} </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+
+                                            </tr>
+                                        @endforeach
                                         <tr>
+
+
                                             <td>Total</td>
                                             @foreach($monthRange as $month)
                                                 <td>{{ App\Helpers\MyHelper::moneyFormatBD($columnTotals[$month] ?? 0) }}</td>
@@ -202,5 +240,4 @@
 @endsection
 
 @push('js')
- 
 @endpush

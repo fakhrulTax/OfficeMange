@@ -122,6 +122,16 @@
                     </li>
 
                     <li class="nav-item">
+                        <a href="{{ route('circle.advance.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'circle.advance.index' || Route::currentRouteName() == 'circle.advance.create' || Route::currentRouteName() == 'circle.advance.search' ? 'active' : '' }}">
+                            <i class="nav-icon fab fa-speakap text-light"></i>
+                            <p>
+                                Advance
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
                         <a href="{{ route('circle.appeal.index') }}"
                             class="nav-link {{ Route::currentRouteName() == 'circle.appeal.index' || Route::currentRouteName() == 'circle.appeal.create' || Route::currentRouteName() == 'circle.appeal.search' ? 'active' : '' }}">
                             <i class="nav-icon fa fa-bookmark text-light"></i>
