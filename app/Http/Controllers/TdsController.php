@@ -232,6 +232,11 @@ class TdsController extends Controller
     }
     public function collectionIndex()
     {
+        // $zillas =  Zilla::getAllZillas();
+        // $upazilas = $zilla->upazilas;
+        // $upazilaIds = $upazilas->pluck('id')->toArray();
+
+
             
         return view('commissioner.tds.collection_index');
     }
