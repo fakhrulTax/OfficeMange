@@ -167,6 +167,7 @@
                                             continue;
                                         } 
 
+
                                         $rowTotal = 0;
                                         $columnTotals = [];
                                     @endphp
@@ -174,11 +175,11 @@
                                     <tr>
                                         <td><a href="{{ route('commissioner.tds.collection.zilla', $zilla->id) }}">{{ ucfirst($zilla->name) }}</a></td>
                                         @foreach ($monthRange as $month)
-                                            <td>{{ App\Helpers\MyHelper::moneyFormatBD($zillaData[1][$month]) }}</td>
+                                            <td>{{ App\Helpers\MyHelper::moneyFormatBD($zillaData[$month]) }}</td>
                                             @php
-                                                $rowTotal += $zillaData[1][$month];
-                                                $columnTotals[$month] = ($columnTotals[$month] ?? 0) + $zillaData[1][$month];
-                                                $totalAllMonths += $zillaData[1][$month];
+                                                $rowTotal += $zillaData[$month];
+                                                $columnTotals[$month] = ($columnTotals[$month] ?? 0) + $zillaData[$month];
+                                                $totalAllMonths += $zillaData[$month];
                                             @endphp
                                         @endforeach   
                                         <td>{{ App\Helpers\MyHelper::moneyFormatBD($rowTotal) }}</td>
