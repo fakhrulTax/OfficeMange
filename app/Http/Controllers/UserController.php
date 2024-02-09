@@ -56,7 +56,7 @@ class UserController extends Controller
             'user_role' => 'required',
             'name' => 'required',
             'designation' => 'required',
-            'mobile_number' => 'required | digits:11 | unique:users',
+            'mobile_number' => 'required | digits:11',
             'email' => 'required | email | unique:users',
             'password' => ['required', Password::min(8)
             ->mixedCase()
