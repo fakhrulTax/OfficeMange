@@ -8,11 +8,7 @@
     @php
         $assessment_year = 20232024;
         $monthRange = App\Helpers\MyHelper::dateRangeAssessmentYear($assessmentYear = 20232024);
-
-        $circleData = App\Models\Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
-
-       $zillas = App\Models\Zilla::orderBy('name')->get();
-
+        $upazilasData = App\Models\Tds_collection::getAssessmentYearCollectionByUpazila($upazilaIds, $monthRange);
     @endphp
 
 
@@ -40,51 +36,14 @@
             <div class="card-body">
 
                 <div class="row">
-
-                    <div class="col-lg-4 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <h5>Total Collection: </h5>
-                                <p>Govt: </p>
-                                <p>Non Govt: </p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-stats-bars"></i>
-                            </div>
-                            <a href="" class="small-box-footer">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-warning">
-                            <div class="inner">
-                                <h5>Total Organization: </h5>
-                                <p>Govt: </p>
-                                <p>Non Govt: </p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-stats-bars"></i>
-                            </div>
-                            <a href="" class="small-box-footer">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary">
-                            <div class="card-header">Distict Wise Collection</div>
+                            <div class="card-header">Upazila TDS</div>
                             <div class="card-body">
                             <table class="table table-bordered table-responsive">
                             <thead>
                                 <tr>
-                                    <th>District</th>
+                                    <th>Upazila</th>
                                     @foreach ($monthRange as $month)
                                         <th>{{ $month }}</th>
                                     @endforeach
@@ -95,30 +54,28 @@
                             <tbody>
                                 @php
                                     $totalAllMonths = 0;
+                                    $rowTotal = 0;
+                                    $columnTotals = [];
                                 @endphp
 
-                                @foreach ($zillas as $zilla)
-                                    @php 
-                                        $ziallInstance = App\Models\Zilla::find($zilla->id);
-                                        $upazilas = $ziallInstance->upazilas;    
-                                        $upazilaIds = $upazilas->pluck('id')->toArray();                                   
-                                        $zillaData = App\Models\Tds_collection::getAssessmentYearCollectionByUpazilas($upazilaIds, $monthRange);   
-                                        if (!count($zillaData)) {
+                                @foreach ($upazilasData as $key => $upazilaData)
+                                    @php                             
+                                        
+                                        if (!count($upazilasData)) {
                                             continue;
                                         } 
-
-                                        $rowTotal = 0;
-                                        $columnTotals = [];
+                                        $upazila = App\Models\Upazila::find($key);                                 
+                                        
                                     @endphp
 
                                     <tr>
-                                        <td><a href="{{ route('commissioner.tds.collection.zilla', $zilla->id) }}">{{ ucfirst($zilla->name) }}</a></td>
+                                        <td>{{ ucfirst($upazila->name) }}</td>
                                         @foreach ($monthRange as $month)
-                                            <td>{{ App\Helpers\MyHelper::moneyFormatBD($zillaData[1][$month]) }}</td>
+                                            <td>{{ App\Helpers\MyHelper::moneyFormatBD($upazilaData[$month]) }}</td>
                                             @php
-                                                $rowTotal += $zillaData[1][$month];
-                                                $columnTotals[$month] = ($columnTotals[$month] ?? 0) + $zillaData[1][$month];
-                                                $totalAllMonths += $zillaData[1][$month];
+                                                $rowTotal += $upazilaData[$month];
+                                                $columnTotals[$month] = ($columnTotals[$month] ?? 0) + $upazilaData[$month];
+                                                $totalAllMonths += $upazilaData[$month];
                                             @endphp
                                         @endforeach   
                                         <td>{{ App\Helpers\MyHelper::moneyFormatBD($rowTotal) }}</td>
