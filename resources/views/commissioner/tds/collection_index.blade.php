@@ -4,14 +4,6 @@
 
 @section('content')
 
-<<<<<<< HEAD
-@php
-    $assessment_year = 20232024;
-    $monthRange = App\Helpers\MyHelper::dateRangeAssessmentYear($assessmentYear = 20232024);
-    
-    $circleData = App\Models\Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
-@endphp
-=======
 
     @php
         $assessment_year = 20232024;
@@ -19,21 +11,10 @@
 
         $circleData = App\Models\Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
 
-
-        
-        $zillas = App\Models\Zilla::orderBy('name')->get()->load('upazilas');
-        // $zillaWiseCollection =;
-
-        $data = [];
-        foreach ($zillas as $key => $zilla) {
-            $AllupazilasColllection = App\Models\Tds_collection::whereIn('upazila_id', $zilla->upazilas->pluck('id'))->get()->groupBy('collection_month');
-
-            $data[] = $AllupazilasColllection;
-        }
+       $zillas = App\Models\Zilla::orderBy('name')->get();
 
     @endphp
 
->>>>>>> 645ee561eb670421aaca1d3fb092c9fb885ff3be
 
     <div class="content-header">
         <div class="container-fluid">
@@ -100,36 +81,38 @@
                         <div class="card card-primary">
                             <div class="card-header">Circle Wise Collection</div>
                             <div class="card-body">
-                                <table class="table table-bordered table-responsive">
+                            <table class="table table-bordered table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Circle</th>
+                                        @foreach($monthRange as $month)
+                                            <th>{{ $month }}</th>
+                                        @endforeach
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
 
-<<<<<<< HEAD
-                                    <thead>
-                                        <tr>
-                                            <th>Circle</th>
-                                            @foreach( $monthRange as $month )
-                                                <th> {{ $month }} </th>
-                                            @endforeach
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @foreach($circleData as $key => $circleMonth)
-=======
                                 <tbody>
                                     @php
                                         $columnTotals = array_fill_keys($monthRange, 0);
                                     @endphp
 
                                     @foreach($circleData as $key => $circleMonth)
->>>>>>> 645ee561eb670421aaca1d3fb092c9fb885ff3be
                                         <tr>
                                             <td>C-{{ $key }}</td>
-                                            @foreach( $monthRange as $month )
-                                                <td>{{ $circleMonth[$month] }}</td>
-                                            @endforeach                                            
+                                            @php
+                                                $rowTotal = 0;
+                                            @endphp
+                                            @foreach($monthRange as $month)
+                                                <td>{{ App\Helpers\MyHelper::moneyFormatBD($circleMonth[$month]) }}</td>
+                                                @php
+                                                    $rowTotal += $circleMonth[$month];
+                                                    $columnTotals[$month] += $circleMonth[$month];
+                                                @endphp
+                                            @endforeach
+                                            <td>{{ App\Helpers\MyHelper::moneyFormatBD($rowTotal) }}</td>
                                         </tr>
-                                        @endforeach
+                                    @endforeach
 
                                     <tr>
                                         <td>Total</td>
@@ -141,10 +124,7 @@
                                             @php
                                                 $totalAllMonths += $columnTotals[$month];
                                             @endphp
-<<<<<<< HEAD
-=======
 
->>>>>>> 645ee561eb670421aaca1d3fb092c9fb885ff3be
                                         @endforeach
                                         <td>{{ App\Helpers\MyHelper::moneyFormatBD($totalAllMonths) }}</td>
                                     </tr>
@@ -174,9 +154,6 @@
                                     </thead>
 
                                     <tbody>
-<<<<<<< HEAD
-                                        @for($i = 1; $i <= 6; $i++)
-=======
                                         @foreach($zillas as $zilla)
                                         @php 
                                             $ziallInstance = App\Models\Zilla::find($zilla->id);
@@ -188,30 +165,43 @@
                                                 continue;
                                             }                                       
                                         @endphp
->>>>>>> 645ee561eb670421aaca1d3fb092c9fb885ff3be
                                         <tr>
-                                            <td> Cumilla </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td> {{  ucfirst($zilla->name) }} </td>
+                                            @php
+                                                $rowTotal = 0;
+                                            @endphp
+                                            @foreach( $monthRange as $month )                                               
+                                                <td>{{ App\Helpers\MyHelper::moneyFormatBD($zillaData[1][$month]) }}</td>
+                                                @php
+                                                    $rowTotal += $zillaData[1][$month];
+                                                    $columnTotals[$month] = ($columnTotals[$month] ?? 0) + $zillaData[1][$month];
+                                                @endphp
+                                            @endforeach   
+                                            <td> {{  App\Helpers\MyHelper::moneyFormatBD($rowTotal) }}</td>
                                         </tr>
-<<<<<<< HEAD
-                                        @endfor
-=======
                                         @endforeach
 
->>>>>>> 645ee561eb670421aaca1d3fb092c9fb885ff3be
 
+                                        @foreach ($zillas as $key => $zilla)
+                                            <tr>
+
+                                                <td> {{ ucfirst($zilla->name) }} </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+
+                                            </tr>
+                                        @endforeach
                                         <tr>
 
 
