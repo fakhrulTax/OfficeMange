@@ -240,6 +240,18 @@ class TdsController extends Controller
             
         return view('commissioner.tds.collection_index');
     }
+
+    public function collectionZilla($zillaId)
+    {
+        $zilla = Zilla::find($zillaId);
+        $upazilas = $zilla->upazilas;    
+        $upazilaIds = $upazilas->pluck('id')->toArray();         
+       
+        return view('commissioner.tds.collection_zilla', [
+            'title' => 'TDS | '. ucfirst($zilla->name),
+            'zilla' => $zilla,
+        ]);
+    }
     
    
     
