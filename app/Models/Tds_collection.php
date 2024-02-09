@@ -61,7 +61,8 @@ class Tds_collection extends Model
         return $formattedData;
     }
     
-     
+    
+    
 
     public static function getAssessmentYearCollectionByUpazilas(array $upazilaIds, array $monthsOrder)
     {
@@ -91,8 +92,22 @@ class Tds_collection extends Model
             $upazila = array_replace(array_fill_keys($monthsOrder, 0), $upazila);
         }
 
-        return $formattedData;
+       
+        // Array to store the sum of values for each month
+        $monthlySum = [];
+
+        // Loop through each array in $monthlyData
+        foreach ($formattedData as $array) {
+            // Loop through each month in the array
+            foreach ($array as $month => $value) {
+                // Initialize the sum for the current month if not set
+                $monthlySum[$month] = ($monthlySum[$month] ?? 0) + $value;
+            }
+        }
+
+        return $monthlySum;
     }
+    
 
     private static function mapDatabaseMonthToFormat($databaseMonth)
     {
