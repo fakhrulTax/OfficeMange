@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('designation')->nullable();
-            $table->string('mobile_number')->unique();
+            $table->string('mobile_number');
             $table->integer('range')->nullable();
             $table->integer('circle')->nullable();
             $table->string('user_role');
