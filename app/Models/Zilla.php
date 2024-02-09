@@ -15,4 +15,10 @@ class Zilla extends Model
     public function upazilas(){
         return $this->hasMany(Upazila::class);
     }
+
+    public static function getAllZillas() 
+    {
+        $disticts = self::orderBy('name', 'ASC')->get();
+        return $disticts;
+    }
 }
