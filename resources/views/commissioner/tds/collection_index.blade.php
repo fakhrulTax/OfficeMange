@@ -162,7 +162,7 @@
                                         $ziallInstance = App\Models\Zilla::find($zilla->id);
                                         $upazilas = $ziallInstance->upazilas;    
                                         $upazilaIds = $upazilas->pluck('id')->toArray();                                   
-                                        $zillaData = App\Models\Tds_collection::getAssessmentYearCollectionByUpazilas($upazilaIds, $monthRange);   
+                                        $zillaData = App\Models\Tds_collection::getAssessmentYearCollectionByZilla($upazilaIds, $monthRange);   
                                         if (!count($zillaData)) {
                                             continue;
                                         } 
