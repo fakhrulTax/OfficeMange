@@ -178,6 +178,7 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     //TDS Collection Panel Route
     Route::get('/tds/collection', [TdsController::class, 'collectionIndex'])->name('tds.collection.index');
+    Route::get('/tds/collection/{zillaId}/zilla', [TdsController::class, 'collectionZilla'])->name('tds.collection.zilla');
 
     //TDS Routes
     Route::get('/tds-list', [TdsController::class, 'commissionTdsIndex'])->name('tdsList.index');
