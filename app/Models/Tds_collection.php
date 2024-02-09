@@ -61,12 +61,47 @@ class Tds_collection extends Model
         return $formattedData;
     }
     
+     
+
+    public static function getAssessmentYearCollectionByUpazilas(array $upazilaIds, array $monthsOrder)
+    {
+        // Use Eloquent to group by upazila and month and get the sum of amount
+        $upazilaData = Self::select('upazila_id', DB::raw("SUBSTRING(collection_month, 1, 7) as month"), DB::raw('SUM(tds) as total_amount'))
+            ->whereIn('upazila_id', $upazilaIds)
+            ->groupBy('upazila_id', 'month')
+            ->orderBy('upazila_id')
+            ->orderBy(DB::raw("FIELD(month, '" . implode("','", $monthsOrder) . "')"))
+            ->get();
+
+        // Organize the data into the format you want
+        $formattedData = [];
+
+        foreach ($upazilaData as $item) {
+            // Map the database month to your predefined format
+            $formattedMonth = Self::mapDatabaseMonthToFormat($item->month);
+
+            // Only include months in your predefined order
+            if (in_array($formattedMonth, $monthsOrder)) {
+                $formattedData[$item->upazila_id][$formattedMonth] = $item->total_amount;
+            }
+        }
+
+        // Fill missing months with zero values
+        foreach ($formattedData as &$upazila) {
+            $upazila = array_replace(array_fill_keys($monthsOrder, 0), $upazila);
+        }
+
+        return $formattedData;
+    }
+
     private static function mapDatabaseMonthToFormat($databaseMonth)
     {
         $dateTime = new \DateTime($databaseMonth);
         return $dateTime->format('F Y');
     }
-    
+
+
+
     
 
 
