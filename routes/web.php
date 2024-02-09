@@ -19,6 +19,7 @@ use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\TdsController;
+use App\Http\Controllers\AdvanceController;
 
 
 
@@ -109,6 +110,19 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/tds/delete/{id}', [TdsController::class, 'destroy'])->name('tds.destroy');
 
     Route::get('/tds/search', [TdsController::class, 'tdsSearch'])->name('tds.search');
+
+
+    //advance
+    Route::get('/advance', [AdvanceController::class, 'advanceIndex'])->name('advance.index');
+    Route::get('/advance/create', [AdvanceController::class, 'create'])->name('advance.create');
+    Route::post('/advance', [AdvanceController::class, 'store'])->name('advance.store');
+
+    Route::get('/advance/edit/{id}', [AdvanceController::class, 'edit'])->name('advance.edit');
+    Route::post('/advance/edit/{id}', [AdvanceController::class, 'update'])->name('advance.update');
+
+    Route::get('/advance/search', [AdvanceController::class, 'search'])->name('advance.search');
+
+
 
 
 });
