@@ -141,55 +141,60 @@
                         <div class="card card-primary">
                             <div class="card-header">Distict Wise Collection</div>
                             <div class="card-body">
-                                <table class="table table-bordered table-responsive">
+                            <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>District</th>
+                                    @foreach ($monthRange as $month)
+                                        <th>{{ $month }}</th>
+                                    @endforeach
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
 
-                                    <thead>
-                                        <tr>
-                                            <th>Distict</th>
-                                            @foreach ($monthRange as $month)
-                                                <th> {{ $month }} </th>
-                                            @endforeach
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
+                            <tbody>
+                                @php
+                                    $totalAllMonths = 0;
+                                @endphp
 
-                                    <tbody>
-                                        @foreach($zillas as $zilla)
-                                            @php 
-                                                $ziallInstance = App\Models\Zilla::find($zilla->id);
-                                                $upazilas = $ziallInstance->upazilas;    
-                                                $upazilaIds = $upazilas->pluck('id')->toArray();                                   
-                                                $zillaData = App\Models\Tds_collection::getAssessmentYearCollectionByUpazilas($upazilaIds, $monthRange);   
-                                                if( !count($zillaData ) )
-                                                {
-                                                    continue;
-                                                }                                       
-                                            @endphp
-                                        <tr>
-                                            <td> {{  ucfirst($zilla->name) }} </td>
+                                @foreach ($zillas as $zilla)
+                                    @php 
+                                        $ziallInstance = App\Models\Zilla::find($zilla->id);
+                                        $upazilas = $ziallInstance->upazilas;    
+                                        $upazilaIds = $upazilas->pluck('id')->toArray();                                   
+                                        $zillaData = App\Models\Tds_collection::getAssessmentYearCollectionByUpazilas($upazilaIds, $monthRange);   
+                                        if (!count($zillaData)) {
+                                            continue;
+                                        } 
+
+                                        $rowTotal = 0;
+                                        $columnTotals = [];
+                                    @endphp
+
+                                    <tr>
+                                        <td>{{ ucfirst($zilla->name) }}</td>
+                                        @foreach ($monthRange as $month)
+                                            <td>{{ App\Helpers\MyHelper::moneyFormatBD($zillaData[1][$month]) }}</td>
                                             @php
-                                                $rowTotal = 0;
+                                                $rowTotal += $zillaData[1][$month];
+                                                $columnTotals[$month] = ($columnTotals[$month] ?? 0) + $zillaData[1][$month];
+                                                $totalAllMonths += $zillaData[1][$month];
                                             @endphp
+                                        @endforeach   
+                                        <td>{{ App\Helpers\MyHelper::moneyFormatBD($rowTotal) }}</td>
+                                    </tr>
+                                @endforeach
 
-                                            @foreach( $monthRange as $month )                                               
-                                                <td>{{ App\Helpers\MyHelper::moneyFormatBD($zillaData[1][$month]) }}</td>
-                                                @php
-                                                    $rowTotal += $zillaData[1][$month];
-                                                    $columnTotals[$month] = ($columnTotals[$month] ?? 0) + $zillaData[1][$month];
-                                                @endphp
-                                            @endforeach   
-                                            <td> {{  App\Helpers\MyHelper::moneyFormatBD($rowTotal) }}</td>
-                                        </tr>
-                                        @endforeach
-                                        <tr>
-                                            <td>Total</td>
-                                            @foreach($monthRange as $month)
-                                                <td>{{ App\Helpers\MyHelper::moneyFormatBD($columnTotals[$month] ?? 0) }}</td>
-                                            @endforeach
-                                        </tr>
-                                    </tbody>
+                                <tr>
+                                    <td>Total</td>
+                                    @foreach ($monthRange as $month)
+                                        <td>{{ App\Helpers\MyHelper::moneyFormatBD($columnTotals[$month] ?? 0) }}</td>  
+                                    @endforeach
+                                    <td>{{ App\Helpers\MyHelper::moneyFormatBD($totalAllMonths) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                                </table>
                             </div>
                         </div>
                     </div>
