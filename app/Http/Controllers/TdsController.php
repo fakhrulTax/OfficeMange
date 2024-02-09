@@ -245,11 +245,12 @@ class TdsController extends Controller
     {
         $zilla = Zilla::find($zillaId);
         $upazilas = $zilla->upazilas;    
-        $upazilaIds = $upazilas->pluck('id')->toArray();         
+        $upazilaIds = $upazilas->pluck('id')->toArray();   
        
         return view('commissioner.tds.collection_zilla', [
             'title' => 'TDS '. ucfirst($zilla->name),
             'zilla' => $zilla,
+            'upazilaIds' => $upazilaIds,
         ]);
     }
     
