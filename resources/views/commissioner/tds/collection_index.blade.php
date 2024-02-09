@@ -4,12 +4,25 @@
 
 @section('content')
 
-@php
-    $assessment_year = 20232024;
-    $monthRange = App\Helpers\MyHelper::dateRangeAssessmentYear($assessmentYear = 20232024);
-    
-    $circleData = App\Models\Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
-@endphp
+    @php
+        $assessment_year = 20232024;
+        $monthRange = App\Helpers\MyHelper::dateRangeAssessmentYear($assessmentYear = 20232024);
+
+        $circleData = App\Models\Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
+
+
+        
+        $zillas = App\Models\Zilla::orderBy('name')->get()->load('upazilas');
+        // $zillaWiseCollection =;
+
+        $data = [];
+        foreach ($zillas as $key => $zilla) {
+            $AllupazilasColllection = App\Models\Tds_collection::whereIn('upazila_id', $zilla->upazilas->pluck('id'))->get()->groupBy('collection_month');
+
+            $data[] = $AllupazilasColllection;
+        }
+
+    @endphp
 
     <div class="content-header">
         <div class="container-fluid">
@@ -33,36 +46,38 @@
 
         <div class="card">
             <div class="card-body">
-                
-                <div class="row">                    
-                    
+
+                <div class="row">
+
                     <div class="col-lg-4 col-6">
                         <!-- small box -->
                         <div class="small-box bg-success">
-                        <div class="inner">
-                            <h5>Total Collection:  </h5>
-                            <p>Govt: </p>
-                            <p>Non Govt: </p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                            <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <div class="inner">
+                                <h5>Total Collection: </h5>
+                                <p>Govt: </p>
+                                <p>Non Govt: </p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-6">
                         <!-- small box -->
                         <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h5>Total Organization:  </h5>
-                            <p>Govt: </p>
-                            <p>Non Govt: </p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                            <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <div class="inner">
+                                <h5>Total Organization: </h5>
+                                <p>Govt: </p>
+                                <p>Non Govt: </p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
 
@@ -79,7 +94,7 @@
                                     <thead>
                                         <tr>
                                             <th>Circle</th>
-                                            @foreach( $monthRange as $month )
+                                            @foreach ($monthRange as $month)
                                                 <th> {{ $month }} </th>
                                             @endforeach
                                             <th>Total</th>
@@ -87,13 +102,13 @@
                                     </thead>
 
                                     <tbody>
-                                        @foreach($circleData as $key => $circleMonth)
-                                        <tr>
-                                            <td>C-{{ $key }}</td>
-                                            @foreach( $monthRange as $month )
-                                                <td>{{ $circleMonth[$month] }}</td>
-                                            @endforeach                                            
-                                        </tr>
+                                        @foreach ($circleData as $key => $circleMonth)
+                                            <tr>
+                                                <td>C-{{ $key }}</td>
+                                                @foreach ($monthRange as $month)
+                                                    <td>{{ $circleMonth[$month] }}</td>
+                                                @endforeach
+                                            </tr>
                                         @endforeach
 
                                         <tr>
@@ -117,7 +132,7 @@
                                     <thead>
                                         <tr>
                                             <th>Distict</th>
-                                            @foreach( $monthRange as $month )
+                                            @foreach ($monthRange as $month)
                                                 <th> {{ $month }} </th>
                                             @endforeach
                                             <th>Total</th>
@@ -125,26 +140,30 @@
                                     </thead>
 
                                     <tbody>
-                                        @for($i = 1; $i <= 6; $i++)
-                                        <tr>
-                                            <td> Cumilla </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        @endfor
 
+                                        @foreach ($zillas as $key => $zilla)
+                                            <tr>
+
+                                                <td> {{ ucfirst($zilla->name) }} </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+
+                                            </tr>
+                                        @endforeach
                                         <tr>
+
+
                                             <td>Total</td>
                                         </tr>
                                     </tbody>
@@ -167,5 +186,4 @@
 @endsection
 
 @push('js')
- 
 @endpush
