@@ -173,6 +173,8 @@
 
                                     <tr>
                                         <td><a href="{{ route('commissioner.tds.collection.zilla', $zilla->id) }}">{{ ucfirst($zilla->name) }}</a></td>
+
+                                     
                                         @foreach ($monthRange as $month)
                                             <td>{{ App\Helpers\MyHelper::moneyFormatBD($zillaData[1][$month]) }}</td>
                                             @php
