@@ -109,10 +109,26 @@ class AdvanceController extends Controller
     }
 
 
-    public function destroy($id){
-        $advance = Advance::find($id);
-        $advance->delete();
-        Toastr::success('Advance Deleted Successfully', 'success');
-        return redirect()->route('circle.advance.index');
+    public function search(Request $request){
+        $advances = Advance::query();
+
+        if(!empty($request->tin)){
+            $advances = $advances->where('tin', $request->tin);
+        }
+
+        if(!empty($request->advance_assessment_year)){
+
+            $advances = $advances->where('advance_assessment_year', $request->advance_assessment_year);
+            
+        }
+
+        $advances = $advances->paginate(100);
+
+
+       
+        return view('circle.advance.index', compact('advances') );
     }
+
+
+
 }

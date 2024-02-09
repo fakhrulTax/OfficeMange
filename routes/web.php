@@ -120,7 +120,8 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/advance/edit/{id}', [AdvanceController::class, 'edit'])->name('advance.edit');
     Route::post('/advance/edit/{id}', [AdvanceController::class, 'update'])->name('advance.update');
 
-    Route::get('/advance/delete/{id}', [AdvanceController::class, 'destroy'])->name('advance.destroy');
+    Route::get('/advance/search', [AdvanceController::class, 'search'])->name('advance.search');
+
 
 
 
