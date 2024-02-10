@@ -217,6 +217,10 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('commissioner/user/delete/{id}', [UserController::class, 'userDelete'])->name('user.delete');
 
+    //Settings
+	Route::get('/commissioner/setting', [SettingController::class, 'index'])->name('setting.index');
+	Route::post('/commissioner/setting', [SettingController::class, 'update'])->name('setting.update');
+
     //SMS routes
 
     Route::get('commissioner/sms', [SMSController::class, 'index'])->name('sms');
