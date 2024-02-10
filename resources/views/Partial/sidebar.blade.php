@@ -101,6 +101,16 @@
                             </p>
                         </a>
                     </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ route('circle.advance.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'circle.advance.index' || Route::currentRouteName() == 'circle.advance.create' || Route::currentRouteName() == 'circle.advance.search' ? 'active' : '' }}">
+                            <i class="nav-icon fab fa-speakap text-light"></i>
+                            <p>
+                                Advance
+                            </p>
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a href="{{ route('circle.arrears') }}" class="nav-link {{ Route::currentRouteName() == 'circle.arrears' ? 'active' : ''}}">
@@ -117,16 +127,6 @@
                             <i class="nav-icon fab fa-speakap text-light"></i>
                             <p>
                                 Collection
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="{{ route('circle.advance.index') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'circle.advance.index' || Route::currentRouteName() == 'circle.advance.create' || Route::currentRouteName() == 'circle.advance.search' ? 'active' : '' }}">
-                            <i class="nav-icon fab fa-speakap text-light"></i>
-                            <p>
-                                Advance
                             </p>
                         </a>
                     </li>
@@ -164,8 +164,7 @@
 
                 {{-- commissioner sidebar start from here   --}}
                 @if ($user->user_role == 'commissioner')
-                    <!-- Add icons to the links using the .nav-icon class
-     with font-awesome or any other icon font library -->
+                    <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                     <li class="nav-item">
                         <a href="{{ route('commissioner.dashboard') }}"
                             class="nav-link {{ Route::currentRouteName() == 'commissioner.dashboard' ? 'active' : '' }} ">
