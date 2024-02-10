@@ -48,6 +48,7 @@
                             <th>Assessment Year</th>
                             <th>Arrear</th>
                             <th>Fine</th>
+                            <th>Collection</th>
                             <th>Circle</th>
 
                             <th>Action</th>
@@ -73,9 +74,6 @@
                                     <table class="table table-bordered table-striped">
                                         @foreach ($arrear as $key => $ar)
                                             <tr>
-
-
-
                                                 <td>{{ App\Helpers\MyHelper::assessment_year_format($ar->assessment_year) }}
                                                 </td>
 
@@ -117,9 +115,12 @@
                                 </td>
 
                                 <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('fine')) }}</td>
+                                <td></td>
 
                                 <td>Circle-{{ $arrear[0]->circle }}</td>
-                                <td>Notice</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary">Notice</button>
+                                </td>
 
 
                             </tr>
