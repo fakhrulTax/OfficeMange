@@ -224,17 +224,16 @@
                         </ul>
                     </li>
 
+
                     <li class="nav-item">
-                        <a href="{{ route('commissioner.task.index') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'commissioner.task.index' ? 'active' : '' }}">
-                            <i class="nav-icon fab fa-dailymotion text-light"></i>
+                        <a href="{{ route('commissioner.advance.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'commissioner.advance.index' || Route::currentRouteName() == 'circle.advance.search' ? 'active' : '' }}">
+                            <i class="nav-icon fab fa-speakap text-light"></i>
                             <p>
-                                Forward Dairy
+                                Advance
                             </p>
                         </a>
                     </li>
-
-           
 
                     <li class="nav-item">
                         <a href="{{ route('commissioner.arrears', 'all') }}"
@@ -256,35 +255,7 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-folder text-light"></i>
-                            <p>
-                                ReOpen
-                            </p>
-                        </a>
-                    </li>
                     
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-calculator text-light"></i>
-                            <p>
-                                Audit
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-file text-light"></i>
-                            <p>
-                                Sonchoy Potra
-                            </p>
-                        </a>
-                    </li>
 
                     <li class="nav-item">
                         <a href="{{ route('commissioner.users') }}"
