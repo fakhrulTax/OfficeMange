@@ -86,6 +86,9 @@
             @else
                 <!-- /.card-header -->
                 <div class="card-body">
+                    @if( Auth::user()->user_role == 'circle' )
+                        <a href="{{ Route('circle.advance.register') }}" class="btn btn-sm btn-primary" target="_blank">Register</a>
+                    @endif
                     <table id="example1" class="table table-primary table-bordered table-striped">
                         <thead>
                             <tr>
