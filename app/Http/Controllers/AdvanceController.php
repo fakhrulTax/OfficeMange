@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Advance;
 use App\Models\Stock;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 use Toastr;
 class AdvanceController extends Controller
@@ -30,7 +31,7 @@ class AdvanceController extends Controller
     
 
     public function advanceIndex(){
-        $advances = Advance::orderBy('id', 'DESC')->paginate(100);
+        $advances = Advance::orderBy('id', 'DESC')->where('circle', Auth::user()->circle)->paginate(100);
         return view('circle.advance.index', [
             'title' => 'Advance Tax',
             'advances' => $advances
@@ -53,7 +54,6 @@ class AdvanceController extends Controller
             'return_submitted_assessment_year' => 'required|digits:8',
             'income' => 'required',
             'tax' => 'required',
-
         ]);
 
         //check the tin is exist in stock table

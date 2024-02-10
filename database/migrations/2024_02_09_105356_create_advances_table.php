@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('return_submitted_assessment_year')->length(8);
             $table->BigInteger('income');
             $table->BigInteger('tax');
+            $table->integer('circle');
             $table->timestamps();
         });
     }
