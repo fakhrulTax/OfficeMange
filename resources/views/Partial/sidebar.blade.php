@@ -269,6 +269,16 @@
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a href="{{ route('commissioner.setting.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'circle.setting.index' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-cogs"></i>
+                            <p>
+                                Settings
+                            </p>
+                        </a>
+                    </li>
+
 
                     <li class="nav-item">
                         <a href="{{ route('commissioner.sms') }}"

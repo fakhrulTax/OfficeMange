@@ -6,8 +6,8 @@
 
 
     @php
-        $assessment_year = 20232024;
-        $monthRange = App\Helpers\MyHelper::dateRangeAssessmentYear($assessmentYear = 20232024);
+        $assessment_year = config('settings.assessment_year_commissioner');
+        $monthRange = App\Helpers\MyHelper::dateRangeAssessmentYear($assessment_year);
         $upazilasData = App\Models\Tds_collection::getAssessmentYearCollectionByUpazila($upazilaIds, $monthRange);
     @endphp
 

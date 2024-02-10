@@ -11,6 +11,14 @@ class SettingController extends Controller
 {
     public function index()
     {
+        
+        if( Auth::user()->user_role == 'commissioner' )
+        {            
+            return view('commissioner.setting.index',[
+                'title' => 'Settings'
+            ]);
+        }
+
     	return view('circle.setting.index',[
     		'title' => 'Settings'
     	]);
@@ -18,17 +26,29 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
+
         
-        if( !isset($request->sidebar_collapse) )
-        {
+        if( Auth::user()->user_role == 'circle' && !isset($request->sidebar_collapse_Auth::user()->circle) )
+        {   
             $request['sidebar_collapse_'. Auth::user()->circle] = null;
         }
 
+        if( Auth::user()->user_role == 'commissioner' &&  !isset($request->sidebar_collapse_commissioner) )
+        {   
+            $request['sidebar_collapse_commissioner'] = null;
+        }
+      
     	$keys = $request->except('_token');	
 
         foreach ($keys as $key => $value)
         {
             Setting::set($key, $value);
+        }
+
+        if( Auth::user()->user_role == 'commissioner' )
+        {            
+            Toastr::success('Settings Save Successful', 'Success');
+            return redirect()->route('commissioner.setting.index');
         }
 
         Toastr::success('Settings Save Successful', 'Success');
