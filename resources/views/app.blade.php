@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/datepicker/bootstrap-datepicker.min.css') }}">
   @stack('css')
 </head>
-<body class="hold-transition sidebar-mini layout-fixed {{ (config('settings.sidebar_collapse_'.Auth::user()->circle))? 'sidebar-collapse':'' }}">
+<body class="hold-transition sidebar-mini layout-fixed {{ (config('settings.sidebar_collapse_commissioner'))? 'sidebar-collapse':'' }}">
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
