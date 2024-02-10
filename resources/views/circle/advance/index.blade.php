@@ -17,8 +17,10 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
+                        @if(Auth::user()->user_role == 'circle')
                         <a href="{{ route('circle.advance.create') }}" class="btn btn-primary float-right"><i
                                 class="fas fa-plus"></i> Add Advance</a>
+                        @endif
                     </ol>
                 </div>
             </div>
@@ -30,7 +32,12 @@
 
         <div class="card">
             <div class="card-body">
+                @if( Auth::user()->user_role == 'circle' )
                 <form action="{{ route('circle.advance.search') }}" method="GET">
+                @elseif( Auth::user()->user_role == 'commissioner' )
+                <form action="{{ route('commissioner.advance.search') }}" method="GET">
+                @endif
+                    @csrf
                     <div class="row">
 
                         <div class="col-md-3">
@@ -40,8 +47,6 @@
                         </div>
 
 
-
-
                         <div class="col-md-3">
                             <div class="form-group">
                                 <input type="number" id="advance_assessment_year" name="advance_assessment_year"
@@ -49,6 +54,19 @@
                                     value="{{ Request::get('advance_assessment_year') }}">
                             </div>
                         </div>
+                        
+                        @if( Auth::user()->user_role != 'circle' )
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select name="circle" id="circle" class="form-control">
+                                    <option value="">Select Circle</option>
+                                    @for($i = 1; $i<=22; $i++)
+                                        <option value="{{ $i }}"  {{ (Request::get('circle') == $i) ? 'selected' : '' }}>Circle-{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                        @endif
 
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-primary">Search</button>
@@ -76,8 +94,11 @@
                                 <th>TIN, Name & Address</th>
                                 <th>Last Return Information</th>
                                 <th>Collection From Advance</th>
-                                <th>Action</th>
-
+                                @if(Auth::user()->user_role == 'circle')
+                                    <th>Action</th>
+                                @else
+                                    <th>Circle</th> 
+                                @endif
                             </tr>
                         </thead>
 
@@ -112,7 +133,7 @@
                                             $totalAmount = 0;
                                         @endphp
                                         
-                                        @if($advaneCollections)
+                                        @if(count($advaneCollections) > 0)
                                             @foreach($advaneCollections as $advanceCollection)
                                             @php
                                                 $totalAmount += $advanceCollection->amount;
@@ -127,11 +148,15 @@
                                             </p>
                                         @endif
                                     </td>
+                                    @if(Auth::user()->user_role == 'circle')
                                     <td>
                                         <a href="{{ route('circle.advance.edit', $advance->id) }}"
                                             class="btn btn-sm btn-primary">Edit</a>
                                         <button class="btn btn-sm btn-success" onclick="advanceModal({{ $advance->tin }}, {{ $advance->advance_assessment_year }})">Notice</button>                                        
                                     </td>
+                                    @else
+                                        <td>{{ $advance->circle }}</td>
+                                    @endif
                                 </tr>
                             @endforeach
 
