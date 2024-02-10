@@ -117,6 +117,7 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/advance/create', [AdvanceController::class, 'create'])->name('advance.create');
     Route::post('/advance', [AdvanceController::class, 'store'])->name('advance.store');
     Route::post('/advance/notice', [AdvanceController::class, 'notice'])->name('advance.notice');
+    Route::get('/advance/register', [AdvanceController::class, 'register'])->name('advance.register');
 
     Route::get('/advance/edit/{id}', [AdvanceController::class, 'edit'])->name('advance.edit');
     Route::post('/advance/edit/{id}', [AdvanceController::class, 'update'])->name('advance.update');
@@ -188,7 +189,7 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     //Advance Route
     Route::get('/commissioner/advance', [AdvanceController::class, 'advanceIndex'])->name('advance.index');
     Route::get('/commissioner/advance/search', [AdvanceController::class, 'search'])->name('advance.search');
-
+    
 
     //Task routes
     Route::get('/forward_dairy', [TaskController::class, 'index'])->name('task.index');

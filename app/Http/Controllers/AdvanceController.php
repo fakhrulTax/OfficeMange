@@ -11,6 +11,19 @@ use Toastr;
 class AdvanceController extends Controller
 {
 
+    public function register()
+    {
+        $assessment_year = config('settings.assessment_year_'.Auth::user()->circle) + 10001;
+        $advances = Advance::where('advance_assessment_year', $assessment_year)
+                    ->where('circle', Auth::user()->circle)
+                    ->get();
+
+        $pdf = PDF::loadView('circle.notice.advanceRegister', [
+            'advances' =>  $advances
+        ]);
+        return $pdf->stream('document.pdf'); 
+    }
+
     public function notice(Request $request)
     {
         $request->validate([
