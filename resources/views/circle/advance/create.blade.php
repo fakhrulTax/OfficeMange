@@ -11,7 +11,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Add Collection</h1>
+                    <h1 class="m-0">Add Advance</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -41,7 +41,7 @@
                             <div class="form-group">
                               <label for="advance_assessment_year">Advance Assessment Year</label>
                            
-                              <input type="nubmer" class="form-control" id="advance_assessment_year" placeholder="Assessment Year" name="advance_assessment_year" value="20242025" readonly>
+                              <input type="nubmer" class="form-control" id="advance_assessment_year" placeholder="Assessment Year" name="advance_assessment_year" value="{{ config('settings.assessment_year_'.Auth::user()->circle) + 10001 }}" readonly>
                               @error('advance_assessment_year')
                               <div class="text text-danger">{{ $message }}</div>
                             @enderror
