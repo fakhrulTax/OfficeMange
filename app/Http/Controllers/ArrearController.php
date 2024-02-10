@@ -13,8 +13,6 @@ class ArrearController extends Controller
     public function index()
     {
 
-
-
         $arrears = Arrear::where('circle', Auth::user()->circle)->with('stock')->latest()->get()->groupBy('tin');
 
         // $arrears = Arrear::with('stock')->latest()->get();

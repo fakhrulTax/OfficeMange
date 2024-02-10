@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Collection;
+use App\Models\Advance;
 
 class Stock extends Model
 {
@@ -13,6 +14,11 @@ class Stock extends Model
     public function collections()
     {
         return $this->hasMany(Collection::class, 'tin', 'tin');
+    }
+
+    public function advnaces()
+    {
+        return $this->hasMany(Advance::class, 'tin', 'tin');
     }
 
     //TIN Check

@@ -15,6 +15,23 @@ class Collection extends Model
         return $this->belongsTo(Stock::class, 'tin', 'tin');
     }
 
+    //Get Advance By TIN and Assessment Year
+    public static function getAdvanceByAssessmentYear($tin, $assessment_year)
+    {
+        $advanceCollection = self::orderBy('pay_date', 'ASC')
+                            ->where('type', 'advance')
+                            ->where('assessment_year', $assessment_year)
+                            ->where('tin', $tin)
+                            ->get();
+        if( $advanceCollection )
+        {
+            return $advanceCollection;
+        }
+
+        return null;
+                        
+    }
+
     protected $fillable = [
         'type',
         'tin',
@@ -25,4 +42,5 @@ class Collection extends Model
         'challan_date',
         'circle',
     ];
+
 }

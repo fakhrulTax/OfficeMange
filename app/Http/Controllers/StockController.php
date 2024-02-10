@@ -41,7 +41,7 @@ class StockController extends Controller
                
                 // $address = $request->address_line_one . ' | ' . $request-> address_line_two . ' | '. $request->address_line_three;
 
-                $address = '<p>'. $request->address_line_one .'</p>, <p>' . $request-> address_line_two .'</p>, <p>' . $request->address_line_three .'</p>';
+                $address = '<p>'. $request->address_line_one .'</p> <p>' . $request-> address_line_two .'</p> <p>' . $request->address_line_three .'</p>';
             }else{
 
                 $address = null;
@@ -129,7 +129,7 @@ class StockController extends Controller
                
                 // $address = $request->address_line_one . ' | ' . $request-> address_line_two . ' | '. $request->address_line_three;
 
-                $address = '<p>'. $request->address_line_one .'</p>, <p>' . $request-> address_line_two .'</p>, <p>' . $request->address_line_three .'</p>';
+                $address = '<p>'. $request->address_line_one .'</p> <p>' . $request-> address_line_two .'</p> <p>' . $request->address_line_three .'</p>';
             }else{
 
                 $address = null;

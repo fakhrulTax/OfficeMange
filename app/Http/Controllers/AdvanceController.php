@@ -5,17 +5,52 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Advance;
 use App\Models\Stock;
+use Illuminate\Support\Facades\Auth;
+use PDF;
 use Toastr;
 class AdvanceController extends Controller
 {
+
+    public function notice(Request $request)
+    {
+        $request->validate([
+            'advanceTIN' => 'required|digits:12',
+            'noticeYear' => 'required|digits:8',
+            'issue_date' => 'required',
+        ]);
+
+        $advance = Advance::where('tin',$request->advanceTIN)->where('advance_assessment_year', $request->noticeYear)->first();
+
+        $pdf = PDF::loadView('circle.notice.advance', [
+            'advance' => $advance,
+            'noticePremimum' => $request->premimum,
+            'issue_date' => $request->issue_date
+        ]);
+        return $pdf->stream('document.pdf'); 
+    }
+    
+
     public function advanceIndex(){
-        $advances = Advance::orderBy('id', 'DESC')->paginate(100);
-        return view('circle.advance.index', compact('advances') );
+
+        $advances = Advance::orderBy('id', 'DESC')->where('circle', Auth::user()->circle)->paginate(100);
+
+        if( Auth::user()->user_role == 'commissioner' )
+        {
+            $advances = Advance::orderBy('id', 'DESC')->paginate(100);
+        }
+
+        return view('circle.advance.index', [
+            'title' => 'Advance Tax',
+            'advances' => $advances
+            ]);
     }
 
 
     public function create(){
-        return view('circle.advance.create');
+        return view('circle.advance.create', [
+            'title' => 'Advance | Create'
+
+        ]);
     }
 
 
@@ -26,7 +61,6 @@ class AdvanceController extends Controller
             'return_submitted_assessment_year' => 'required|digits:8',
             'income' => 'required',
             'tax' => 'required',
-
         ]);
 
         //check the tin is exist in stock table
@@ -50,6 +84,7 @@ class AdvanceController extends Controller
         $advance->return_submitted_assessment_year = $request->return_submitted_assessment_year;
         $advance->income = $request->income;
         $advance->tax = $request->tax;
+        $advance->circle = Auth::user()->circle;
         $advance->save();
 
         Toastr::success('Advance Added Successfully', 'Success');
@@ -64,7 +99,10 @@ class AdvanceController extends Controller
 
     public function edit($id){
         $advance = Advance::find($id);
-        return view('circle.advance.edit', compact('advance'));
+        return view('circle.advance.edit', [
+            'title' => 'Edit Advance',    
+            'advance' => $advance,
+        ]);
     }
 
 
@@ -75,7 +113,6 @@ class AdvanceController extends Controller
             'return_submitted_assessment_year' => 'required|digits:8',
             'income' => 'required',
             'tax' => 'required',
-
         ]);
 
         //check the tin is exist in stock table
@@ -116,6 +153,10 @@ class AdvanceController extends Controller
             $advances = $advances->where('tin', $request->tin);
         }
 
+        if( isset($request->circle) && !empty($request->circle)){
+            $advances = $advances->where('circle', $request->circle);
+        }
+
         if(!empty($request->advance_assessment_year)){
 
             $advances = $advances->where('advance_assessment_year', $request->advance_assessment_year);
@@ -126,7 +167,10 @@ class AdvanceController extends Controller
 
 
        
-        return view('circle.advance.index', compact('advances') );
+        return view('circle.advance.index', [
+            'advances' => $advances, 
+            'title' => 'Advance | Search'
+            ]);
     }
 
 
