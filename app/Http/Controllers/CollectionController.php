@@ -74,13 +74,16 @@ class CollectionController extends Controller
         ]);
 
         //Check The Arrear is availavle in Arrear Table
+        if( $request->type == 'arrear' )
+        {
+            $arrear = Arrear::checkArrear($request->tin, $request->assessment_year);
 
-        $arrear = Arrear::checkArrear($request->tin, $request->assessment_year);
-
-        if (!$arrear) {
-            Toastr::error('There is no arrear for this TIN and Assessment Year', 'danger');
-            return back()->withInput();
+            if (!$arrear) {
+                Toastr::error('There is no arrear for this TIN and Assessment Year', 'danger');
+                return back()->withInput();
+            }
         }
+        
 
         //  //Check The Advance is availavle in Advance Table
         // if( $request->type == 'advance' )

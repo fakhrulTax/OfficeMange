@@ -116,6 +116,7 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/advance', [AdvanceController::class, 'advanceIndex'])->name('advance.index');
     Route::get('/advance/create', [AdvanceController::class, 'create'])->name('advance.create');
     Route::post('/advance', [AdvanceController::class, 'store'])->name('advance.store');
+    Route::post('/advance/notice', [AdvanceController::class, 'notice'])->name('advance.notice');
 
     Route::get('/advance/edit/{id}', [AdvanceController::class, 'edit'])->name('advance.edit');
     Route::post('/advance/edit/{id}', [AdvanceController::class, 'update'])->name('advance.update');
