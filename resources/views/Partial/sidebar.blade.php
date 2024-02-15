@@ -62,7 +62,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item {{ Route::currentRouteName() == 'circle.tds.index' || Route::currentRouteName() == 'circle.tds.create' ? 'menu-is-opening menu-open' : ''}}">
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['circle.tds.index', 'circle.tds.create', 'circle.tds.upazila.organization', 'circle.tds.upazilaSelected.organization']) ? 'menu-is-opening menu-open' : ''}}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-user text-light"></i>
                             <p>
@@ -74,7 +74,7 @@
     
                             <li class="nav-item">
                                 <a href="{{ route('circle.tds.index') }}"
-                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.index' ? 'active' : ''}}">
+                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.index' || Route::currentRouteName() == 'circle.tds.create' ? 'active' : ''}}">
                                     <i class="far fa-circle nav-icon text-light"></i>
                                     <p>TDS Collection</p>
                                 </a>
@@ -82,7 +82,7 @@
 
                             <li class="nav-item">
                                 <a href="{{ route('circle.tds.upazila.organization') }}"
-                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.upazila.organization' ? 'active' : ''}}">
+                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.upazila.organization' || Route::currentRouteName() == 'circle.tds.upazilaSelected.organization' ? 'active' : ''}}">
                                     <i class="far fa-circle nav-icon text-light"></i>
                                     <p>Upazila & Organization</p>
                                 </a>
