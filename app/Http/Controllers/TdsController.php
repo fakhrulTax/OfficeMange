@@ -184,7 +184,7 @@ class TdsController extends Controller
     //Commission TDS
     public function commissionTdsIndex(){
         $zillas = Zilla::orderBy('name')->get();
-        $tdsList = Tds_collection::with('upazila', 'organization')
+        $tdsList = Tds_collection::orderBy('circle', 'ASC')->with('upazila', 'organization')
         ->paginate(100);
      
         return view ('commissioner.tds.index', compact('tdsList', 'zillas'));
