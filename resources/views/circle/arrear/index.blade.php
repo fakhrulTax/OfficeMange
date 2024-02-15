@@ -45,12 +45,12 @@
                         <tr>
                             <th>#</th>
                             <th>Name, Address and TIN</th>
+                            <th>Status</th>
                             <th>Assessment Year</th>
                             <th>Arrear</th>
                             <th>Fine</th>
+                            <th>Total</th>
                             <th>Collection</th>
-                            <th>Circle</th>
-
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -58,79 +58,54 @@
 
                         @php
                             $i = 0;
+                            $repeatTIN = '';
+                            $newTIN = '';
                         @endphp
 
                         @foreach ($arrears as $key => $arrear)
+                            @php
+                                
+                                if(  $repeatTIN != $arrear->tin  )
+                                {
+                                    $newTIN = '';
+                                }else
+                                {
+                                    $newTIN = '';
+                                }
+
+                                $countForDesiredTin = $arrears->where('tin', $arrear->tin)->count();
+                                dd($countForDesiredTin);
+                            @endphp
                             <tr>
                                 <td>{{ $i + 1 }}</td>
+                                <td>{{ $arrear->tin }}</td>
                                 <td>
-                                    {{ $arrear[0]->stock->name }} <br>
-                                    {{ str_replace('</p><p>', ', ', strip_tags($arrear[0]->stock->address)) }} <br>
-                                    {{ $arrear[0]->tin }}
+                                    {{ ucfirst($arrear->arrear_type) }}
                                 </td>
-
                                 <td>
-
-                                    <table class="table table-bordered table-striped">
-                                        @foreach ($arrear as $key => $ar)
-                                            <tr>
-                                                <td>{{ App\Helpers\MyHelper::assessment_year_format($ar->assessment_year) }}
-                                                </td>
-
-                                                <td>{{ $ar->arrear_type }}</td>
-                                                <td class="text-right">
-                                                    {{ App\Helpers\MyHelper::moneyFormatBD($ar->arrear) }}</td>
-
-
-
-                                                <td class="text-right">
-
-                                                    <button class="btn btn-danger btn-sm "
-                                                        onclick="ArreardEdit({{ $ar->id }})" data-toggle="modal"
-                                                        data-target="#editModal">Edit</button>
-                                                </td>
-
-
-
-
-
-                                            </tr>
-                                        @endforeach
-                                        <tr>
-                                            <td class="text-bold">Total</td>
-                                            <td></td>
-                                            <td class="text-bold text-right">
-                                                {{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('arrear')) }}</td>
-                                            <td></td>
-
-                                        </tr>
-
-
-                                    </table>
-
+                                    {{ $arrear->assessment_year }}
                                 </td>
-
-                                <td class="text-right">
-                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('arrear')) }}
-                                </td>
-
-                                <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('fine')) }}</td>
-                                <td></td>
-
-                                <td>Circle-{{ $arrear[0]->circle }}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary">Notice</button>
+                                    {{ $arrear->arrear }}
                                 </td>
-
-
+                                <td>
+                                    {{ $arrear->fine }}
+                                </td>
+                                <td>
+                                    {{ $arrear->arrear + $arrear->fine }}
+                                </td>
+                                <td>
+                                    0
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm " onclick="ArreardEdit({{ $arrear->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
+                                    <button class="btn btn-primary btn-sm">Notice</button>
+                                </td>
                             </tr>
                             @php
                                 $i++;
                             @endphp
                         @endforeach
-
-
-
 
 
                     </tbody>

@@ -12,13 +12,10 @@ class ArrearController extends Controller
 {
     public function index()
     {
-
-        $arrears = Arrear::where('circle', Auth::user()->circle)->with('stock')->latest()->get()->groupBy('tin');
-
-        // $arrears = Arrear::with('stock')->latest()->get();
-        
-  
-
+        $arrears = Arrear::where('circle', Auth::user()->circle)
+                    ->orderBy('tin', 'ASC')
+                    ->orderBy('assessment_year', 'ASC')
+                    ->get();
         return view('circle.arrear.index', compact('arrears'));
     }
 
