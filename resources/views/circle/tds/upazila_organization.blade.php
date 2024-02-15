@@ -188,11 +188,6 @@
                                             @foreach($selectedUpazila->organizations as $key => $organization)
                                                 <li class="organization-list-item">
                                                     {{ ++$key.'. '. $organization->name }}
-                                                    <form action="{{ route('circle.removeOrganization', ['upazilaId' => $selectedUpazila->id, 'organizationId' => $organization->id]) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm">remove</button>
-                                                    </form>
                                                 </li>
                                             @endforeach
                                         @endif
