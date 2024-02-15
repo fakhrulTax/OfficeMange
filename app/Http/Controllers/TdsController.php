@@ -15,11 +15,11 @@ class TdsController extends Controller
 {
     public function index(){
         $zillas = Zilla::orderBy('name')->get();
-        $tdsList = Tds_collection::where('circle', Auth::user()->circle)
+        $tdses = Tds_collection::where('circle', Auth::user()->circle)
         ->with('upazila', 'organization')
-        ->paginate(100);
+        ->paginate(100);    
      
-        return view ('circle.tds.index', compact('tdsList', 'zillas'));
+        return view ('circle.tds.index', compact('tdses', 'zillas'));
     }
 
 
