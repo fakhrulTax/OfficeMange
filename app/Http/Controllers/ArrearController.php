@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Arrear;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\MyHelper;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 class ArrearController extends Controller
@@ -15,10 +16,11 @@ class ArrearController extends Controller
         $arrears = Arrear::where('circle', Auth::user()->circle)
                     ->orderBy('tin', 'ASC')
                     ->orderBy('assessment_year', 'ASC')
-                    ->get();
+                    ->paginate(200); // Adjust the pagination size based on your needs
         return view('circle.arrear.index', compact('arrears'));
     }
-
+    
+    
 
 
 

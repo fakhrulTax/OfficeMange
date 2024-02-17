@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <style>
+        .arrer_address p {
+            margin: 0;
+        }
+    </style>
 @endpush
 
 
@@ -40,7 +45,7 @@
                
 
 
-                <table id="example1" class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -60,39 +65,46 @@
                             $i = 0;
                             $repeatTIN = '';
                             $newTIN = '';
+                            $totalArrear = 0;
+                            $totlaFine = 0;
                         @endphp
 
                         @foreach ($arrears as $key => $arrear)
-                            @php
-                                
-                                if(  $repeatTIN != $arrear->tin  )
-                                {
-                                    $newTIN = '';
-                                }else
-                                {
-                                    $newTIN = '';
-                                }
-
-                                $countForDesiredTin = $arrears->where('tin', $arrear->tin)->count();
-                                //dd($countForDesiredTin);
-                            @endphp
+                        @php
+                            $countForDesiredTin = $arrears->where('tin', $arrear->tin)->count();
+                        @endphp
                             <tr>
-                                <td>{{ $i + 1 }}</td>
-                                <td>{{ $arrear->tin }}</td>
+                                @if($repeatTIN != $arrear->tin)
+                                    <td rowspan="{{ $countForDesiredTin }}">{{ $i + 1 }}</td>
+                                    <td rowspan="{{ $countForDesiredTin }}">
+                                        @if($arrear->stock->bangla_name)
+                                        {{ $arrear->stock->bangla_name }}
+                                        @else
+                                            {{ $arrear->stock->name }}
+                                        @endif
+                                        <div class="arrer_address">
+                                            {!! $arrear->stock->address !!}
+                                        </div>                                        
+                                        {{ $arrear->tin }}
+                                    </td>
+                                    @php
+                                        $repeatTIN = $arrear->tin;
+                                    @endphp
+                                @endif
                                 <td>
                                     {{ ucfirst($arrear->arrear_type) }}
                                 </td>
                                 <td>
-                                    {{ $arrear->assessment_year }}
+                                    {{ App\Helpers\MyHelper::assessment_year_format($arrear->assessment_year) }}
                                 </td>
                                 <td>
-                                    {{ $arrear->arrear }}
+                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->arrear) }}
                                 </td>
                                 <td>
-                                    {{ $arrear->fine }}
+                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->fine) }}
                                 </td>
                                 <td>
-                                    {{ $arrear->arrear + $arrear->fine }}
+                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->arrear + $arrear->fine) }}
                                 </td>
                                 <td>
                                     0
@@ -104,18 +116,18 @@
                             </tr>
                             @php
                                 $i++;
+                                $totalArrear += $arrear->arrear;
+                                $totlaFine += $arrear->fine;
                             @endphp
                         @endforeach
 
 
                     </tbody>
                     <tfoot>
-                        <th colspan="3" class="text-center">Total</th>
-
-
-                        <th class="text-right"></th>
-                        <th class="text-right"></th>
-                        <th colspan="2"></th>
+                        <th colspan="4" class="text-center">Total</th>
+                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totalArrear) }}</th>
+                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totlaFine) }}</th>
+                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD( $totalArrear+ $totlaFine) }}</th>
 
                     </tfoot>
                 </table>
@@ -261,94 +273,10 @@
 
 
 @push('js')
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
-    <!-- AdminLTE App -->
-
-
     <script>
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         }
-
-
-        $(function() {
-            $("#example1").DataTable({
-
-                "responsive": true,
-                "lengthChange": true,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                footerCallback: function(row, data, start, end, display) {
-                    let api = this.api();
-
-                    // Remove the formatting to get integer data for summation
-                    let intVal = function(i) {
-                        return typeof i === 'string' ?
-                            i.replace(/[\$,]/g, '') * 1 :
-                            typeof i === 'number' ?
-                            i :
-                            0;
-                    };
-
-                    // Total over all pages
-                    total = api
-                        .column([3])
-                        .data()
-                        .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-
-
-                    // Total over this page
-                    arrearTotal = api
-                        .column(3, {
-                            page: 'current'
-                        })
-                        .data()
-                        .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-
-                    // Update footer
-                    api.column(3).footer().innerHTML = numberWithCommas(arrearTotal);
-
-
-                    // Fine Total over this page
-                    fineTotal = api
-                        .column(4, {
-                            page: 'current'
-                        })
-                        .data()
-                        .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-                    // Update footer
-                    api.column(4).footer().innerHTML = numberWithCommas(fineTotal);
-
-
-
-
-                }
-
-
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-
-
-
-        });
-
-
 
         
     </script>
