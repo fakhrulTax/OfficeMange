@@ -113,6 +113,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                       
 
                         @php
                             $i = 0;
@@ -128,6 +129,8 @@
                             $countForDesiredTin = $arrears->where('tin', $arrear->tin)->count();
                         @endphp
                             <tr>
+
+                            
                                 @if($repeatTIN != $arrear->tin)
                                     <td rowspan="{{ $countForDesiredTin }}">{{ $i + 1 }}</td>
                                     <td rowspan="{{ $countForDesiredTin }}">

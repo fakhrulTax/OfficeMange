@@ -156,8 +156,8 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('/commissioner-dashboard', [CommissionerController::class, 'index'])->name('dashboard');
 
+    //Arrear Route
     Route::get('commissioner/arrears/{circle}', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
-
     Route::post('commissioner/arrear/', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
 
     //TDS

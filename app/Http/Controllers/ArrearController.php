@@ -31,7 +31,7 @@ class ArrearController extends Controller
 
         if (!empty($request->from_date) && !empty($request->to_date)) {
 
-            $arrears = $arrears->whereBetween('demand_create_date', [date('Y-m-d', strtotime($request->from_date)), date('Y-m-d', strtotime($request->to_date))]);
+            $arrears = $arrears->whereBetween('demand_create_date', [date('Y-m-d', strtotime($request->from_date)), date('Y-m', strtotime($request->to_date))]);
         }
 
 
