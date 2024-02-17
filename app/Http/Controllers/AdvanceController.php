@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Advance;
 use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\MyHelper;
 use PDF;
 use Toastr;
 class AdvanceController extends Controller
@@ -167,17 +168,26 @@ class AdvanceController extends Controller
         }
 
         if( isset($request->circle) && !empty($request->circle)){
-            $advances = $advances->where('circle', $request->circle);
+            
+            if( $request->circle == "range-1" || $request->circle == "range-2" || $request->circle == "range-3" || $request->circle == "range-4" )
+            {
+                //search for range
+                $circles = MyHelper::ranges($request->circle);
+                $advances = $advances->whereIN('circle', $circles);
+            }else
+            {
+                $advances = $advances->where('circle', $request->circle);
+            }           
         }
 
         if(!empty($request->advance_assessment_year)){
+            
 
             $advances = $advances->where('advance_assessment_year', $request->advance_assessment_year);
             
         }
 
         $advances = $advances->paginate(100);
-
 
        
         return view('circle.advance.index', [

@@ -231,7 +231,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route('commissioner.advance.index') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'commissioner.advance.index' || Route::currentRouteName() == 'circle.advance.search' ? 'active' : '' }}">
+                            class="nav-link {{ Route::currentRouteName() == 'commissioner.advance.index' || Route::currentRouteName() == 'circle.advance.search' || Route::currentRouteName() == 'commissioner.advance.search' ? 'active' : '' }}">
                             <i class="nav-icon fab fa-speakap text-light"></i>
                             <p>
                                 Advance
