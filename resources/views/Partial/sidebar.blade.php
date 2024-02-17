@@ -12,25 +12,27 @@
         </div>
 
         @php
-            $name = Auth::user()->name;
 
-            if(strlen($name) > 15){
-                $words = explode(' ', $name);
-
-                $name = implode(' ', array_slice($words, 0, 2));
-         
+            if( Auth::user()->user_role == 'commissioner' )
+            {
+                $name = 'Commissioner';
+            }elseif(Auth::user()->user_role == 'range')
+            {
+                $name = 'Range-'. Auth::user()->range;
+            }elseif(Auth::user()->user_role == 'technical')
+            {
+                $name = 'Technical';
             }
-
-         
+            else
+            {
+                $name = 'Circle-'. Auth::user()->circle;
+            }     
 
         @endphp
 
         <div class="col-md-8 mt-3">
-            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
+            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px; margin-top: 18px">
                 {{ ucfirst($name) }}</h4>
-
-            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
-                {{ ucfirst(Auth::user()->designation) }}</h4>
         </div>
 
     </div>
