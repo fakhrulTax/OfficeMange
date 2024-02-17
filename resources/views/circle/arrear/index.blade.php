@@ -74,7 +74,7 @@
                                 }
 
                                 $countForDesiredTin = $arrears->where('tin', $arrear->tin)->count();
-                                dd($countForDesiredTin);
+                                //dd($countForDesiredTin);
                             @endphp
                             <tr>
                                 <td>{{ $i + 1 }}</td>
