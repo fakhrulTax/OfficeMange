@@ -187,7 +187,12 @@ class AdvanceController extends Controller
             
         }
 
-        $advances = $advances->paginate(100);
+        if( Auth::user()->user_role == 'circle' )
+        {
+            $advances = $advances->where('circle', Auth::user()->circle);
+        }
+
+        $advances = $advances->paginate(200);
 
        
         return view('circle.advance.index', [

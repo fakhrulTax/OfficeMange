@@ -37,6 +37,59 @@
 
     <section class="content">
 
+        <div class="card" style="padding: 10px">
+            <form action="{{ Route('circle.arrears.search') }}" method="GET" class="form">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input type="number" id="tin" name="tin" placeholder="TIN" class="form-control"value="{{ Request::get('tin') }}" autofocus>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select name="arrear_type" id="arrear_type" class="form-control">
+                                    <option value="">Select Type</option>
+                                    <option value="disputed" {{ (Request::get('arrear_type') == 'disputed') ? 'selected' : '' }}>Disputed</option>
+                                    <option value="undisputed" {{ (Request::get('arrear_type') == 'undisputed') ? 'selected' : '' }}>Undisputed</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="from_date" name="from_date" placeholder="From Date" value="{{ Request::get('from_date') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="to_date" name="to_date" placeholder="To Date" value="{{ Request::get('to_date') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select name="paginate" id="paginate" class="form-control">
+                                    <option value="">Paginate</option>
+                                    @for($i = 100; $i<=200; $i++)
+                                        <option value="{{ $i }}"  {{ (Request::get('paginate') == $i) ? 'selected' : '' }}>{{ $i }}</option>
+                                    @endfor
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-sm btn-primary">Search</button>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+
 
         <div class="card">
 
@@ -67,6 +120,7 @@
                             $newTIN = '';
                             $totalArrear = 0;
                             $totlaFine = 0;
+                            $totalCollection = 0;
                         @endphp
 
                         @foreach ($arrears as $key => $arrear)
@@ -97,17 +151,17 @@
                                 <td>
                                     {{ App\Helpers\MyHelper::assessment_year_format($arrear->assessment_year) }}
                                 </td>
-                                <td>
+                                <td class="text-right">
                                     {{ App\Helpers\MyHelper::moneyFormatBD($arrear->arrear) }}
                                 </td>
-                                <td>
+                                <td class="text-right">
                                     {{ App\Helpers\MyHelper::moneyFormatBD($arrear->fine) }}
                                 </td>
-                                <td>
+                                <td class="text-right">
                                     {{ App\Helpers\MyHelper::moneyFormatBD($arrear->arrear + $arrear->fine) }}
                                 </td>
-                                <td>
-                                    0
+                                <td class="text-right">
+                                    {{ App\Helpers\MyHelper::moneyFormatBD(App\Models\Collection::getArrearByTINAssessmentYear($arrear->tin, $arrear->assessment_year)) }}
                                 </td>
                                 <td>
                                     <button class="btn btn-danger btn-sm " onclick="ArreardEdit({{ $arrear->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
@@ -118,6 +172,7 @@
                                 $i++;
                                 $totalArrear += $arrear->arrear;
                                 $totlaFine += $arrear->fine;
+                                $totalCollection += App\Models\Collection::getArrearByTINAssessmentYear($arrear->tin, $arrear->assessment_year);
                             @endphp
                         @endforeach
 
@@ -128,11 +183,17 @@
                         <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totalArrear) }}</th>
                         <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totlaFine) }}</th>
                         <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD( $totalArrear+ $totlaFine) }}</th>
-
+                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD( $totalCollection) }}</th>                        
                     </tfoot>
                 </table>
             </div>
             <!-- /.card-body -->
+
+            <div class="card-footer">
+                <ul class="pagination pagination-sm m-0 float-right">
+                    {{ $arrears->links('pagination::bootstrap-4') }}
+                </ul>
+            </div>
         </div>
         <!-- /.card -->
 
@@ -184,8 +245,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="demand_create_date"> Demand Create Date </label>
-                                        <input type="date" class="form-control" id="demand_create_date"
-                                            name="demand_create_date">
+                                        <input type="text" class="form-control" id="demand_create_date"
+                                            name="demand_create_date" placeholder="dd-mm-YYYY">
                                     </div>
                                 </div>
 

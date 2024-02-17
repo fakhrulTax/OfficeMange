@@ -115,7 +115,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('circle.arrears') }}" class="nav-link {{ Route::currentRouteName() == 'circle.arrears' ? 'active' : ''}}">
+                        <a href="{{ route('circle.arrears') }}" class="nav-link {{ Route::currentRouteName() == 'circle.arrears' || Route::currentRouteName() == 'circle.arrears.search' ? 'active' : ''}}">
                             <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Arrear

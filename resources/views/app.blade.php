@@ -75,7 +75,7 @@
 <script src="{{ asset('js/toastr.min.js') }}"></script>
   {!! Toastr::message() !!}
 <script type="text/javascript">
-  $('#receive_date, #move_date, #appeal_disposal_date, #appeal_order_date, #deadline, #challan_date, #audit_date, #expire_date, #deadline, #reopen_date, #disposal_date, #pay_date, #issue_date, #hearing_date, #from_date, #to_date').datepicker({
+  $('#edit_demand_create_date, #demand_create_date, #receive_date, #move_date, #appeal_disposal_date, #appeal_order_date, #deadline, #challan_date, #audit_date, #expire_date, #deadline, #reopen_date, #disposal_date, #pay_date, #issue_date, #hearing_date, #from_date, #to_date').datepicker({
     autoclose: true,
     format: 'dd-mm-yyyy',
     todayHighlight: true,
