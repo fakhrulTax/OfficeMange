@@ -122,25 +122,25 @@ class TdsController extends Controller
     public function tdsSearch(Request $request){
         $zillas = Zilla::orderBy('name')->get();
         
-        $tdsList = Tds_collection::query();
+        $tdses = Tds_collection::query();
     
         if(!empty($request->upazila_search)){
-            $tdsList = $tdsList->where('upazila_id', $request->upazila_search);
+            $tdses = $tdses->where('upazila_id', $request->upazila_search);
         }
        
         if(!empty($request->organization_search)){
-            $tdsList = $tdsList->where('organization_id', $request->organization_search);
+            $tdses = $tdses->where('organization_id', $request->organization_search);
         }
         if(!empty($request->start_month)){
 
-            $tdsList = $tdsList->whereBetween('collection_month', [$request->start_month, $request->end_month]);
+            $tdses = $tdses->whereBetween('collection_month', [$request->start_month, $request->end_month]);
         }
     
-        $tdsList = $tdsList->where('circle', Auth::user()->circle)
+        $tdses = $tdses->where('circle', Auth::user()->circle)
             ->with('upazila', 'organization')
             ->paginate(100);        
     
-        return view ('circle.tds.index', compact('tdsList', 'zillas'));
+        return view ('circle.tds.index', compact('tdses', 'zillas'));
     }
     
 
