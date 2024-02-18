@@ -131,10 +131,7 @@ class NoticeController extends Controller
             'assessment_year' => 'required',
             'issue_date' => 'required',
             'hearing_date' => 'required',
-        ]);
-
-
-        
+        ]);       
 
 
         //Get Stock Information

@@ -16,7 +16,7 @@ class UpazilaController extends Controller
         $zillas = Zilla::orderBy('name', 'ASC')->get();
 
         return view('commissioner.tds.upazila',[
-            'title' => 'TDS | Upazila', 
+            'title' => 'TDS | Upazila',       
             'zillas' => $zillas
         ]);
     }
