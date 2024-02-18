@@ -69,7 +69,7 @@
                     </li>
 
 
-                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['circle.tds.index', 'circle.tds.create', 'circle.tds.upazila.organization', 'circle.tds.upazilaSelected.organization']) ? 'menu-is-opening menu-open' : ''}}">
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['circle.tds.index', 'circle.tds.report', 'circle.tds.create', 'circle.tds.upazila.organization', 'circle.tds.upazilaSelected.organization']) ? 'menu-is-opening menu-open' : ''}}">
 
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-user text-light"></i>
@@ -89,6 +89,17 @@
                                     <p>TDS Collection</p>
                                 </a>
                             </li>   
+
+                            
+                            <li class="nav-item">
+                                <a href="{{ route('circle.tds.report') }}"
+
+                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.report' ? 'active' : ''}}">
+
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>TDS Report</p>
+                                </a>
+                            </li> 
 
                             <li class="nav-item">
                                 <a href="{{ route('circle.tds.upazila.organization') }}"

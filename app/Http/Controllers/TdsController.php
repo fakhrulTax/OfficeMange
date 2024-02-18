@@ -13,6 +13,20 @@ use Toastr;
 
 class TdsController extends Controller
 {
+    //TDS Report From Circle
+    public function tdsReport()
+    {
+        $monthsOrder = ['July 2023', 'August 2023', 'September 2023', 'October 2023', 'November 2023', 'December 2023', 'January 2024', 'February 2024', 'March 2024', 'April 2024', 'May 2024', 'June 2024'];
+    
+        
+
+        //dd($circleData);
+
+        return view('circle.tds.report', [
+            'title' => 'TDS Report'
+        ]);
+    }
+
     public function index(){
         $zillas = Zilla::orderBy('name')->get();
 
