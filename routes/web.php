@@ -113,6 +113,7 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/tds/delete/{id}', [TdsController::class, 'destroy'])->name('tds.destroy');
 
     Route::get('/tds/search', [TdsController::class, 'tdsSearch'])->name('tds.search');
+    Route::get('/tds/report', [TdsController::class, 'tdsReport'])->name('tds.report');
 
 
     //advance
@@ -256,5 +257,3 @@ Route::post('/password-reset', [UserController::class, 'passwordReset'])->name('
 //Zill to Upazilla to organization 
 Route::get('/upazilla/{zilla}', [TdsController::class, 'upazilaList'])->name('upazilaList');
 Route::get('/ogranization/{upazilla}', [TdsController::class, 'ogranizationList'])->name('ogranizationList');
-
- 

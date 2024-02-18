@@ -28,17 +28,31 @@ class Tds_collection extends Model
         return $this->belongsTo(Organization::class, 'organization_id');
     }
 
-    public static function getAssessmentYearCollectionByCircle(array $monthsOrder)
+    public static function getAssessmentYearCollectionByCircle(array $monthsOrder, array $circles = null)
     {
         // Predefined order of months
         //$monthsOrder = ['July 2023', 'August 2023', 'September 2023', 'October 2023', 'November 2023', 'December 2023', 'January 2024', 'February 2024', 'March 2024', 'April 2024', 'May 2024', 'June 2024'];
     
         // Use Eloquent to group by circle and month and get the sum of amount
-        $circleData = Self::select('circle', DB::raw("SUBSTRING(collection_month, 1, 7) as month"), DB::raw('SUM(tds) as total_amount'))
+
+        if( $circles )
+        {
+            $circleData = Self::select('circle', DB::raw("SUBSTRING(collection_month, 1, 7) as month"), DB::raw('SUM(tds) as total_amount'))
+            ->whereIn('circle', $circles)
             ->groupBy('circle', 'month')
             ->orderBy('circle')
             ->orderBy(DB::raw("FIELD(month, '" . implode("','", $monthsOrder) . "')"))
             ->get();
+        }else
+        {
+            $circleData = Self::select('circle', DB::raw("SUBSTRING(collection_month, 1, 7) as month"), DB::raw('SUM(tds) as total_amount'))
+            ->groupBy('circle', 'month')
+            ->orderBy('circle')
+            ->orderBy(DB::raw("FIELD(month, '" . implode("','", $monthsOrder) . "')"))
+            ->get();
+        }
+
+        
     
         // Organize the data into the format you want
         $formattedData = [];
