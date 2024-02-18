@@ -166,6 +166,10 @@
 
                         <tbody>
 
+                            @php
+                                $totalTDS = 0;
+                            @endphp
+
                             @foreach ($tdsList as $key => $tds)
                                 <tr>
                                     <td>{{ ++$key }}</td>
@@ -176,7 +180,9 @@
                                     <td> {{ ucfirst($tds->upazila->zilla->name) }}</td>
                                     <td> {{ ucfirst($tds->upazila->name) }}</td>
                                     <td> {{ ucfirst($tds->organization->name) }} </td>
-                                    <td> Circle-{{ $tds->circle }} </td>
+
+                                    <td> {{ $tds->circle }} </td>
+
                                     <td>
                                         {{ App\Helpers\MyHelper::moneyFormatBD($tds->tds) }}
                                     </td>
@@ -186,14 +192,20 @@
 
 
                                 </tr>
+
+                                @php
+                                    $totalTDS += $tds->tds;
+                                @endphp
+
                             @endforeach
 
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="5" class="font-weight-bold text-center">Total</td>
-                                <td>{{ App\Helpers\MyHelper::moneyFormatBD($tds->sum('tds')) }}</td>
-                                <td>{{ App\Helpers\MyHelper::moneyFormatBD($tds->sum('bill')) }}</td>
+
+                                <td colspan="6" class="font-weight-bold text-center">Total</td>
+                                <td>{{ App\Helpers\MyHelper::moneyFormatBD($totalTDS) }}</td>
+
                                 <td></td>
                             </tr>
 

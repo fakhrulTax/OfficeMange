@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('tin');
             $table->string('arrear_type');
-            $table->text('demand_create_date');
+
+            $table->date('demand_create_date');
+
             $table->integer('assessment_year')->length(8);
             $table->BigInteger('arrear');
             $table->BigInteger('fine')->nullable();

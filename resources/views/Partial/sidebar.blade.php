@@ -12,25 +12,31 @@
         </div>
 
         @php
-            $name = Auth::user()->name;
 
-            if(strlen($name) > 15){
-                $words = explode(' ', $name);
 
-                $name = implode(' ', array_slice($words, 0, 2));
-         
+            if( Auth::user()->user_role == 'commissioner' )
+            {
+                $name = 'Commissioner';
+            }elseif(Auth::user()->user_role == 'range')
+            {
+                $name = 'Range-'. Auth::user()->range;
+            }elseif(Auth::user()->user_role == 'technical')
+            {
+                $name = 'Technical';
             }
+            else
+            {
+                $name = 'Circle-'. Auth::user()->circle;
+            }     
 
-         
 
         @endphp
 
         <div class="col-md-8 mt-3">
-            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
+
+            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px; margin-top: 18px">
                 {{ ucfirst($name) }}</h4>
 
-            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
-                {{ ucfirst(Auth::user()->designation) }}</h4>
         </div>
 
     </div>
@@ -62,7 +68,9 @@
                         </a>
                     </li>
 
-                    <li class="nav-item {{ Route::currentRouteName() == 'circle.tds.index' || Route::currentRouteName() == 'circle.tds.create' ? 'menu-is-opening menu-open' : ''}}">
+
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['circle.tds.index', 'circle.tds.create', 'circle.tds.upazila.organization', 'circle.tds.upazilaSelected.organization']) ? 'menu-is-opening menu-open' : ''}}">
+
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-user text-light"></i>
                             <p>
@@ -74,7 +82,9 @@
     
                             <li class="nav-item">
                                 <a href="{{ route('circle.tds.index') }}"
-                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.index' ? 'active' : ''}}">
+
+                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.index' || Route::currentRouteName() == 'circle.tds.create' ? 'active' : ''}}">
+
                                     <i class="far fa-circle nav-icon text-light"></i>
                                     <p>TDS Collection</p>
                                 </a>
@@ -82,7 +92,9 @@
 
                             <li class="nav-item">
                                 <a href="{{ route('circle.tds.upazila.organization') }}"
-                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.upazila.organization' ? 'active' : ''}}">
+
+                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.upazila.organization' || Route::currentRouteName() == 'circle.tds.upazilaSelected.organization' ? 'active' : ''}}">
+
                                     <i class="far fa-circle nav-icon text-light"></i>
                                     <p>Upazila & Organization</p>
                                 </a>
@@ -113,7 +125,9 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('circle.arrears') }}" class="nav-link {{ Route::currentRouteName() == 'circle.arrears' ? 'active' : ''}}">
+
+                        <a href="{{ route('circle.arrears') }}" class="nav-link {{ Route::currentRouteName() == 'circle.arrears' || Route::currentRouteName() == 'circle.arrears.search' ? 'active' : ''}}">
+
                             <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Arrear
@@ -229,7 +243,9 @@
 
                     <li class="nav-item">
                         <a href="{{ route('commissioner.advance.index') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'commissioner.advance.index' || Route::currentRouteName() == 'circle.advance.search' ? 'active' : '' }}">
+
+                            class="nav-link {{ Route::currentRouteName() == 'commissioner.advance.index' || Route::currentRouteName() == 'circle.advance.search' || Route::currentRouteName() == 'commissioner.advance.search' ? 'active' : '' }}">
+
                             <i class="nav-icon fab fa-speakap text-light"></i>
                             <p>
                                 Advance
