@@ -12,25 +12,31 @@
         </div>
 
         @php
-            $name = Auth::user()->name;
 
-            if(strlen($name) > 15){
-                $words = explode(' ', $name);
 
-                $name = implode(' ', array_slice($words, 0, 2));
-         
+            if( Auth::user()->user_role == 'commissioner' )
+            {
+                $name = 'Commissioner';
+            }elseif(Auth::user()->user_role == 'range')
+            {
+                $name = 'Range-'. Auth::user()->range;
+            }elseif(Auth::user()->user_role == 'technical')
+            {
+                $name = 'Technical';
             }
+            else
+            {
+                $name = 'Circle-'. Auth::user()->circle;
+            }     
 
-         
 
         @endphp
 
         <div class="col-md-8 mt-3">
-            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
+
+            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px; margin-top: 18px">
                 {{ ucfirst($name) }}</h4>
 
-            <h4 class="brand-text font-weight-light text-light" style="font-size: 18px">
-                {{ ucfirst(Auth::user()->designation) }}</h4>
         </div>
 
     </div>
@@ -62,7 +68,9 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['circle.tds.index', 'circle.tds.create', 'circle.tds.upazila.organization', 'circle.tds.upazilaSelected.organization']) ? 'menu-is-opening menu-open' : ''}}">
+
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-user text-light"></i>
                             <p>
@@ -74,30 +82,28 @@
     
                             <li class="nav-item">
                                 <a href="{{ route('circle.tds.index') }}"
-                                    class="nav-link">
+
+                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.index' || Route::currentRouteName() == 'circle.tds.create' ? 'active' : ''}}">
+
                                     <i class="far fa-circle nav-icon text-light"></i>
-                                    <p>Organization</p>
+                                    <p>TDS Collection</p>
                                 </a>
-                            </li>
-    
+                            </li>   
+
+                            <li class="nav-item">
+                                <a href="{{ route('circle.tds.upazila.organization') }}"
+
+                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.upazila.organization' || Route::currentRouteName() == 'circle.tds.upazilaSelected.organization' ? 'active' : ''}}">
+
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>Upazila & Organization</p>
+                                </a>
+                            </li> 
                            
                        
                         </ul>
                     </li>
 
-
-
-
-
-                    <li class="nav-item">
-                        <a href="{{ route('circle.task.index') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'circle.task.index' ? 'active' : '' }}">
-                            <i class="nav-icon fab fa-dailymotion text-light"></i>
-                            <p>
-                                Forward Dairy
-                            </p>
-                        </a>
-                    </li>
 
                     <li class="nav-item">
                         <a href="{{ route('circle.stock') }}" class="nav-link {{ Route::currentRouteName() == 'circle.stock' ? 'active' : ''}} ">
@@ -107,9 +113,21 @@
                             </p>
                         </a>
                     </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ route('circle.advance.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'circle.advance.index' || Route::currentRouteName() == 'circle.advance.create' || Route::currentRouteName() == 'circle.advance.search' ? 'active' : '' }}">
+                            <i class="nav-icon fab fa-speakap text-light"></i>
+                            <p>
+                                Advance
+                            </p>
+                        </a>
+                    </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('circle.arrears') }}" class="nav-link {{ Route::currentRouteName() == 'circle.arrears' ? 'active' : ''}}">
+
+                        <a href="{{ route('circle.arrears') }}" class="nav-link {{ Route::currentRouteName() == 'circle.arrears' || Route::currentRouteName() == 'circle.arrears.search' ? 'active' : ''}}">
+
                             <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Arrear
@@ -136,39 +154,7 @@
                             </p>
                         </a>
                     </li>
-
-
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-folder text-light"></i>
-                            <p>
-                                ReOpen
-                            </p>
-                        </a>
-                    </li>
                     
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-calculator text-light"></i>
-                            <p>
-                                Audit
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-file text-light"></i>
-                            <p>
-                                Sonchoy Potra
-                            </p>
-                        </a>
-                    </li>
-
-
                     <li class="nav-item">
                         <a href="{{ route('circle.movement.index') }}"
                             class="nav-link {{ Route::currentRouteName() == 'circle.movement.index' ? 'active' : '' }}">
@@ -192,8 +178,7 @@
 
                 {{-- commissioner sidebar start from here   --}}
                 @if ($user->user_role == 'commissioner')
-                    <!-- Add icons to the links using the .nav-icon class
-     with font-awesome or any other icon font library -->
+                    <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                     <li class="nav-item">
                         <a href="{{ route('commissioner.dashboard') }}"
                             class="nav-link {{ Route::currentRouteName() == 'commissioner.dashboard' ? 'active' : '' }} ">
@@ -204,7 +189,9 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item 
+                    {{ in_array(Route::currentRouteName(),
+                        ['commissioner.tds.collection.index', 'commissioner.tdsList.index', 'commissioner.tds.upazila.index', 'commissioner.tds.organization.index', 'commissioner.tds.upazila.organization', 'commissioner.tds.collection.zilla' ] ) ? 'menu-is-opening menu-open' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-user text-light"></i>
                             <p>
@@ -213,23 +200,37 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
+
+                            <li class="nav-item">
+                                <a href="{{ route('commissioner.tds.collection.index') }}" class="nav-link {{ in_array(Route::currentRouteName(),['commissioner.tds.collection.index', 'commissioner.tds.collection.zilla' ] ) ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>TDS Collection</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('commissioner.tdsList.index') }}" class="nav-link {{ in_array(Route::currentRouteName(),['commissioner.tdsList.index'] ) ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>TDS Collection Table</p>
+                                </a>
+                            </li>   
     
                         <li class="nav-item">
-                            <a href="{{ route('commissioner.tds.upazila.index') }}" class="nav-link">
+                            <a href="{{ route('commissioner.tds.upazila.index') }}" class="nav-link {{ in_array(Route::currentRouteName(),['commissioner.tds.upazila.index'] ) ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon text-light"></i>
                                 <p>Upazilla</p>
                             </a>
                         </li>    
                         
                         <li class="nav-item">
-                                <a href="{{ route('commissioner.tds.organization.index') }} " class="nav-link">
+                                <a href="{{ route('commissioner.tds.organization.index') }} " class="nav-link {{ in_array(Route::currentRouteName(),['commissioner.tds.organization.index'] ) ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon text-light"></i>
                                     <p>Organization</p>
                                 </a>
                         </li> 
 
                         <li class="nav-item">
-                            <a href="{{ route('commissioner.tds.upazila.organization') }}" class="nav-link">
+                            <a href="{{ route('commissioner.tds.upazila.organization') }}" class="nav-link {{ in_array(Route::currentRouteName(),['commissioner.tds.upazila.organization'] ) ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon text-light"></i>
                                 <p>Upazilla & Org</p>
                             </a>
@@ -239,17 +240,18 @@
                         </ul>
                     </li>
 
+
                     <li class="nav-item">
-                        <a href="{{ route('commissioner.task.index') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'commissioner.task.index' ? 'active' : '' }}">
-                            <i class="nav-icon fab fa-dailymotion text-light"></i>
+                        <a href="{{ route('commissioner.advance.index') }}"
+
+                            class="nav-link {{ Route::currentRouteName() == 'commissioner.advance.index' || Route::currentRouteName() == 'circle.advance.search' || Route::currentRouteName() == 'commissioner.advance.search' ? 'active' : '' }}">
+
+                            <i class="nav-icon fab fa-speakap text-light"></i>
                             <p>
-                                Forward Dairy
+                                Advance
                             </p>
                         </a>
                     </li>
-
-           
 
                     <li class="nav-item">
                         <a href="{{ route('commissioner.arrears', 'all') }}"
@@ -271,35 +273,7 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-folder text-light"></i>
-                            <p>
-                                ReOpen
-                            </p>
-                        </a>
-                    </li>
                     
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-calculator text-light"></i>
-                            <p>
-                                Audit
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-file text-light"></i>
-                            <p>
-                                Sonchoy Potra
-                            </p>
-                        </a>
-                    </li>
 
                     <li class="nav-item">
                         <a href="{{ route('commissioner.users') }}"
@@ -307,6 +281,16 @@
                             <i class="nav-icon fas fa-users text-light"></i>
                             <p>
                                 Users
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('commissioner.setting.index') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'circle.setting.index' ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-cogs"></i>
+                            <p>
+                                Settings
                             </p>
                         </a>
                     </li>

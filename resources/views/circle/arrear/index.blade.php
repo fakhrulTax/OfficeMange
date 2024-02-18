@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+
+    <style>
+        .arrer_address p {
+            margin: 0;
+        }
+    </style>
+
 @endpush
 
 
@@ -33,6 +40,61 @@
     <section class="content">
 
 
+        <div class="card" style="padding: 10px">
+            <form action="{{ Route('circle.arrears.search') }}" method="GET" class="form">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input type="number" id="tin" name="tin" placeholder="TIN" class="form-control"value="{{ Request::get('tin') }}" autofocus>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select name="arrear_type" id="arrear_type" class="form-control">
+                                    <option value="">Select Type</option>
+                                    <option value="disputed" {{ (Request::get('arrear_type') == 'disputed') ? 'selected' : '' }}>Disputed</option>
+                                    <option value="undisputed" {{ (Request::get('arrear_type') == 'undisputed') ? 'selected' : '' }}>Undisputed</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="from_date" name="from_date" placeholder="From Date" value="{{ Request::get('from_date') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="to_date" name="to_date" placeholder="To Date" value="{{ Request::get('to_date') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select name="paginate" id="paginate" class="form-control">
+                                    <option value="">Paginate</option>
+                                    @for($i = 100; $i<=200; $i++)
+                                        <option value="{{ $i }}"  {{ (Request::get('paginate') == $i) ? 'selected' : '' }}>{{ $i }}</option>
+                                    @endfor
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-sm btn-primary">Search</button>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+
+
+
         <div class="card">
 
             <!-- /.card-header -->
@@ -40,111 +102,113 @@
                
 
 
-                <table id="example1" class="table table-bordered table-striped">
+
+                <table class="table table-bordered table-striped">
+
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Name, Address and TIN</th>
+
+                            <th>Status</th>
                             <th>Assessment Year</th>
                             <th>Arrear</th>
                             <th>Fine</th>
-                            <th>Circle</th>
+                            <th>Total</th>
+                            <th>Collection</th>
 
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
 
+                       
+
                         @php
                             $i = 0;
+                            $repeatTIN = '';
+                            $newTIN = '';
+                            $totalArrear = 0;
+                            $totlaFine = 0;
+                            $totalCollection = 0;
                         @endphp
 
                         @foreach ($arrears as $key => $arrear)
+                        @php
+                            $countForDesiredTin = $arrears->where('tin', $arrear->tin)->count();
+                        @endphp
                             <tr>
-                                <td>{{ $i + 1 }}</td>
+
+                            
+                                @if($repeatTIN != $arrear->tin)
+                                    <td rowspan="{{ $countForDesiredTin }}">{{ $i + 1 }}</td>
+                                    <td rowspan="{{ $countForDesiredTin }}">
+                                        @if($arrear->stock->bangla_name)
+                                        {{ $arrear->stock->bangla_name }}
+                                        @else
+                                            {{ $arrear->stock->name }}
+                                        @endif
+                                        <div class="arrer_address">
+                                            {!! $arrear->stock->address !!}
+                                        </div>                                        
+                                        {{ $arrear->tin }}
+                                    </td>
+                                    @php
+                                        $repeatTIN = $arrear->tin;
+                                    @endphp
+                                @endif
                                 <td>
-                                    {{ $arrear[0]->stock->name }} <br>
-                                    {{ str_replace('</p><p>', ', ', strip_tags($arrear[0]->stock->address)) }} <br>
-                                    {{ $arrear[0]->tin }}
+                                    {{ ucfirst($arrear->arrear_type) }}
                                 </td>
-
                                 <td>
-
-                                    <table class="table table-bordered table-striped">
-                                        @foreach ($arrear as $key => $ar)
-                                            <tr>
-
-
-
-                                                <td>{{ App\Helpers\MyHelper::assessment_year_format($ar->assessment_year) }}
-                                                </td>
-
-                                                <td>{{ $ar->arrear_type }}</td>
-                                                <td class="text-right">
-                                                    {{ App\Helpers\MyHelper::moneyFormatBD($ar->arrear) }}</td>
-
-
-
-                                                <td class="text-right">
-
-                                                    <button class="btn btn-danger btn-sm "
-                                                        onclick="ArreardEdit({{ $ar->id }})" data-toggle="modal"
-                                                        data-target="#editModal">Edit</button>
-                                                </td>
-
-
-
-
-
-                                            </tr>
-                                        @endforeach
-                                        <tr>
-                                            <td class="text-bold">Total</td>
-                                            <td></td>
-                                            <td class="text-bold text-right">
-                                                {{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('arrear')) }}</td>
-                                            <td></td>
-
-                                        </tr>
-
-
-                                    </table>
-
+                                    {{ App\Helpers\MyHelper::assessment_year_format($arrear->assessment_year) }}
                                 </td>
-
                                 <td class="text-right">
-                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('arrear')) }}
+                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->arrear) }}
                                 </td>
-
-                                <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($arrear->sum('fine')) }}</td>
-
-                                <td>Circle-{{ $arrear[0]->circle }}</td>
-                                <td>Notice</td>
-
-
+                                <td class="text-right">
+                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->fine) }}
+                                </td>
+                                <td class="text-right">
+                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->arrear + $arrear->fine) }}
+                                </td>
+                                <td class="text-right">
+                                    {{ App\Helpers\MyHelper::moneyFormatBD(App\Models\Collection::getArrearByTINAssessmentYear($arrear->tin, $arrear->assessment_year)) }}
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm " onclick="ArreardEdit({{ $arrear->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
+                                    <button class="btn btn-primary btn-sm">Notice</button>
+                                </td>
                             </tr>
                             @php
                                 $i++;
+                                $totalArrear += $arrear->arrear;
+                                $totlaFine += $arrear->fine;
+                                $totalCollection += App\Models\Collection::getArrearByTINAssessmentYear($arrear->tin, $arrear->assessment_year);
+
                             @endphp
                         @endforeach
 
 
-
-
-
                     </tbody>
                     <tfoot>
-                        <th colspan="3" class="text-center">Total</th>
-
-
-                        <th class="text-right"></th>
-                        <th class="text-right"></th>
-                        <th colspan="2"></th>
-
+                        <th colspan="4" class="text-center">Total</th>
+                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totalArrear) }}</th>
+                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totlaFine) }}</th>
+                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD( $totalArrear+ $totlaFine) }}</th>
+                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD( $totalCollection) }}</th>                        
                     </tfoot>
                 </table>
             </div>
             <!-- /.card-body -->
+
+
+            <div class="card-footer">
+                <ul class="pagination pagination-sm m-0 float-right">
+                    {{ $arrears->links('pagination::bootstrap-4') }}
+                </ul>
+            </div>
+
         </div>
         <!-- /.card -->
 
@@ -196,8 +260,10 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="demand_create_date"> Demand Create Date </label>
-                                        <input type="date" class="form-control" id="demand_create_date"
-                                            name="demand_create_date">
+
+                                        <input type="text" class="form-control" id="demand_create_date"
+                                            name="demand_create_date" placeholder="dd-mm-YYYY">
+
                                     </div>
                                 </div>
 
@@ -285,94 +351,11 @@
 
 
 @push('js')
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
-    <!-- AdminLTE App -->
-
 
     <script>
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         }
-
-
-        $(function() {
-            $("#example1").DataTable({
-
-                "responsive": true,
-                "lengthChange": true,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                footerCallback: function(row, data, start, end, display) {
-                    let api = this.api();
-
-                    // Remove the formatting to get integer data for summation
-                    let intVal = function(i) {
-                        return typeof i === 'string' ?
-                            i.replace(/[\$,]/g, '') * 1 :
-                            typeof i === 'number' ?
-                            i :
-                            0;
-                    };
-
-                    // Total over all pages
-                    total = api
-                        .column([3])
-                        .data()
-                        .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-
-
-                    // Total over this page
-                    arrearTotal = api
-                        .column(3, {
-                            page: 'current'
-                        })
-                        .data()
-                        .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-
-                    // Update footer
-                    api.column(3).footer().innerHTML = numberWithCommas(arrearTotal);
-
-
-                    // Fine Total over this page
-                    fineTotal = api
-                        .column(4, {
-                            page: 'current'
-                        })
-                        .data()
-                        .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-                    // Update footer
-                    api.column(4).footer().innerHTML = numberWithCommas(fineTotal);
-
-
-
-
-                }
-
-
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-
-
-
-        });
-
-
 
         
     </script>

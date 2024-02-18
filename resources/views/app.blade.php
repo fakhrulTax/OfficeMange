@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/datepicker/bootstrap-datepicker.min.css') }}">
   @stack('css')
 </head>
-<body class="hold-transition sidebar-mini layout-fixed {{ (config('settings.sidebar_collapse_'.Auth::user()->circle))? 'sidebar-collapse':'' }}">
+<body class="hold-transition sidebar-mini layout-fixed {{ (config('settings.sidebar_collapse_commissioner'))? 'sidebar-collapse':'' }}">
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
@@ -75,7 +75,9 @@
 <script src="{{ asset('js/toastr.min.js') }}"></script>
   {!! Toastr::message() !!}
 <script type="text/javascript">
-  $('#receive_date, #move_date, #appeal_disposal_date, #appeal_order_date, #deadline, #challan_date, #audit_date, #expire_date, #deadline, #reopen_date, #disposal_date, #pay_date, #issue_date, #hearing_date, #from_date, #to_date').datepicker({
+
+  $('#edit_demand_create_date, #demand_create_date, #receive_date, #move_date, #appeal_disposal_date, #appeal_order_date, #deadline, #challan_date, #audit_date, #expire_date, #deadline, #reopen_date, #disposal_date, #pay_date, #issue_date, #hearing_date, #from_date, #to_date').datepicker({
+
     autoclose: true,
     format: 'dd-mm-yyyy',
     todayHighlight: true,

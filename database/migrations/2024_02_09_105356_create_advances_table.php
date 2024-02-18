@@ -13,18 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('arrears', function (Blueprint $table) {
+        Schema::create('advances', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tin');
-            $table->string('arrear_type');
-
-            $table->date('demand_create_date');
-
-            $table->integer('assessment_year')->length(8);
-            $table->BigInteger('arrear');
-            $table->BigInteger('fine')->nullable();
-            $table->integer('circle');    
-            $table->string('comments')->nullable();
+            $table->integer('advance_assessment_year')->length(8);
+            $table->integer('return_submitted_assessment_year')->length(8);
+            $table->BigInteger('income');
+            $table->BigInteger('tax');
+            $table->integer('circle');
             $table->timestamps();
         });
     }
@@ -36,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('arrears');
+        Schema::dropIfExists('advances');
     }
 };

@@ -12,6 +12,9 @@
                 </div>
 
                 <div class="col-md-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <a href="{{ route('circle.tds.create') }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add New TDS</a>
+                    </ol>
                 </div>
 
             </div>
@@ -20,246 +23,112 @@
     </div>
 
     <section class="content">
+        
+
+
         <div class="card">
-            <div class="card-body bg-success">
-
-              @if(isset($updateType)  && $updateType == 'edit')
-              <form action="{{ route('circle.tds.update', $editTds->id) }}" method="POST">
-                @csrf
+            <div class="card-body">
+              <form action="{{ route('circle.tds.search') }}" method="GET">
                 <div class="row">
-
-                    <div class="col-md-3">
+          
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="zilla">Zilla</label>
-                           <input type="text" value="{{ $editTds->upazila->zilla->name }}" class="form-control" readonly>
+                            <select class="form-control" name="zilla_search" id="zilla_search">
+                                <option value="">Select Zilla</option>
+                                @foreach ($zillas as $zilla)
+                                    <option value="{{ $zilla->id }}" {{ Request::get('zilla_search') == $zilla->id ? 'selected' : ''}} >{{ ucfirst($zilla->name) }} </option>
+                                @endforeach
+          
+                            </select>
                         </div>
                     </div>
-
-
-                    <div class="col-md-3">
+          
+          
+                    <div class="col-md-2">
                         <div class="form-group">
-                            <label for="upazila">Upazilla</label>
-                            <input type="text" value="{{ $editTds->upazila->name }}" class="form-control" readonly>
+                            <label for="upazila_search">Upazilla</label>
+                            <select class="form-control" name="upazila_search" id="upazila_search">
+                                <option value="">Select Upazilla</option>
+
+                                @if (Request::get('zilla_search'))
+
+                                @php
+                                    $uapzilas = App\Models\Upazila::where('zilla_id', Request::get('zilla_search'))->get();
+                                @endphp
+                                
+                                @foreach ($uapzilas as $uapzila )
+                                <option value="{{ $uapzila->id }}" {{ Request::get('upazila_search') == $uapzila->id ? 'selected' : ''}} > {{ ucfirst($uapzila->name)}} </option>
+                                @endforeach
+                                    
+                                @endif
+          
+                            </select>
                         </div>
                     </div>
-
-                    <div class="col-md-3">
+          
+                    <div class="col-md-2">
                         <div class="form-group">
-                            <label for="organization">Organization</label>
-                            <input type="text" value="{{ $editTds->organization->name }}" class="form-control" readonly>
+                            <label for="organization_search">Organization</label>
+                            <select class="form-control" name="organization_search" id="organization_search" >
+                                <option value="">Select Organization</option>
+                                @if (Request::get('upazila_search'))
+
+                                @php
+                                    $organizations = App\Models\Upazila::where('id', Request::get('upazila_search'))->first()->organizations;
+                                    
+                                @endphp
+
+                                @foreach ($organizations as $organization )
+                                <option value="{{ $organization->id }}" {{ Request::get('organization_search') == $organization->id ? 'selected' : ''}} > {{ ucfirst($organization->name) }} </option>
+                                @endforeach
+                                    
+                                @endif
+                               
+          
+          
+                            </select>
+
+                          
                         </div>
                     </div>
-
-
-
-
-                    <div class="col-md-3">
-
+          
+                    <div class="col-md-2">
                         <div class="form-group">
-                            <label for="collection_month">Collection Month</label>
-                            <input type="month" name="collection_month"
-                                placeholder="collection month" value="{{ $editTds->collection_month }}" class="form-control" autofocus>
+                            <label for="start_month">Start Month</label>
+                            <input type="month" name="start_month" value="{{ Request::get('start_month') }}" class="form-control">
+
                         </div>
                     </div>
 
-
-                    <div class="col-md-3">
-
+                    <div class="col-md-2">
                         <div class="form-group">
-                            <label for="bill">Bill</label>
-                            <input type="number" value="{{ $editTds->bill }}"  name="bill" placeholder="bill" class="form-control"
-                                autofocus>
+                            <label for="end_month">End Month</label>
+                            <input type="month" name="end_month" value="{{ Request::get('end_month') }}" class="form-control">
+
                         </div>
                     </div>
-
-
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="tds">TDS</label>
-                            <input type="number" id="tds" name="tds" placeholder="TDS" class="form-control"
-                                value="{{ $editTds->tds }}">
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label for="comments">Comment</label>
-                        <div class="form-group">
-                            <textarea name="comments" id="" cols="30" rows="1" class="form-control">{{ $editTds->comments }}</textarea>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 mt-4">
-                        <input type="submit" value="Update TDS" class="btn btn-primary  mt-2">
-
-                    </div>
-
+          
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Search">
+                      </div>
+                  </div>
+          
                 </div>
-
-            </form>
-
-
-
-              @else
-                <form action="{{ route('circle.tds.store') }}" method="POST">
-                    @csrf
-                    <div class="row">
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="zilla">Zilla</label>
-                                <select class="form-control" id="zilla">
-                                    <option value="">Select Zilla</option>
-                                    @foreach ($zillas as $zilla)
-                                        <option value="{{ $zilla->id }}">{{ $zilla->name }}</option>
-                                    @endforeach
-
-                                </select>
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="upazila">Upazilla</label>
-                                <select class="form-control" name="upazila_id" id="upazila" required>
-                                    <option value="">Select Upazilla</option>
-
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="organization">Organization</label>
-                                <select class="form-control" name="organization_id" id="organization" required>
-                                    <option value="">Select Organization</option>
-
-
-                                </select>
-                            </div>
-                        </div>
-
-
-
-
-                        <div class="col-md-3">
-
-                            <div class="form-group">
-                                <label for="collection_month">Collection Month</label>
-                                <input type="month" id="collection_month" name="collection_month"
-                                    placeholder="collection month" class="form-control" autofocus>
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-3">
-
-                            <div class="form-group">
-                                <label for="bill">Bill</label>
-                                <input type="number" id="bill" name="bill" placeholder="bill" class="form-control"
-                                    autofocus>
-                            </div>
-                        </div>
-
-
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="tds">TDS</label>
-                                <input type="number" id="tds" name="tds" placeholder="TDS" class="form-control"
-                                    value="">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="comments">Comment</label>
-                            <div class="form-group">
-                                <textarea name="comments" id="" cols="30" rows="1" class="form-control"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mt-4">
-                            <input type="submit" value="Add TDS" class="btn btn-primary mt-2">
-
-                        </div>
-
-                    </div>
-
-                </form>
-              @endif
+              </form>
             </div>
-        </div>
-    
-
-        <div class="card">
-          <div class="card-body">
-            <form action="{{ route('circle.tds.search') }}" method="GET">
-              <div class="row">
-    
-                  <div class="col-md-2">
-                      <div class="form-group">
-                          <label for="zilla">Zilla</label>
-                          <select class="form-control" name="zilla_search" id="zilla_search">
-                              <option value="">Select Zilla</option>
-                              @foreach ($zillas as $zilla)
-                                  <option value="{{ $zilla->id }}">{{ $zilla->name }}</option>
-                              @endforeach
-    
-                          </select>
-                      </div>
-                  </div>
-    
-    
-                  <div class="col-md-2">
-                      <div class="form-group">
-                          <label for="upazila_search">Upazilla</label>
-                          <select class="form-control" name="upazila_search" id="upazila_search">
-                              <option value="">Select Upazilla</option>
-    
-                          </select>
-                      </div>
-                  </div>
-    
-                  <div class="col-md-2">
-                      <div class="form-group">
-                          <label for="organization_search">Organization</label>
-                          <select class="form-control" name="organization_search" id="organization_search" >
-                              <option value="">Select Organization</option>
-    
-    
-                          </select>
-                      </div>
-                  </div>
-
-                  <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="collection_month">Collection Month</label>
-                      <input type="month" name="collection_month" class="form-control">
-
-                    </div>
-                </div>
-
-                  <div class="col-md-2">
-                    <div class="form-group mt-4">
-                      <input type="submit" class="btn btn-primary mt-2" value="Search">
-                    </div>
-                </div>
-    
-              </div>
-            </form>
           </div>
-        </div>
-
-
+          
 
 
 
 
         <div class="card">
 
-            @if (count($tds) < 1)
+
+            @if (count($tdses) < 1)
+
 
                 <h2 class="text-danger p-5">Sorry! There is no data to show!</h2>
             @else
@@ -273,9 +142,10 @@
                                 <th>Zilla</th>
                                 <th>Upazila</th>
                                 <th>Orginization</th>
-
-                                <th>Bill</th>
                                 <th>TDS</th>
+
+                                <th>Bill</th>                                
+
                                 <th>Comments</th>
                                 <th>Action</th>
                             </tr>
@@ -283,20 +153,26 @@
 
                         <tbody>
 
-                            @foreach ($tds as $key => $tds)
+                            @php
+                                $totalTDS = 0;
+                            @endphp
+
+                            @foreach ($tdses as $key => $tds)
+
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td>
                                         {{ date('M-Y', strtotime($tds->collection_month)) }}<br>
 
                                     </td>
-                                    <td> {{ $tds->upazila->zilla->name }}</td>
-                                    <td> {{ $tds->upazila->name }}</td>
-                                    <td> {{ $tds->organization->name }} </td>
-                                    <td> {{ $tds->bill }} </td>
+                                    <td> {{ ucfirst($tds->upazila->zilla->name ) }}</td>
+                                    <td> {{ ucfirst($tds->upazila->name) }}</td>
+                                    <td> {{ ucfirst($tds->organization->name )}} </td>
                                     <td>
-                                        {{ $tds->tds }}
+                                        {{ App\Helpers\MyHelper::moneyFormatBD($tds->tds) }}
                                     </td>
+                                    <td> {{ App\Helpers\MyHelper::moneyFormatBD($tds->bill) }} </td>
+                                    
                                     <td> {{ $tds->comments }} </td>
                                     <td> 
                                       <a href="{{ route('circle.tds.edit', $tds->id) }}" class="btn btn-sm btn-warning">Edit</a>
@@ -305,14 +181,19 @@
                                     </td>
 
                                 </tr>
+                                @php
+                                    $totalTDS += $tds->tds;
+                                @endphp
+
                             @endforeach
 
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="5" class="font-weight-bold text-center">Total</td>
-                                <td>{{ $tds->sum('bill') }}</td>
-                                <td>{{ $tds->sum('tds') }}</td>
+
+                                <td>{{ App\Helpers\MyHelper::moneyFormatBD($totalTDS ) }}</td>
+
                                 <td colspan="2"></td>
                             </tr>
 
@@ -327,6 +208,14 @@
         </div>
         <!-- /.card -->
 
+   <div class="card-footer clearfix">
+            <ul class="pagination pagination-sm m-0 float-right">
+
+                {{ $tdses->links("pagination::bootstrap-4") }}
+
+            </ul>
+        </div>
+
 
 
     </section>
@@ -338,77 +227,12 @@
 
 @push('js')
     <script>
-        $('#zilla').change(function() {
-            var zilla = $(this).val();
-            $('#upazila').empty();
-
-            if (zilla) {
-                $.ajax({
-                    type: "GET",
-                    url: "{{ url('upazilla') }}/" + zilla,
-                    dataType: "json",
-
-                    success: function(res) {
-                        if (res) {
-                            $('#upazila').empty();
-
-
-                            $('#upazila').append('<option>Select Upazilla</option>');
-                            $.each(res.upazilla, function(key, value) {
-                                $('#upazila').append('<option value="' + value.id + '">' + value
-                                    .name + '</option>');
-                            });
-
-                        }
-                    }
-
-
-
-                });
-            }
-
-
-        });
-
-        $('#upazila').change(function() {
-            var upazila = $(this).val();
-
-            if (upazila) {
-                $.ajax({
-                    type: "GET",
-                    url: "{{ url('ogranization') }}/" + upazila,
-                    dataType: "json",
-
-                    success: function(res) {
-                        if (res) {
-
-                            $('#organization').empty();
-
-                            $('#organization').append('<option>Select Organization</option>');
-                            $.each(res.organization, function(key, value) {
-
-                                $.each(value.organizations, function(key, org) {
-
-                                    $('#organization').append('<option value="' + org
-                                        .id + '">' + org.name + '</option>');
-                                })
-
-                            });
-
-                        }
-                    }
-
-                })
-            }
-
-        });
-
-
-
+       
 
         $('#zilla_search').change(function() {
             var zilla = $(this).val();
             $('#upazila_search').empty();
+            $('#organization_search').empty();
             if (zilla) {
              
                 $.ajax({
@@ -424,7 +248,7 @@
                             $('#upazila_search').append('<option value="">Select Upazilla</option>');
                             $.each(res.upazilla, function(key, value) {
                                 $('#upazila_search').append('<option value="' + value.id + '">' + value
-                                    .name + '</option>');
+                                    .name + '</option>').css("text-transform", "capitalize");
                             });
 
                         }
@@ -440,7 +264,7 @@
 
         $('#upazila_search').change(function() {
             var upazila = $(this).val();
-
+            $('#organization_search').empty();
             if (upazila) {
                 $.ajax({
                     type: "GET",
@@ -450,7 +274,7 @@
                     success: function(res) {
                         if (res) {
 
-                            $('#organization_search').empty();
+                            
 
                             $('#organization_search').append('<option value="">Select Organization</option>');
                             $.each(res.organization, function(key, value) {
@@ -458,7 +282,7 @@
                                 $.each(value.organizations, function(key, org) {
 
                                     $('#organization_search').append('<option value="' + org
-                                        .id + '">' + org.name + '</option>');
+                                        .id + '">' + org.name + '</option>').css("text-transform", "capitalize");
                                 })
 
                             });
