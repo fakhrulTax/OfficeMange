@@ -50,7 +50,7 @@
                     <div class="col-9 col-sm-9">
                       <div class="tab-content" id="vert-tabs-tabContent">
 
-                        @include('commissioner.Setting.general') 
+                        @include('commissioner.setting.general') 
 
                         <button type="submit" class="btn btn-primary">Save</button>
                       </div>
