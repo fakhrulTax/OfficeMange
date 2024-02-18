@@ -158,7 +158,7 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('/commissioner-dashboard', [CommissionerController::class, 'index'])->name('dashboard');
 
-<
+
     //Arrear Route
     Route::get('commissioner/arrears/{circle}', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
 
@@ -183,15 +183,9 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::get('/tds/organization/{id}', [OrganizationController::class, 'edit'])->name('tds.organization.edit');
     Route::put('/tds/organization/{organization}', [OrganizationController::class, 'update'])->name('tds.organization.update');
 
-<<<<<<< HEAD
-    Route::get('/tds/collection', function(){
-        return view('commissioner.tds.tds_das.index');
-    });
-=======
     //TDS Collection Panel Route
     Route::get('/tds/collection', [TdsController::class, 'collectionIndex'])->name('tds.collection.index');
     Route::get('/tds/collection/{zillaId}/zilla', [TdsController::class, 'collectionZilla'])->name('tds.collection.zilla');
->>>>>>> 1d05f9037b685aa0d49973209140cbd8a8383328
 
     //TDS Routes
     Route::get('/tds-list', [TdsController::class, 'commissionTdsIndex'])->name('tdsList.index');
