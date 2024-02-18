@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class MyHelper
 {
+
     public static function ranges($range)
     {
         $ranges = [
@@ -24,6 +25,7 @@ class MyHelper
         
         return $ranges[$range];
     }
+
 
     //Assessment Year Format
     public static function assessment_year_format( $number )

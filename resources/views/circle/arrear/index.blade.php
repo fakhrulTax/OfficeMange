@@ -8,11 +8,13 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+
     <style>
         .arrer_address p {
             margin: 0;
         }
     </style>
+
 @endpush
 
 
@@ -36,6 +38,7 @@
     </div>
 
     <section class="content">
+
 
         <div class="card" style="padding: 10px">
             <form action="{{ Route('circle.arrears.search') }}" method="GET" class="form">
@@ -91,6 +94,7 @@
         </div>
 
 
+
         <div class="card">
 
             <!-- /.card-header -->
@@ -98,21 +102,26 @@
                
 
 
+
                 <table class="table table-bordered table-striped">
+
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Name, Address and TIN</th>
+
                             <th>Status</th>
                             <th>Assessment Year</th>
                             <th>Arrear</th>
                             <th>Fine</th>
                             <th>Total</th>
                             <th>Collection</th>
+
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
+
                        
 
                         @php
@@ -176,6 +185,7 @@
                                 $totalArrear += $arrear->arrear;
                                 $totlaFine += $arrear->fine;
                                 $totalCollection += App\Models\Collection::getArrearByTINAssessmentYear($arrear->tin, $arrear->assessment_year);
+
                             @endphp
                         @endforeach
 
@@ -192,11 +202,13 @@
             </div>
             <!-- /.card-body -->
 
+
             <div class="card-footer">
                 <ul class="pagination pagination-sm m-0 float-right">
                     {{ $arrears->links('pagination::bootstrap-4') }}
                 </ul>
             </div>
+
         </div>
         <!-- /.card -->
 
@@ -248,8 +260,10 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="demand_create_date"> Demand Create Date </label>
+
                                         <input type="text" class="form-control" id="demand_create_date"
                                             name="demand_create_date" placeholder="dd-mm-YYYY">
+
                                     </div>
                                 </div>
 
@@ -337,6 +351,7 @@
 
 
 @push('js')
+
     <script>
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");

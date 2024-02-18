@@ -28,6 +28,7 @@ class UserController extends Controller
 
         //$otpResponse = MyHelper::sendOtp(Auth::user());
         $otpResponse ="success";
+
         if($otpResponse){
 
             Toastr::success('OTP Sending successfully');
@@ -91,7 +92,7 @@ class UserController extends Controller
 
 
     public function userEdit($id){
-        
+
         $user = User::find($id);
 
         $otpResponse = MyHelper::sendOtp(Auth::user());

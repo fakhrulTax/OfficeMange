@@ -188,6 +188,7 @@
                                             @foreach($selectedUpazila->organizations as $key => $organization)
                                                 <li class="organization-list-item">
                                                     {{ ++$key.'. '. $organization->name }}
+
                                                 </li>
                                             @endforeach
                                         @endif

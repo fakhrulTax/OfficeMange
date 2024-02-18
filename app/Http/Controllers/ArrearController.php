@@ -6,11 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Arrear;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\MyHelper;
+
 use Illuminate\Support\Facades\DB;
+
 use PDF;
 
 class ArrearController extends Controller
 {
+
 
     public function search(Request $request){
 
@@ -74,6 +77,7 @@ class ArrearController extends Controller
                     ->orderBy('tin', 'ASC')
                     ->orderBy('assessment_year', 'ASC')
                     ->paginate(200); // Adjust the pagination size based on your needs
+
         return view('circle.arrear.index', compact('arrears'));
     }
 
@@ -109,7 +113,9 @@ class ArrearController extends Controller
         Arrear::create([
             'arrear_type' => $request->arrear_type,
             'tin' => $request->tin,
+
             'demand_create_date' => date('Y-m-d', strtotime($request->demand_create_date)),
+
             'assessment_year' => $request->assessment_year,
             'arrear' => $request->arrear,
             'circle' => $circle,
@@ -172,7 +178,9 @@ class ArrearController extends Controller
     
             Arrear::where('id', $request->id)->update([
                 'arrear_type' => $request->arrear_type,
+
                 'demand_create_date' => date('Y-m-d', strtotime($request->demand_create_date)),
+
                 'assessment_year' => $request->assessment_year,
                 'arrear' => $request->arrear,
                 'fine' => $request->fine,

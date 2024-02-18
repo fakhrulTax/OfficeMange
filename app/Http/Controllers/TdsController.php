@@ -15,11 +15,13 @@ class TdsController extends Controller
 {
     public function index(){
         $zillas = Zilla::orderBy('name')->get();
+
         $tdses = Tds_collection::where('circle', Auth::user()->circle)
         ->with('upazila', 'organization')
         ->paginate(100);    
      
         return view ('circle.tds.index', compact('tdses', 'zillas'));
+
     }
 
 
@@ -184,7 +186,9 @@ class TdsController extends Controller
     //Commission TDS
     public function commissionTdsIndex(){
         $zillas = Zilla::orderBy('name')->get();
+
         $tdsList = Tds_collection::orderBy('circle', 'ASC')->with('upazila', 'organization')
+
         ->paginate(100);
      
         return view ('commissioner.tds.index', compact('tdsList', 'zillas'));

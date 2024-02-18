@@ -15,6 +15,7 @@ class Collection extends Model
         return $this->belongsTo(Stock::class, 'tin', 'tin');
     }
 
+
     //Arrear Collection By TIN and Assessment Year
     public static function getArrearByTINAssessmentYear($tin, $assessment_year)
     {

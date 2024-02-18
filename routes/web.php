@@ -78,7 +78,9 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::post('/arrear', [ArrearController::class, 'store'])->name('arrearStore');
     Route::get('/arrear/edit', [ArrearController::class, 'edit'])->name('arrearEdit');
     Route::post('/arrear/edit', [ArrearController::class, 'update'])->name('arrearUpdate');
+
     Route::get('/circle/arrears/search', [ArrearController::class, 'search'])->name('arrears.search');
+
 
      //Task routes
      Route::get('/circle/forward_dairy', [TaskController::class, 'index'])->name('task.index');
@@ -156,8 +158,10 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('/commissioner-dashboard', [CommissionerController::class, 'index'])->name('dashboard');
 
+<
     //Arrear Route
     Route::get('commissioner/arrears/{circle}', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
+
     Route::post('commissioner/arrear/', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
 
     //TDS

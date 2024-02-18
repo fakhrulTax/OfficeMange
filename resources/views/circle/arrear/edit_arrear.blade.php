@@ -34,8 +34,10 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="demand_create_date"> Demand Create Date </label>
+
                     <input type="text" class="form-control" id="edit_demand_create_date"
                         name="demand_create_date" value="{{ date('d-m-Y', strtotime($arrear->demand_create_date)) }}">
+
                 </div>
             </div>
 

@@ -126,7 +126,9 @@
 
         <div class="card">
 
+
             @if (count($tdses) < 1)
+
 
                 <h2 class="text-danger p-5">Sorry! There is no data to show!</h2>
             @else
@@ -141,18 +143,22 @@
                                 <th>Upazila</th>
                                 <th>Orginization</th>
                                 <th>TDS</th>
+
                                 <th>Bill</th>                                
+
                                 <th>Comments</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
 
                         <tbody>
+
                             @php
                                 $totalTDS = 0;
                             @endphp
 
                             @foreach ($tdses as $key => $tds)
+
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td>
@@ -173,17 +179,21 @@
                                       <a href="{{ route('circle.tds.destroy', $tds->id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this TDS?')">Delete</a>
                                     
                                     </td>
+
                                 </tr>
                                 @php
                                     $totalTDS += $tds->tds;
                                 @endphp
+
                             @endforeach
 
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="5" class="font-weight-bold text-center">Total</td>
+
                                 <td>{{ App\Helpers\MyHelper::moneyFormatBD($totalTDS ) }}</td>
+
                                 <td colspan="2"></td>
                             </tr>
 
@@ -200,7 +210,9 @@
 
    <div class="card-footer clearfix">
             <ul class="pagination pagination-sm m-0 float-right">
+
                 {{ $tdses->links("pagination::bootstrap-4") }}
+
             </ul>
         </div>
 

@@ -60,10 +60,12 @@
                             <div class="form-group">
                                 <select name="circle" id="circle" class="form-control">
                                     <option value="">Select Circle</option>
+
                                     <option value="range-1" {{ (Request::get('circle') == 'range-1') ? 'selected' : '' }}>Range-1</option>
                                     <option value="range-2" {{ (Request::get('circle') == 'range-2') ? 'selected' : '' }}>Range-2</option>
                                     <option value="range-3" {{ (Request::get('circle') == 'range-3') ? 'selected' : '' }}>Range-3</option>
                                     <option value="range-4" {{ (Request::get('circle') == 'range-4') ? 'selected' : '' }}>Range-4</option>                                    
+
                                     @for($i = 1; $i<=22; $i++)
                                         <option value="{{ $i }}"  {{ (Request::get('circle') == $i) ? 'selected' : '' }}>Circle-{{ $i }}</option>
                                     @endfor
