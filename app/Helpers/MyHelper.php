@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class MyHelper
 {
-
+    
     public static function ranges($range)
     {
         $ranges = [
