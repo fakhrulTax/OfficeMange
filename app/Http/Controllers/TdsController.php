@@ -24,21 +24,19 @@ class TdsController extends Controller
         $circleData = Tds_collection::getAssessmentYearCollectionByCircle($monthRange, [Auth::user()->circle]);
 
         //Upazila Data
-        $upazilaIds = Tds_collection::where('circle', 1)->distinct()->pluck('upazila_id')->toArray();;
-
-        //dd($upazilaIds);
-       
+        $upazilaIds = Tds_collection::where('circle', Auth::user()->circle)->distinct()->pluck('upazila_id')->toArray();       
         $upazilaData = count($upazilaIds) ? Tds_Collection::getAssessmentYearCollectionByUpazila($upazilaIds, $monthRange, [Auth::user()->circle]) : [];
         
-        
-        
-        //dd($upazilaData);
-
+        //Organization Data
+        $orgIds = Tds_collection::where('circle', Auth::user()->circle)->distinct()->pluck('organization_id')->toArray();
+        $orgDatas = count($orgIds) ? Tds_collection::getAssessmentYearCollectionByOrganization($orgIds, $monthRange, [Auth::user()->circle]) : [];
+      
         return view('circle.tds.report', [
             'title' => 'TDS Report',
             'monthRange' => $monthRange,
             'circleData' => $circleData,
             'upazilaData' => $upazilaData,
+            'orgDatas' => $orgDatas,
         ]);
     }
 

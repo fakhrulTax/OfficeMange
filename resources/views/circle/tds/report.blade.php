@@ -82,7 +82,7 @@
                 <!-- /.card -->
 
                 <!-- card For Total TDS By Upazila -->
-                <div class="card card-primary">
+                <div class="card card-secondary">
 
                 <div class="card-header">
                     Total TDS By Upazila
@@ -133,6 +133,72 @@
                                 </tr>
                                 @endforeach
                                
+                            </tbody>
+                            <tfoot>
+                                <th>Total</th>
+                                @foreach ($monthRange as $month)
+                                    <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($columnTotals[$month] ?? 0) }}</th>  
+                                @endforeach
+                                <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totalAllMonths) }}</th>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+                 <!-- card For Total TDS By Upazila -->
+                 <div class="card card-danger">
+
+                <div class="card-header">
+                    Total TDS By Authority 
+                </div>   
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        
+                        <table class="table table-bordered table-responsive table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    @foreach ($monthRange as $month)
+                                        <th>{{ $month }}</th>
+                                    @endforeach
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @php
+                                    $totalAllMonths = 0;                                    
+                                    $columnTotals = [];
+                                @endphp
+
+                                @foreach($orgDatas as $key => $orgData)
+                                <tr>                                   
+
+                                    @php                                    
+                                        $org = App\Models\Organization::find($key);
+                                        $rowTotal = 0;
+                                    @endphp
+
+                                    <td>{{ $org->name }}</td>
+
+                                    @foreach($monthRange as $month)
+
+                                        <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($orgData[$month]) }}</td>
+
+                                        @php
+                                            $rowTotal += $orgData[$month];
+                                            $columnTotals[$month] = ($columnTotals[$month] ?? 0) + $orgData[$month];
+                                            $totalAllMonths += $orgData[$month];
+                                        @endphp
+
+                                    @endforeach
+
+                                    <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($rowTotal) }}</td>
+                                </tr>
+                                @endforeach
+                            
                             </tbody>
                             <tfoot>
                                 <th>Total</th>
