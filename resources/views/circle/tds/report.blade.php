@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('title', 'Arrear')
+@section('title', 'TDS Report')
 
 @push('css')
     <!--  Datatable -->
@@ -37,7 +37,7 @@
             <section class="content">
 
 
-                <div class="card card-primary">
+                <div class="card card-primary" id="circle_table_wrapper">
 
                 <div class="card-header">
                     Total TDS By Month
@@ -45,7 +45,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         
-                        <table class="table table-bordered table-responsive table-striped">
+                        <table class="table table-bordered table-responsive table-striped" id="circle_table">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -82,7 +82,7 @@
                 <!-- /.card -->
 
                 <!-- card For Total TDS By Upazila -->
-                <div class="card card-secondary">
+                <div class="card card-secondary" id="upazila_table_wrapper">
 
                 <div class="card-header">
                     Total TDS By Upazila
@@ -90,7 +90,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         
-                        <table class="table table-bordered table-responsive table-striped">
+                        <table class="table table-bordered table-responsive table-striped" id="upazila_table">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -148,7 +148,7 @@
                 <!-- /.card -->
 
                  <!-- card For Total TDS By Upazila -->
-                 <div class="card card-danger">
+                 <div class="card card-danger" id="authority_table_wrapper">
 
                 <div class="card-header">
                     Total TDS By Authority 
@@ -156,7 +156,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         
-                        <table class="table table-bordered table-responsive table-striped">
+                        <table id="authority_table" class="table table-bordered table-responsive table-striped">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -241,86 +241,28 @@
 
 
     <script>
-        $(document).ready(function() {
-
-            // change function for circle
-            $('#circle').change(function() {
-                let circle = $(this).val();
-
-                $('#circle-form').submit();
-
-
-            });
-
-
-
-        });
-
-
-        function numberWithCommas(x) {
-            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-        }
-    </script>
-
-    <script>
         $(function() {
-            $("#example1").DataTable({
 
-                "responsive": true,
+            $("#authority_table").DataTable({
+                "responsive": false,
                 "lengthChange": true,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                footerCallback: function(row, data, start, end, display) {
-                    let api = this.api();
+                "autoWidth": true,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],                
+            }).buttons().container().appendTo('#authority_table_wrapper .col-md-6:eq(0)');
 
-                    // Remove the formatting to get integer data for summation
-                    let intVal = function(i) {
-                        return typeof i === 'string' ?
-                            i.replace(/[\$,]/g, '') * 1 :
-                            typeof i === 'number' ?
-                            i :
-                            0;
-                    };
+            $("#upazila_table").DataTable({
+                "responsive": false,
+                "lengthChange": true,
+                "autoWidth": true,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],                
+            }).buttons().container().appendTo('#upazila_table_wrapper .col-md-6:eq(0)');
 
-                    // Total over all pages
-                    total = api
-                        .column([3])
-                        .data()
-                        .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-
-
-                    // Total over this page
-                    arrearTotal = api
-                        .column(3, {
-                            page: 'current'
-                        })
-                        .data()
-                        .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-
-                    // Update footer
-                    api.column(3).footer().innerHTML = numberWithCommas(arrearTotal);
-
-
-                    // Fine Total over this page
-                    fineTotal = api
-                        .column(4, {
-                            page: 'current'
-                        })
-                        .data()
-                        .reduce((a, b) => intVal(a) + intVal(b), 0);
-
-                    // Update footer
-                    api.column(4).footer().innerHTML = numberWithCommas(fineTotal);
-
-
-
-
-                }
-
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
+            $("#circle_table").DataTable({
+                "responsive": false,
+                "lengthChange": true,
+                "autoWidth": true,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],                
+            }).buttons().container().appendTo('#circle_table_wrapper .col-md-6:eq(0)');
 
         });
     </script>
