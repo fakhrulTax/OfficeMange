@@ -114,7 +114,7 @@
                         <select class="form-control" id="zilla" name="zilla_id" required>
                             <option value="">Select Zilla</option>
                             @foreach ($zillas as $zilla)
-                                <option value="{{ $zilla->id }}" {{ old('zilla_id') == $zilla->id ? 'selected' : ''}} >{{ ucfirst($zilla->name) }}</option>
+                                <option value="{{ $zilla->id }}" {{ old('zilla_id') == $zilla->id || $zilla->id == $selectedDistictId ? 'selected' : ''}} >{{ ucfirst($zilla->name) }}</option>
                             @endforeach
 
                         </select>
@@ -136,6 +136,9 @@
                         <select class="form-control" name="upazila_id" id="upazila" required>
                             <option value="">Select Upazilla</option>
 
+                            @foreach( $selectedUpazilas as $upazila )
+                                <option value="{{ $upazila->id }}">{{ ucfirst($upazila->name) }}</option>
+                            @endforeach
 
                         </select>
 
