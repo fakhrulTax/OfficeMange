@@ -111,7 +111,7 @@
           
                     <div class="col-md-2">
                       <div class="form-group">
-                        <input type="submit" class="btn btn-primary" value="Search">
+                        <input type="submit" class="btn btn-primary" value="Search" style="margin-top: 30px">
                       </div>
                   </div>
           
