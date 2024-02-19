@@ -122,15 +122,28 @@ class Tds_collection extends Model
     }
 
 
-    public static function getAssessmentYearCollectionByUpazila(array $upazilaIds, array $monthsOrder)
+    public static function getAssessmentYearCollectionByUpazila(array $upazilaIds, array $monthsOrder, array $circles = null)
     {
-        // Use Eloquent to group by upazila and month and get the sum of amount
-        $upazilaData = Self::select('upazila_id', DB::raw("SUBSTRING(collection_month, 1, 7) as month"), DB::raw('SUM(tds) as total_amount'))
+        if($circles)
+        {
+            $upazilaData = Self::select('upazila_id', DB::raw("SUBSTRING(collection_month, 1, 7) as month"), DB::raw('SUM(tds) as total_amount'))
+            ->whereIn('upazila_id', $upazilaIds)
+            ->whereIn('circle', $circles)
+            ->groupBy('upazila_id', 'month')
+            ->orderBy('upazila_id')
+            ->orderBy(DB::raw("FIELD(month, '" . implode("','", $monthsOrder) . "')"))
+            ->get();
+
+        }else{
+            // Use Eloquent to group by upazila and month and get the sum of amount
+            $upazilaData = Self::select('upazila_id', DB::raw("SUBSTRING(collection_month, 1, 7) as month"), DB::raw('SUM(tds) as total_amount'))
             ->whereIn('upazila_id', $upazilaIds)
             ->groupBy('upazila_id', 'month')
             ->orderBy('upazila_id')
             ->orderBy(DB::raw("FIELD(month, '" . implode("','", $monthsOrder) . "')"))
             ->get();
+        }
+        
 
         // Organize the data into the format you want
         $formattedData = [];

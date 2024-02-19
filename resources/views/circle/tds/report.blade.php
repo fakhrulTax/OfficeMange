@@ -11,9 +11,8 @@
 @endpush
 
 @php
-    $assessment_year = config('settings.assessment_year_'.Auth::user()->circle);
-    $monthRange = App\Helpers\MyHelper::dateRangeAssessmentYear($assessment_year);
-    $circleData = App\Models\Tds_collection::getAssessmentYearCollectionByCircle($monthRange, [Auth::user()->circle]);
+    
+    
 @endphp
 
 @section('content')
@@ -38,11 +37,14 @@
             <section class="content">
 
 
-                <div class="card">
+                <div class="card card-primary">
 
+                <div class="card-header">
+                    Total TDS By Month
+                </div>   
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <h4>Total By Month</h4>
+                        
                         <table class="table table-bordered table-responsive table-striped">
                             <thead>
                                 <tr>
@@ -73,14 +75,71 @@
                                 </tr>
                                
                             </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+                <!-- card For Total TDS By Upazila -->
+                <div class="card card-primary">
+
+                <div class="card-header">
+                    Total TDS By Upazila
+                </div>   
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        
+                        <table class="table table-bordered table-responsive table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    @foreach ($monthRange as $month)
+                                        <th>{{ $month }}</th>
+                                    @endforeach
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @php
+                                    $totalAllMonths = 0;                                    
+                                    $columnTotals = [];
+                                @endphp
+
+                                @foreach($upazilaData as $key => $upazilaD)
+                                <tr>                                   
+
+                                    @php                                    
+                                        $upazila = App\Models\Upazila::find($key);
+                                        $rowTotal = 0;
+                                    @endphp
+
+                                    <td>{{ $upazila->name }}</td>
+
+                                    @foreach($monthRange as $month)
+
+                                        <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($upazilaD[$month]) }}</td>
+
+                                        @php
+                                            $rowTotal += $upazilaD[$month];
+                                            $columnTotals[$month] = ($columnTotals[$month] ?? 0) + $upazilaD[$month];
+                                            $totalAllMonths += $upazilaD[$month];
+                                        @endphp
+
+                                    @endforeach
+
+                                    <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($rowTotal) }}</td>
+                                </tr>
+                                @endforeach
+                               
+                            </tbody>
                             <tfoot>
-                                <th colspan="3" class="text-center">Total</th>
-
-
-                                <th></th>
-                                <th class="text-right"> </th>
-                                <th class="text-right"></th>
-
+                                <th>Total</th>
+                                @foreach ($monthRange as $month)
+                                    <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($columnTotals[$month] ?? 0) }}</th>  
+                                @endforeach
+                                <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totalAllMonths) }}</th>
                             </tfoot>
                         </table>
                     </div>
