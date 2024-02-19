@@ -28,10 +28,10 @@ class SettingController extends Controller
     {
 
         
-        if( Auth::user()->user_role == 'circle' && !isset($request->sidebar_collapse_Auth::user()->circle) )
-        {   
-            $request['sidebar_collapse_'. Auth::user()->circle] = null;
+        if (Auth::user()->user_role == 'circle' && !isset($request['sidebar_collapse_' . Auth::user()->circle])) {
+            $request['sidebar_collapse_' . Auth::user()->circle] = null;
         }
+        
 
         if( Auth::user()->user_role == 'commissioner' &&  !isset($request->sidebar_collapse_commissioner) )
         {   
