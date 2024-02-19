@@ -23,6 +23,10 @@ class SettingController extends Controller
 
         $zillas = Zilla::orderBy('name', 'ASC')->get();
         $selectedUpazilaIds = json_decode(config('settings.upazila_id_' . Auth::user()->circle));   
+        if(!$selectedUpazilaIds)
+        {
+            $selectedUpazilaIds = [];
+        }
         $selectedUpazilas = Upazila::whereIn('id', $selectedUpazilaIds)->orderBy('name', 'ASC')->get();
 
     	return view('circle.setting.index',[
