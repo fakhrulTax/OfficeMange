@@ -8,6 +8,7 @@ use App\Models\Zilla;
 use App\Models\Upazila;
 use App\Models\Organization_upazila;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\MyHelper;
 use Auth;
 use Toastr;
 
@@ -15,9 +16,27 @@ class TdsController extends Controller
 {
     //TDS Report From Circle
     public function tdsReport()
-    {
+    {        
+        $assessment_year = config('settings.assessment_year_'.Auth::user()->circle);
+        $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year);
+
+        //Circle Data
+        $circleData = Tds_collection::getAssessmentYearCollectionByCircle($monthRange, [Auth::user()->circle]);
+
+        //Upazila Data
+        $upazilaIds = Tds_collection::where('circle', Auth::user()->circle)->distinct()->pluck('upazila_id')->toArray();       
+        $upazilaData = count($upazilaIds) ? Tds_Collection::getAssessmentYearCollectionByUpazila($upazilaIds, $monthRange, [Auth::user()->circle]) : [];
+        
+        //Organization Data
+        $orgIds = Tds_collection::where('circle', Auth::user()->circle)->distinct()->pluck('organization_id')->toArray();
+        $orgDatas = count($orgIds) ? Tds_collection::getAssessmentYearCollectionByOrganization($orgIds, $monthRange, [Auth::user()->circle]) : [];
+      
         return view('circle.tds.report', [
-            'title' => 'TDS Report'
+            'title' => 'TDS Report',
+            'monthRange' => $monthRange,
+            'circleData' => $circleData,
+            'upazilaData' => $upazilaData,
+            'orgDatas' => $orgDatas,
         ]);
     }
 
