@@ -183,7 +183,7 @@ class TdsController extends Controller
 
         $tds = Tds_collection::create([
            
-            'collection_month' => $request->collection_month,
+            'collection_month' => date('Y-m', strtotime($request->collection_month)),
             'upazila_id' => $request->upazila_id,
             'organization_id' => $request->organization_id,
             'tds' => $request->tds,
@@ -235,7 +235,7 @@ class TdsController extends Controller
 
         
         $tds->update([
-            'collection_month' => $request->collection_month,
+            'collection_month' => date('Y-m', strtotime($request->collection_month)),
             'tds' => $request->tds,
             'bill' => $request->bill,
             'comments' => $request->comments
