@@ -74,10 +74,29 @@ class UpazilaController extends Controller
 
         if( Auth::user()->user_role == 'circle' )
         {
+            $zillaId = config('settings.distict_'. Auth::user()->circle);
+            $zillas = $zillaId ? Zilla::where('id', $zillaId)->get() : [];
+
+            $upazilaIds = json_decode(config('settings.upazila_id_'. Auth::user()->circle));
+            $circleUpazilas = $upazilaIds ? Upazila::whereIn('id', $upazilaIds)->get() : [];
+
+            $govtOrg = Organization::Where('is_govt', 1)->get();
+            $organizationIds =  $circleUpazilas ? $circleUpazilas->flatMap->organizations->pluck('id')->unique()->toArray(): [];
+            $allOrganizations = Organization::whereIn('id', $organizationIds)->get();
+
+            $organizations = $govtOrg->merge($allOrganizations)->unique();
+            
+            
+           //dd($mergedOrganizations);
+
             return view('circle.tds.upazila_organization',[
                 'title' => 'TDS | Upazila & Organization', 
                 'zillas' => $zillas, 
-                'organizations' => $organizations,                
+                'circleZillaId' => $zillaId,
+                'organizations' => $organizations,  
+                'circleUpazilas' => $circleUpazilas,
+                'circleUpazilasIds' => $upazilaIds,    
+                         
             ]);
         }
 
@@ -97,11 +116,27 @@ class UpazilaController extends Controller
 
         if( Auth::user()->user_role == 'circle' )
         {
+            $zillaId = config('settings.distict_'. Auth::user()->circle);
+            $zillas = $zillaId ? Zilla::where('id', $zillaId)->get() : [];
+
+            $upazilaIds = json_decode(config('settings.upazila_id_'. Auth::user()->circle));
+            $circleUpazilas = $upazilaIds ? Upazila::whereIn('id', $upazilaIds)->get() : [];
+
+            $govtOrg = Organization::Where('is_govt', 1)->get();
+            $organizationIds =  $circleUpazilas ? $circleUpazilas->flatMap->organizations->pluck('id')->unique()->toArray(): [];
+            $allOrganizations = Organization::whereIn('id', $organizationIds)->get();
+
+            $organizations = $govtOrg->merge($allOrganizations)->unique();
+            
+
             return view('circle.tds.upazila_organization', [
                 'title' => 'TDS | Upazila & Organization',
                 'zillas' => $zillas,
+                'circleZillaId' => $zillaId,
                 'organizations' => $organizations,
                 'selectedUpazila' => $selectedUpazila,
+                'circleUpazilas' => $circleUpazilas,
+                'circleUpazilasIds' => $upazilaIds,  
             ]);
         }
         

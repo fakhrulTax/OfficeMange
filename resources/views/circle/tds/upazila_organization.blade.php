@@ -90,9 +90,8 @@
                                 <select class="form-control" name="zilla_search" id="zilla_search" required>
                                     <option value="">Select Zilla</option>
                                     @foreach ($zillas as $zilla)
-                                        <option value="{{ $zilla->id }}">{{ ucfirst($zilla->name) }}</option>
-                                    @endforeach
-            
+                                        <option value="{{ $zilla->id }}" {{ ($zilla->id == $circleZillaId) ? 'selected' : '' }}>{{ ucfirst($zilla->name) }}</option>
+                                    @endforeach            
                                 </select>
                             </div>
                         </div>
@@ -100,7 +99,10 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <select class="form-control" name="upazila_search" id="upazila_search" required>
-                                    <option value="">Select Upazilla</option>            
+                                    <option value="">Select Upazilla</option>                                    
+                                    @foreach( $circleUpazilas as $upazila )
+                                        <option value="{{ $upazila->id }}">{{ $upazila->name }}</option> 
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -163,11 +165,18 @@
                                             <ul class="nested">
                                             @endif
                                                 @foreach($zilla->upazilas as $upazila)
+                                                    @php
+                                                        if( !in_array($upazila->id, $circleUpazilasIds)  ){
+                                                            continue;
+                                                        }
+                                                    @endphp
+                                                       
                                                     <li class="{{ (isset($selectedUpazila) && $selectedUpazila->id == $upazila->id) ? 'active' : '' }}">
                                                         <a href="{{ route('circle.tds.upazilaSelected.organization', $upazila->id) }}">
                                                             {{ ucfirst($upazila->name) }}
                                                         </a>
                                                     </li>
+
                                                 @endforeach
                                             </ul>
                                         </li>
