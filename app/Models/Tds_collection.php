@@ -209,6 +209,54 @@ class Tds_collection extends Model
 
         return $formattedData;
     }
+
+    public static function getAssessmentYearCollectionByAllOrganizationInUpazila($upazilaId, array $orgIds, array $circles = null, array $monthsOrder)
+    {
+        
+        if($circles)
+        {
+            $orgData = Self::select('organization_id', DB::raw("SUBSTRING(collection_month, 1, 7) as month"), DB::raw('SUM(tds) as total_amount'))
+            ->whereIn('organization_id', $orgIds)
+            ->where('upazila_id', $upazilaId)
+            ->whereIn('circle', $circles)
+            ->groupBy('organization_id', 'month')
+            ->orderBy('organization_id')
+            ->orderBy(DB::raw("FIELD(month, '" . implode("','", $monthsOrder) . "')"))
+            ->get();
+
+        }else
+        {
+            $orgData = Self::select('organization_id', DB::raw("SUBSTRING(collection_month, 1, 7) as month"), DB::raw('SUM(tds) as total_amount'))
+            ->whereIn('organization_id', $orgIds)
+            ->where('upazila_id', $upazilaId)
+            ->groupBy('organization_id', 'month')
+            ->orderBy('organization_id')
+            ->orderBy(DB::raw("FIELD(month, '" . implode("','", $monthsOrder) . "')"))
+            ->get();
+        }
+
+        
+
+        // Organize the data into the format you want
+        $formattedData = [];
+
+        foreach ($orgData as $item) {
+            // Map the database month to your predefined format
+            $formattedMonth = Self::mapDatabaseMonthToFormat($item->month);
+
+            // Only include months in your predefined order
+            if (in_array($formattedMonth, $monthsOrder)) {
+                $formattedData[$item->organization_id][$formattedMonth] = $item->total_amount;
+            }
+        }
+        
+        // Fill missing months with zero values
+        foreach ($formattedData as &$organization) {
+            $organization = array_replace(array_fill_keys($monthsOrder, 0), $organization);
+        }
+
+        return $formattedData;
+    }
     
 
     private static function mapDatabaseMonthToFormat($databaseMonth)

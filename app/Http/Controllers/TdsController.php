@@ -14,6 +14,26 @@ use Toastr;
 
 class TdsController extends Controller
 {
+    //Report from all org based on one upazilaList
+    public function tdsReportbyOrgUpazila ( $upazilaId )
+    {      
+       $assessment_year = config('settings.assessment_year_'.Auth::user()->circle);
+       $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year); 
+
+       $upazila = Upazila::find($upazilaId);
+       $orgIds = $upazila->organizations->pluck('id')->toArray();
+
+       $orgDatas = count($orgIds) ? Tds_Collection::getAssessmentYearCollectionByAllOrganizationInUpazila($upazilaId, $orgIds, [ Auth::user()->circle ], $monthRange) : [];
+
+       return view('circle.tds.organization_by_upazila_report', [
+        'title' => 'TDS Report',
+        'monthRange' => $monthRange,
+        'upazila' => $upazila,
+        'orgDatas' => $orgDatas,
+         ]);
+
+    }
+
     //TDS Report From Circle
     public function tdsReport()
     {        
