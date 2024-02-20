@@ -1,3 +1,3 @@
 <footer class="main-footer">
-    <strong>Copyright &copy; {{ date('Y') }} Fakhrul Islam</a>.</strong> All rights reserved.
+    <p>Copyright &copy; {{ date('Y') }} <strong>Taxes Zone Cumilla. </strong>Developer:<strong> Fakhrul Islam: 01781 616121</strong></p>
  </footer>

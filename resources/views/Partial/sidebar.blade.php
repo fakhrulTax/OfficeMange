@@ -116,6 +116,7 @@
                     </li>
 
 
+
                     <li class="nav-item">
                         <a href="{{ route('circle.stock') }}" class="nav-link {{ Route::currentRouteName() == 'circle.stock' ? 'active' : ''}} ">
                             <i class="nav-icon fas fa-list text-light"></i>
@@ -352,35 +353,6 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-folder text-light"></i>
-                            <p>
-                                ReOpen
-                            </p>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-calculator text-light"></i>
-                            <p>
-                                Audit
-                            </p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-file text-light"></i>
-                            <p>
-                                Sonchoy Potra
-                            </p>
-                        </a>
-                    </li>
                 @endif
 
 
@@ -401,6 +373,31 @@
                         </a>
                     </li>
 
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['range.tds.report', 'range.tds.report.circle', 'range.tds.report.circle.upazila', 'range.tds.report.upazila']) ? 'menu-is-opening menu-open' : ''}}">
+
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-user text-light"></i>
+                            <p>
+                                TDS
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+    
+                            <li class="nav-item">
+                                <a href="{{ route('range.tds.report') }}"
+
+                                    class="nav-link {{ in_array(Route::currentRouteName(), ['range.tds.report', 'range.tds.report.circle', 'range.tds.report.circle.upazila', 'range.tds.report.upazila']) ? 'active' : ''}}">
+
+                                    <i class="far fa-circle nav-icon text-light"></i>
+                                    <p>TDS Report</p>
+                                </a>
+                            </li>         
+                           
+                       
+                        </ul>
+                    </li>
+
                     <li class="nav-item">
                         <a href="" class="nav-link ">
                             <i class="nav-icon fas fa-list text-light"></i>
@@ -419,35 +416,7 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-folder text-light"></i>
-                            <p>
-                                ReOpen
-                            </p>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-calculator text-light"></i>
-                            <p>
-                                Audit
-                            </p>
-                        </a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a href=" "
-                            class="nav-link ">
-                            <i class="nav-icon fa fa-file text-light"></i>
-                            <p>
-                                Sonchoy Potra
-                            </p>
-                        </a>
-                    </li>
                 @endif
 
                 <li class="nav-header">Profile</li>

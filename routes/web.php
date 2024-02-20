@@ -138,10 +138,14 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
 
     Route::get('/range-dashboard', [RangeController::class, 'index'])->name('dashboard');
 
-
     Route::get('range/arrears/{circle}', [RangeController::class, 'RangeArrear'])->name('arrears');
-
     Route::post('range/arrear', [RangeController::class, 'RangeArrearSort'])->name('arrearssort');
+
+    //TDS Report
+    Route::get('/range/tds/report', [TdsController::class, 'tdsRangeReport'])->name('tds.report');
+    Route::get('/range/tds/report/circle/{circle}', [TdsController::class, 'tdsReport'])->name('tds.report.circle');
+    Route::get('/range/tds/report/circle/{circle}/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.circle.upazila');
+    Route::get('/range/tds/report/circles/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgDistUpazila'])->name('tds.report.upazila');
 });
 
 
