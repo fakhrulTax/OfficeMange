@@ -78,7 +78,6 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::post('/arrear', [ArrearController::class, 'store'])->name('arrearStore');
     Route::get('/arrear/edit', [ArrearController::class, 'edit'])->name('arrearEdit');
     Route::post('/arrear/edit', [ArrearController::class, 'update'])->name('arrearUpdate');
-
     Route::get('/circle/arrears/search', [ArrearController::class, 'search'])->name('arrears.search');
 
 
@@ -111,9 +110,9 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     ->name('tds.upazilaSelected.addOrganizations');
 
     Route::get('/tds/delete/{id}', [TdsController::class, 'destroy'])->name('tds.destroy');
-
     Route::get('/tds/search', [TdsController::class, 'tdsSearch'])->name('tds.search');
     Route::get('/tds/report', [TdsController::class, 'tdsReport'])->name('tds.report');
+    Route::get('/tds/report/upazila/{upzilaId}/organization', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.upzila.org');
 
 
     //advance
@@ -139,10 +138,14 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
 
     Route::get('/range-dashboard', [RangeController::class, 'index'])->name('dashboard');
 
-
     Route::get('range/arrears/{circle}', [RangeController::class, 'RangeArrear'])->name('arrears');
-
     Route::post('range/arrear', [RangeController::class, 'RangeArrearSort'])->name('arrearssort');
+
+    //TDS Report
+    Route::get('/range/tds/report', [TdsController::class, 'tdsRangeReport'])->name('tds.report');
+    Route::get('/range/tds/report/circle/{circle}', [TdsController::class, 'tdsReport'])->name('tds.report.circle');
+    Route::get('/range/tds/report/circle/{circle}/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.circle.upazila');
+    Route::get('/range/tds/report/circles/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgDistUpazila'])->name('tds.report.upazila');
 });
 
 

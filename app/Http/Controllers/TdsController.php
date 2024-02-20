@@ -14,29 +14,115 @@ use Toastr;
 
 class TdsController extends Controller
 {
+    //TDS Report For Range
+    public function tdsRangeReport()
+    {
+        $assessment_year = config('settings.assessment_year_commissioner');
+        $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year);
+        $circles = Myhelper::ranges( 'range-' . Auth::user()->range );
+
+        //Circle Data
+         $circleDatas = Tds_collection::getAssessmentYearCollectionByCircle($monthRange, $circles);
+
+        //Upazila Data
+        $upazilaIds = Tds_collection::whereIn('circle', $circles)->distinct()->pluck('upazila_id')->toArray();       
+        $upazilaData = count($upazilaIds) ? Tds_Collection::getAssessmentYearCollectionByUpazila($upazilaIds, $monthRange, $circles) : [];
+        
+        //Organization Data
+        $orgIds = Tds_collection::whereIn('circle', $circles)->distinct()->pluck('organization_id')->toArray();
+        $orgDatas = count($orgIds) ? Tds_collection::getAssessmentYearCollectionByOrganization($orgIds, $monthRange, $circles) : [];
+      
+        return view('range.tds.report', [
+            'title' => 'TDS Report',
+            'monthRange' => $monthRange,
+            'circleDatas' => $circleDatas,
+            'upazilaData' => $upazilaData,
+            'orgDatas' => $orgDatas,
+        ]);
+    }
+
+        //Report from all org based on one upazila on single circle
+    public function tdsReportbyOrgDistUpazila( $upazilaId )
+    {    
+        $assessment_year = config('settings.assessment_year_commissioner');           
+        $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year); 
+
+        $upazila = Upazila::find($upazilaId);
+        $orgIds = $upazila->organizations->pluck('id')->toArray();
+
+        $orgDatas = count($orgIds) ? Tds_Collection::getAssessmentYearCollectionByAllOrganizationInUpazila($upazilaId, $orgIds, null, $monthRange) : [];
+        
+        return view('range.tds.organization_by_upazila_by_distict', [
+            'title' => 'TDS Report',
+            'monthRange' => $monthRange,
+            'upazila' => $upazila,
+            'orgDatas' => $orgDatas,
+        ]);
+    }
+
+    //Report from all org based on one upazila on single circle
+    public function tdsReportbyOrgUpazila ( $upazilaId, $givenCircle = null )
+    {      
+        if( !$givenCircle && Auth::user()->user_role == 'circle' )
+        {
+            $assessment_year = config('settings.assessment_year_'.Auth::user()->circle);
+            $circle = Auth::user()->circle;
+        }else
+        {
+            $assessment_year = config('settings.assessment_year_commissioner');                      
+            $circle = $givenCircle; 
+        }
+       
+       $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year); 
+
+       $upazila = Upazila::find($upazilaId);
+       $orgIds = $upazila->organizations->pluck('id')->toArray();
+
+       $orgDatas = count($orgIds) ? Tds_Collection::getAssessmentYearCollectionByAllOrganizationInUpazila($upazilaId, $orgIds, [ $circle ], $monthRange) : [];
+
+       return view('circle.tds.organization_by_upazila_report', [
+        'title' => 'TDS Report',
+        'monthRange' => $monthRange,
+        'upazila' => $upazila,
+        'orgDatas' => $orgDatas,
+         ]);
+    }
+
     //TDS Report From Circle
-    public function tdsReport()
+    public function tdsReport($givenCircle = null)
     {        
-        $assessment_year = config('settings.assessment_year_'.Auth::user()->circle);
+
+        if( !$givenCircle && Auth::user()->user_role == 'circle' )
+        {
+            $assessment_year = config('settings.assessment_year_'.Auth::user()->circle);
+            $circle = Auth::user()->circle;
+        }else
+        {
+            $assessment_year = config('settings.assessment_year_commissioner');                      
+            $circle = $givenCircle; 
+        }
+        
         $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year);
 
         //Circle Data
-        $circleData = Tds_collection::getAssessmentYearCollectionByCircle($monthRange, [Auth::user()->circle]);
+        $circleData = Tds_collection::getAssessmentYearCollectionByCircle($monthRange, [$circle]);
 
         //Upazila Data
-        $upazilaIds = Tds_collection::where('circle', Auth::user()->circle)->distinct()->pluck('upazila_id')->toArray();       
-        $upazilaData = count($upazilaIds) ? Tds_Collection::getAssessmentYearCollectionByUpazila($upazilaIds, $monthRange, [Auth::user()->circle]) : [];
+        $upazilaIds = Tds_collection::where('circle', $circle)->distinct()->pluck('upazila_id')->toArray();       
+        $upazilaData = count($upazilaIds) ? Tds_Collection::getAssessmentYearCollectionByUpazila($upazilaIds, $monthRange, [$circle]) : [];
         
         //Organization Data
-        $orgIds = Tds_collection::where('circle', Auth::user()->circle)->distinct()->pluck('organization_id')->toArray();
-        $orgDatas = count($orgIds) ? Tds_collection::getAssessmentYearCollectionByOrganization($orgIds, $monthRange, [Auth::user()->circle]) : [];
+        $orgIds = Tds_collection::where('circle', $circle)->distinct()->pluck('organization_id')->toArray();
+        $orgDatas = count($orgIds) ? Tds_collection::getAssessmentYearCollectionByOrganization($orgIds, $monthRange, [$circle]) : [];
       
+        //dd($circleData);
         return view('circle.tds.report', [
             'title' => 'TDS Report',
             'monthRange' => $monthRange,
             'circleData' => $circleData,
             'upazilaData' => $upazilaData,
             'orgDatas' => $orgDatas,
+            'circle' => $circle,
         ]);
     }
 

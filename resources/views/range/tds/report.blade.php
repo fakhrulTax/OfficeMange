@@ -40,12 +40,13 @@
                 <div class="card card-primary" id="circle_table_wrapper">
 
                 <div class="card-header">
-                    Total TDS By Month
+                    Total TDS By Circle
                 </div>   
                     <!-- /.card-header -->
                     <div class="card-body">
-                        
+
                         <table class="table table-bordered table-responsive table-striped" id="circle_table">
+                            
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -55,27 +56,53 @@
                                     <th>Total</th>
                                 </tr>
                             </thead>
-                            <tbody>
 
+                            <tbody>
+                                @foreach($circleDatas as $key => $circleData)
+                                    <tr>
+                                        <td><a href="{{ Route('range.tds.report.circle', $key) }}">Circle-{{ $key }}</a></td>
+
+                                        @php
+                                            $totalRow = 0; 
+                                        @endphp
+
+                                        @foreach ($monthRange as $month)
+                                            <td>{{ App\Helpers\MyHelper::moneyFormatBD( $circleData[$month] ) }}</td>
+                                            @php
+                                                $totalRow += $circleData[$month]; // Update row total
+                                            @endphp
+                                        @endforeach
+
+                                        <td>{{ App\Helpers\MyHelper::moneyFormatBD($totalRow) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+
+                            <tfoot>
                                 <tr>
-                                    <td>Circle-{{ $circle }}</td>
+                                    <th>Total</th>
 
                                     @php
-                                        $circleTotal = 0;
+                                        $totals = array_fill_keys($monthRange, 0); // Initialize column totals
                                     @endphp
 
-                                    @foreach($monthRange as $month)
-                                        <td>{{ App\Helpers\MyHelper::moneyFormatBD($circleData[$circle][$month]) }}</td>
-                                        @php
-                                            $circleTotal += $circleData[$circle][$month];
-                                        @endphp
+                                    @foreach($circleDatas as $circleData)
+                                        @foreach ($monthRange as $month)
+                                            @php
+                                                $totals[$month] += $circleData[$month]; // Update column total
+                                            @endphp
+                                        @endforeach
                                     @endforeach
 
-                                    <td>{{ App\Helpers\MyHelper::moneyFormatBD($circleTotal) }}</td>
+                                    @foreach ($monthRange as $month)
+                                        <th>{{ App\Helpers\MyHelper::moneyFormatBD( $totals[$month] ) }}</th>
+                                    @endforeach
+
+                                    <th>{{ App\Helpers\MyHelper::moneyFormatBD( array_sum($totals) ) }}</th>
                                 </tr>
-                               
-                            </tbody>
+                            </tfoot>
                         </table>
+
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -115,11 +142,7 @@
                                         $rowTotal = 0;
                                     @endphp
 
-                                    @if( Auth::user()->user_role == 'circle' )
-                                        <td><a href="{{ route('circle.tds.report.upzila.org', $upazila->id) }}">{{ $upazila->name }}</a></td>
-                                    @elseif( Auth::user()->user_role == 'range' )
-                                        <td><a href="{{ route('range.tds.report.circle.upazila', [$upazila->id, $circle]) }}">{{ $upazila->name }}</a></td>
-                                    @endif
+                                    <td><a href="{{ route('range.tds.report.upazila', $upazila->id) }}">{{ $upazila->name }}</a></td>
 
                                     @foreach($monthRange as $month)
 

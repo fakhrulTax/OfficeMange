@@ -1,10 +1,9 @@
 @extends('app')
 
-@section('title', 'TDS Report')
+@section('title', $title)
 
 @push('css')
     <!--  Datatable -->
-
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
@@ -37,125 +36,11 @@
             <section class="content">
 
 
-                <div class="card card-primary" id="circle_table_wrapper">
-
-                <div class="card-header">
-                    Total TDS By Month
-                </div>   
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        
-                        <table class="table table-bordered table-responsive table-striped" id="circle_table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    @foreach ($monthRange as $month)
-                                        <th>{{ $month }}</th>
-                                    @endforeach
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr>
-                                    <td>Circle-{{ $circle }}</td>
-
-                                    @php
-                                        $circleTotal = 0;
-                                    @endphp
-
-                                    @foreach($monthRange as $month)
-                                        <td>{{ App\Helpers\MyHelper::moneyFormatBD($circleData[$circle][$month]) }}</td>
-                                        @php
-                                            $circleTotal += $circleData[$circle][$month];
-                                        @endphp
-                                    @endforeach
-
-                                    <td>{{ App\Helpers\MyHelper::moneyFormatBD($circleTotal) }}</td>
-                                </tr>
-                               
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-
-                <!-- card For Total TDS By Upazila -->
-                <div class="card card-secondary" id="upazila_table_wrapper">
-
-                <div class="card-header">
-                    Total TDS By Upazila
-                </div>   
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        
-                        <table class="table table-bordered table-responsive table-striped" id="upazila_table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    @foreach ($monthRange as $month)
-                                        <th>{{ $month }}</th>
-                                    @endforeach
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @php
-                                    $totalAllMonths = 0;                                    
-                                    $columnTotals = [];
-                                @endphp
-
-                                @foreach($upazilaData as $key => $upazilaD)
-                                <tr>                                   
-
-                                    @php                                    
-                                        $upazila = App\Models\Upazila::find($key);
-                                        $rowTotal = 0;
-                                    @endphp
-
-                                    @if( Auth::user()->user_role == 'circle' )
-                                        <td><a href="{{ route('circle.tds.report.upzila.org', $upazila->id) }}">{{ $upazila->name }}</a></td>
-                                    @elseif( Auth::user()->user_role == 'range' )
-                                        <td><a href="{{ route('range.tds.report.circle.upazila', [$upazila->id, $circle]) }}">{{ $upazila->name }}</a></td>
-                                    @endif
-
-                                    @foreach($monthRange as $month)
-
-                                        <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($upazilaD[$month]) }}</td>
-
-                                        @php
-                                            $rowTotal += $upazilaD[$month];
-                                            $columnTotals[$month] = ($columnTotals[$month] ?? 0) + $upazilaD[$month];
-                                            $totalAllMonths += $upazilaD[$month];
-                                        @endphp
-
-                                    @endforeach
-
-                                    <td class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($rowTotal) }}</td>
-                                </tr>
-                                @endforeach
-                               
-                            </tbody>
-                            <tfoot>
-                                <th>Total</th>
-                                @foreach ($monthRange as $month)
-                                    <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($columnTotals[$month] ?? 0) }}</th>  
-                                @endforeach
-                                <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totalAllMonths) }}</th>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-
                  <!-- card For Total TDS By Upazila -->
                  <div class="card card-danger" id="authority_table_wrapper">
 
                 <div class="card-header">
-                    Total TDS By Authority 
+                    TDS Report Upzila: {{ ucfirst($upazila->name) }}
                 </div>   
                     <!-- /.card-header -->
                     <div class="card-body">
