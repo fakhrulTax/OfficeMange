@@ -9,6 +9,7 @@ use App\Models\Upazila;
 use App\Models\Organization_upazila;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\MyHelper;
+use Carbon\Carbon;
 use Auth;
 use Toastr;
 
@@ -163,7 +164,7 @@ class TdsController extends Controller
     public function store(Request $request){
 
         $request->validate([
-            'collection_month' => 'required',
+            'collection_month' => 'required|date_format:m-Y',
             'upazila_id' => 'required',
             'organization_id' => 'required',
             'tds' => 'required',
@@ -181,9 +182,13 @@ class TdsController extends Controller
         return redirect()->back();
        }
 
+       // Date Format
+        $carbonDate = Carbon::createFromFormat('m-Y', $request->collection_month);
+        $formatedDate = $carbonDate->format('Y-m');
+
         $tds = Tds_collection::create([
            
-            'collection_month' => date('Y-m', strtotime($request->collection_month)),
+            'collection_month' => $formatedDate,
             'upazila_id' => $request->upazila_id,
             'organization_id' => $request->organization_id,
             'tds' => $request->tds,
@@ -212,11 +217,10 @@ class TdsController extends Controller
 
 
     public function update(Request $request, $id){
-
         
 
         $validate = $request->validate([
-            'collection_month' => 'required',
+            'collection_month' => 'required|date_format:m-Y',
             'tds' => 'required',
         ]);
 
@@ -233,9 +237,12 @@ class TdsController extends Controller
             return redirect()->back();
         }
 
-        
+        // Date Format
+        $carbonDate = Carbon::createFromFormat('m-Y', $request->collection_month);
+        $formatedDate = $carbonDate->format('Y-m');
+
         $tds->update([
-            'collection_month' => date('Y-m', strtotime($request->collection_month)),
+            'collection_month' => $formatedDate,
             'tds' => $request->tds,
             'bill' => $request->bill,
             'comments' => $request->comments

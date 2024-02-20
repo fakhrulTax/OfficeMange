@@ -26,7 +26,7 @@
     <div class="card-body">
 
       @if(isset($updateType)  && $updateType == 'edit')
-      <form action="{{ route('circle.tds.update', $editTds->id) }}" method="POST">
+      <form action="{{ route('circle.tds.update', $editTds->id) }}" method="POST" >
         @csrf
         <div class="row">
 
@@ -59,13 +59,10 @@
 
                 <div class="form-group">
                     <label for="collection_month">Collection Month</label>
-                    <input type="month" name="collection_month"
-                        placeholder="collection month" value="{{ $editTds->collection_month }}" class="form-control" autofocus>
+                    <input type="text" name="collection_month" id="collection_month"
+                        placeholder="01-2024" value="{{ date('m-Y', strtotime($editTds->collection_month)) }}" class="form-control" autofocus>
                 </div>
-            </div>
-
-
-        
+            </div>       
 
 
             <div class="col-md-4">
@@ -176,8 +173,8 @@
 
                     <div class="form-group">
                         <label for="collection_month">Collection Month</label>
-                        <input type="month" id="collection_month" name="collection_month"
-                            placeholder="collection month" class="form-control" value="{{ old('collection_month') }}" required>
+                        <input type="text" id="collection_month" name="collection_month" 
+                            placeholder="01-2024" class="form-control" value="{{ old('collection_month') }}" required>
 
                             @error('collection_month')
                             <span class="text-danger" role="alert">

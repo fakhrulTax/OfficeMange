@@ -83,6 +83,17 @@
     todayHighlight: true,
     weekStart: 6
   });
+
+  
+
+  $('#collection_month').datepicker({
+
+    autoclose: true,
+    useStrict: true,
+    format: 'mm-yyyy',
+    viewMode: 'months',
+    minViewMode: 'months'
+  });
 </script>
 
 <script>
