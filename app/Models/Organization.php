@@ -21,4 +21,12 @@ class Organization extends Model
         return $this->belongsToMany(Upazila::class, 'organization_upazilas');
 
     }
+
+    //get all govt. or non govt. organization
+    public static function getOrganizationIdsByType($is_govt = null)
+    {
+        $organizationIds = self::where('is_govt', $is_govt)->pluck('id')->toArray();;
+        return $organizationIds;
+    }
+
 }

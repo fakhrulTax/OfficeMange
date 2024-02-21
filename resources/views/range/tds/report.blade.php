@@ -174,12 +174,12 @@
                 </div>
                 <!-- /.card -->
 
-                 <!-- card For Total TDS By Upazila -->
+                 <!-- card For Total TDS By Organization -->
                  <div class="card card-danger" id="authority_table_wrapper">
 
-                <div class="card-header">
-                    Total TDS By Authority 
-                </div>   
+                    <div class="card-header">
+                        Total TDS By Authority 
+                    </div>   
                     <!-- /.card-header -->
                     <div class="card-body">
                         

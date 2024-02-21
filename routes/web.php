@@ -191,8 +191,10 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::get('/tds/collection', [TdsController::class, 'collectionIndex'])->name('tds.collection.index');
     Route::get('/tds/collection/{zillaId}/zilla', [TdsController::class, 'collectionZilla'])->name('tds.collection.zilla');
 
-    //TDS Routes
+    //TDS Report Routes
     Route::get('/tds-list', [TdsController::class, 'commissionTdsIndex'])->name('tdsList.index');
+    Route::get('/tds/report/circle/{circle}', [TdsController::class, 'tdsReport'])->name('tds.report.circle');
+    Route::get('/tds/report/circle/{circle}/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.circle.upazila');
     Route::get('/tds-list/search', [TdsController::class, 'commissionTdsSearch'])->name('tdsList.search');
 
     //Advance Route
