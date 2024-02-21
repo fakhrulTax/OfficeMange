@@ -119,6 +119,8 @@
                                         <td><a href="{{ route('circle.tds.report.upzila.org', $upazila->id) }}">{{ $upazila->name }}</a></td>
                                     @elseif( Auth::user()->user_role == 'range' )
                                         <td><a href="{{ route('range.tds.report.circle.upazila', [$upazila->id, $circle]) }}">{{ $upazila->name }}</a></td>
+                                    @elseif( Auth::user()->user_role == 'commissioner' )
+                                        <td><a href="{{ route('commissioner.tds.report.circle.upazila', [$upazila->id, $circle]) }}">{{ $upazila->name }}</a></td>
                                     @endif
 
                                     @foreach($monthRange as $month)

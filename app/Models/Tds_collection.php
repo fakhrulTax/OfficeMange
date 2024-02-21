@@ -28,6 +28,29 @@ class Tds_collection extends Model
         return $this->belongsTo(Organization::class, 'organization_id');
     }
 
+    //Total Collection By Org
+    public static function totalCollectionByOrg( $assessment_year, $orgIds )
+    {
+        // Assuming the format is 'YYYYYYYY' (8 digits)
+        $startYear = substr($assessment_year, 0, 4);
+        $endYear = substr($assessment_year, 4, 4);
+
+        // Format the date range
+        $fromDate = $startYear . '-07-01';
+        $toDate = $endYear . '-06-30';
+        
+        $totalCollection = self::whereIn('organization_id', $orgIds)
+        ->whereBetween('collection_month', [$fromDate, $toDate])
+        ->sum('tds');
+
+        if($totalCollection)
+        {
+            return $totalCollection;
+        }
+
+        return 0;
+    } 
+
     public static function getAssessmentYearCollectionByCircle(array $monthsOrder, array $circles = null)
     {
         // Predefined order of months
@@ -181,7 +204,7 @@ class Tds_collection extends Model
         }else{
             // Use Eloquent to group by upazila and month and get the sum of amount
             $orgData = Self::select('organization_id', DB::raw("SUBSTRING(collection_month, 1, 7) as month"), DB::raw('SUM(tds) as total_amount'))
-            ->whereIn('organization_id', $upazilaIds)
+            ->whereIn('organization_id', $orgIds)
             ->groupBy('organization_id', 'month')
             ->orderBy('organization_id')
             ->orderBy(DB::raw("FIELD(month, '" . implode("','", $monthsOrder) . "')"))

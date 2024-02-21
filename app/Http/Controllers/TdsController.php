@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Tds_collection;
 use App\Models\Zilla;
 use App\Models\Upazila;
+use App\Models\Organization;
 use App\Models\Organization_upazila;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\MyHelper;
@@ -109,7 +110,7 @@ class TdsController extends Controller
         $circleData = Tds_collection::getAssessmentYearCollectionByCircle($monthRange, [$circle]);
 
         //Upazila Data
-        $upazilaIds = Tds_collection::where('circle', $circle)->distinct()->pluck('upazila_id')->toArray();       
+        $upazilaIds = Tds_collection::where('circle', $circle)->distinct()->pluck('upazila_id')->toArray();    
         $upazilaData = count($upazilaIds) ? Tds_Collection::getAssessmentYearCollectionByUpazila($upazilaIds, $monthRange, [$circle]) : [];
         
         //Organization Data
@@ -371,15 +372,45 @@ class TdsController extends Controller
         return view ('commissioner.tds.index', compact('tdsList', 'zillas'));
         
     }
+
+    //Commissioner Tds Report
     public function collectionIndex()
     {
-        // $zillas =  Zilla::getAllZillas();
-        // $upazilas = $zilla->upazilas;
-        // $upazilaIds = $upazilas->pluck('id')->toArray();
+        //Settings
+        $assessment_year = config('settings.assessment_year_commissioner');
+        $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year);
 
+        //Get Govt or Non Govt Organization
+        $govtOrganizationIds = Organization::getOrganizationIdsByType(true);         
+        $nonGovtOrganizationIds = Organization::getOrganizationIdsByType(false); 
+        
+        //Get Total Govt. or Non Govt Org
+        $toatalGovtTDS = Tds_collection::totalCollectionByOrg( $assessment_year, $govtOrganizationIds);
+        $toatalNonGovtTDS = Tds_collection::totalCollectionByOrg( $assessment_year, $nonGovtOrganizationIds); 
+        
+        //Circle Data
+        $circleData = Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
 
-            
-        return view('commissioner.tds.collection_index');
+        //Zillas
+        $zillas = Zilla::orderBy('name')->get();
+
+         //Organization Data
+         $orgIds = array_merge($govtOrganizationIds, $nonGovtOrganizationIds);         
+         $orgDatas = count($orgIds) ? Tds_collection::getAssessmentYearCollectionByOrganization($orgIds, $monthRange, $circles = null) : [];
+         
+         //dd($orgDatas);
+
+        return view('commissioner.tds.collection_index', [
+            'title' => 'TDS Report',
+            'monthRange' => $monthRange,
+            'govtOrgNumber' => count($govtOrganizationIds), 
+            'nonGovtOrgNumber' => count($nonGovtOrganizationIds), 
+            'toatalGovtTDS' => $toatalGovtTDS,
+            'toatalNonGovtTDS' => $toatalNonGovtTDS,
+            'circleData' => $circleData,
+            'zillas' => $zillas,
+            'orgDatas' => $orgDatas 
+        ]);
     }
 
     public function collectionZilla($zillaId)
