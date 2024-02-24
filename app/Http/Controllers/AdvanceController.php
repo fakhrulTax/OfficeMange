@@ -21,12 +21,14 @@ class AdvanceController extends Controller
         if( Auth::user()->user_role == 'range' )
         {
             $circles = Myhelper::ranges( 'range-' . Auth::user()->range );
-            $totalAdvanceTaxPayers = count(Advance::getAdvanceTaxPayersByCircle($circles));
+            $totalAdvanceTaxPayers = count(Advance::getAdvanceTaxPayersByCircle($circles, $assessment_year));
             $totalAdvanceTaxPaidTaxPayers = count(Collection::advanceTaxPaidTaxPayers($circles, $assessment_year));
             $totalAdvanceCollection = Collection::advanceCollectionByCircles($circles, $assessment_year);
             
            
             return view('commissioner.advance.report', [
+                'circles' => $circles,
+                'assessment_year' => $assessment_year,
                 'totalAdvanceTaxPayers' => $totalAdvanceTaxPayers, 
                 'totalAdvanceCollection' => $totalAdvanceCollection,
                 'totalAdvanceTaxPaidTaxPayers' => $totalAdvanceTaxPaidTaxPayers

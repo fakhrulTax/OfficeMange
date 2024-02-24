@@ -16,10 +16,10 @@ class Advance extends Model
     }
 
     //get total taxpayer by circle
-    public static function getAdvanceTaxPayersByCircle(array $circles = null)
+    public static function getAdvanceTaxPayersByCircle(array $circles = null, $assessment_year)
     {
         // Retrieve advance tax payers whose 'circle' attribute is in the provided array $circles
-        $advanceTaxPayers = self::whereIn('circle', $circles)->get();
+        $advanceTaxPayers = self::where('advance_assessment_year', $assessment_year)->whereIn('circle', $circles)->get();
     
         // Return the collection of advance tax payers
         return $advanceTaxPayers;
