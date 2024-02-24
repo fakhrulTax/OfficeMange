@@ -15,6 +15,17 @@ class Advance extends Model
         return $this->belongsTo(Stock::class, 'tin', 'tin');
     }
 
+    //get total taxpayer by circle
+    public static function getAdvanceTaxPayersByCircle(array $circles = null)
+    {
+        // Retrieve advance tax payers whose 'circle' attribute is in the provided array $circles
+        $advanceTaxPayers = self::whereIn('circle', $circles)->get();
+    
+        // Return the collection of advance tax payers
+        return $advanceTaxPayers;
+    }
+    
+
     protected $fillable = [
         'tin',
          'advance_assessment_year', 

@@ -399,10 +399,10 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="" class="nav-link ">
+                        <a href="{{ route('range.advance.report') }}" class="nav-link {{ Route::currentRouteName() == 'range.advance.report' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-list text-light"></i>
                             <p>
-                                Stock
+                                Advance
                             </p>
                         </a>
                     </li>
