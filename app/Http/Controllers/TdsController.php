@@ -391,6 +391,8 @@ class TdsController extends Controller
         //Circle Data
         $circleData = Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
 
+        //dd($circleData);
+
         //Zillas
         $zillas = Zilla::orderBy('name')->get();
 

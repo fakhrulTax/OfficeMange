@@ -30,7 +30,6 @@
     <section class="content">
 
 
-
         <div class="card">
             <div class="card-body">
 
@@ -107,22 +106,24 @@
                                             <td>{{ App\Helpers\MyHelper::moneyFormatBD($rowTotal) }}</td>
                                         </tr>
                                     @endforeach
-
-                                    <tr>
-                                        <td>Total</td>
-                                        @php
-                                            $totalAllMonths = 0;
-                                        @endphp
-                                        @foreach($monthRange as $month)
-                                            <td>{{ App\Helpers\MyHelper::moneyFormatBD($columnTotals[$month]) }}</td>
-                                            @php
-                                                $totalAllMonths += $columnTotals[$month];
-                                            @endphp
-
-                                        @endforeach
-                                        <td>{{ App\Helpers\MyHelper::moneyFormatBD($totalAllMonths) }}</td>
-                                    </tr>
+                                    
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                            @php
+                                                $totalAllMonths = 0;
+                                            @endphp
+                                            @foreach($monthRange as $month)
+                                                <th>{{ App\Helpers\MyHelper::moneyFormatBD($columnTotals[$month]) }}</th>
+                                                @php
+                                                    $totalAllMonths += $columnTotals[$month];
+                                                @endphp
+
+                                            @endforeach
+                                            <th>{{ App\Helpers\MyHelper::moneyFormatBD($totalAllMonths) }}</th>
+                                    </tr>
+                                </tfoot>
                             </table>
 
                             </div>
@@ -296,13 +297,19 @@
         $(function() {
 
             $("#circle_table").DataTable({
+                // ajax: "{{ route('commissioner.tds.collection.index') }}",
+                // processing: true,
+                // serverSide: false,
+                order: [[ 1, 'asc' ]],                
                 "responsive": false,
                 "lengthChange": true,
                 "autoWidth": true,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],                
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],    
+                           
             }).buttons().container().appendTo('#circle_table_wrapper .col-md-6:eq(0)');
             
             $("#distict_table").DataTable({
+                order: [[ 1, 'asc' ]],
                 "responsive": false,
                 "lengthChange": true,
                 "autoWidth": true,
