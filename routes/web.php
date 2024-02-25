@@ -201,8 +201,7 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::get('/tds-list/search', [TdsController::class, 'commissionTdsSearch'])->name('tdsList.search');
 
     //Advance Route
-    Route::get('/commissioner/advance', [AdvanceController::class, 'advanceIndex'])->name('advance.index');
-    Route::get('/commissioner/advance/search', [AdvanceController::class, 'search'])->name('advance.search');
+    Route::get('/commissioner/advance', [AdvanceController::class, 'advanceReport'])->name('advance.index');
     
 
     //Task routes

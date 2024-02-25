@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('title', 'TDS')
+@section('title', 'Advance Tax')
 
 @push('css')
     <!--  Datatable -->
@@ -95,7 +95,7 @@
                                         @endphp
                                         @foreach( $circles as $circle )
                                             <tr>
-                                                <td>{{ $circle }}</td>
+                                                <td>Circle-{{ $circle }}</td>
                                                 <td>{{  App\Helpers\MyHelper::moneyFormatBD(count(App\Models\Advance::getAdvanceTaxPayersByCircle([$circle], $assessment_year))) }}</td>
                                                 <td>{{  App\Helpers\MyHelper::moneyFormatBD(count(App\Models\Collection::advanceTaxPaidTaxPayers([$circle], $assessment_year))) }}</td>
                                                 <td class="text-right">{{  App\Helpers\MyHelper::moneyFormatBD(App\Models\Collection::advanceCollectionByCircles([$circle], $assessment_year)) }}</td>
@@ -162,6 +162,7 @@
 
             
             $("#advance_table").DataTable({
+                order: [[ 1, 'ASC' ]],
                 "responsive": false,
                 "lengthChange": true,
                 "autoWidth": true,
