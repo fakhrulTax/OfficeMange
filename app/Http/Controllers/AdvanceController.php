@@ -5,14 +5,36 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Advance;
 use App\Models\Stock;
+use App\Models\Collection;
 use Illuminate\Support\Facades\Auth;
-
 use App\Helpers\MyHelper;
-
 use PDF;
 use Toastr;
+
 class AdvanceController extends Controller
 {
+
+    public function advanceReport ()
+    {
+        $assessment_year = config('settings.assessment_year_commissioner') + 10001;
+
+        if( Auth::user()->user_role == 'range' )
+        {
+            $circles = Myhelper::ranges( 'range-' . Auth::user()->range );
+            $totalAdvanceTaxPayers = count(Advance::getAdvanceTaxPayersByCircle($circles, $assessment_year));
+            $totalAdvanceTaxPaidTaxPayers = count(Collection::advanceTaxPaidTaxPayers($circles, $assessment_year));
+            $totalAdvanceCollection = Collection::advanceCollectionByCircles($circles, $assessment_year);
+            
+           
+            return view('commissioner.advance.report', [
+                'circles' => $circles,
+                'assessment_year' => $assessment_year,
+                'totalAdvanceTaxPayers' => $totalAdvanceTaxPayers, 
+                'totalAdvanceCollection' => $totalAdvanceCollection,
+                'totalAdvanceTaxPaidTaxPayers' => $totalAdvanceTaxPaidTaxPayers
+            ]);
+        }
+    }
 
     public function register()
     {

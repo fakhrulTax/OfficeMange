@@ -146,6 +146,9 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
     Route::get('/range/tds/report/circle/{circle}', [TdsController::class, 'tdsReport'])->name('tds.report.circle');
     Route::get('/range/tds/report/circle/{circle}/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.circle.upazila');
     Route::get('/range/tds/report/circles/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgDistUpazila'])->name('tds.report.upazila');
+
+    //Advance
+    Route::get('/range/advance', [AdvanceController::class, 'advanceReport'])->name('advance.report');
 });
 
 
