@@ -55,6 +55,7 @@
                                 <label for="type">Tax Payer Type</label>
                                 <select name="type" id="type" class="form-control">
                                     <option value="individual" @if($StockInfo->type == 'individual') selected @endif >Individual</option>
+                                    <option value="firm" @if($StockInfo->type == 'firm') selected @endif >Firm</option>
                                     <option value="company" @if($StockInfo->type == 'company') selected @endif>Company</option>
                                 </select>
                             </div>
@@ -84,10 +85,10 @@
                             <div class="form-group">
                                 <label for="file_rack">File Rack</label>
                                 <select name="file_rack" id="file_rack" class="form-control">
-                                    <option value="1" @if($StockInfo->file_rack == 1) selected @endif>1</option>
-                                    <option value="2" @if($StockInfo->file_rack == 2) selected @endif>2</option>
-                                    <option value="3" @if($StockInfo->file_rack == 3) selected @endif>3</option>
-                                    <option value="4" @if($StockInfo->file_rack == 4) selected @endif>4</option>
+                                    <option value="">File Rack</option>
+                                    @for( $i = 1; $i<=9; $i++ )                                        
+                                        <option value="{{ $i }}" @if($StockInfo->file_rack == $i) selected @endif>{{ $i }}</option>
+                                    @endfor    
                                 </select>
                             </div>
                         </div>
@@ -95,30 +96,18 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="address_line_one">Address</label>
-                                @php
-                                    if($StockInfo->address){
-
-                                    $add = explode(', ', strip_tags($StockInfo->address));
-                                
-                                    }
-                                    
-                                    
-
-                                @endphp
+                                <label for="address_line_one">Address (Fillup 3 lines)</label>
 
                                 <input type="text" class="form-control" id="address_line_one"
-                                    name="address_line_one" value="{{ $add[0]??'' }}">
+                                    name="address_line_one" value="{{ $StockInfo->address_line_one }}">
 
 
                                 <input type="text" class="form-control mt-1" id="address_line_two"
-                                    name="address_line_two" value="{{ $add[1] ??'' }}">
+                                    name="address_line_two" value="{{ $StockInfo->address_line_two }}">
 
 
                                 <input type="text" class="form-control mt-1" id="address_line_three"
-                                    name="address_line_three"  value="{{ $add[2] ??'' }}">
-
-
+                                    name="address_line_three"  value="{{ $StockInfo->address_line_three }}">
 
 
 

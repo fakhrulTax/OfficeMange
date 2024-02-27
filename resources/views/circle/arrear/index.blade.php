@@ -29,7 +29,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <button type="button" class="btn btn-primary float-right" data-toggle="modal"
-                            data-target="#addModal"><i class="fas fa-plus"></i> Add item</button>
+                            data-target="#addModal"><i class="fas fa-plus"></i> Add Arrear</button>
                     </ol>
                 </div>
             </div>
@@ -46,7 +46,7 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <input type="number" id="tin" name="tin" placeholder="TIN" class="form-control"value="{{ Request::get('tin') }}" autofocus>
+                            <input type="number" id="searchTIN" name="tin" placeholder="TIN" class="form-control"value="{{ Request::get('tin') }}" autofocus>
                         </div>
                     </div>
 
@@ -262,7 +262,7 @@
                                         <label for="demand_create_date"> Demand Create Date </label>
 
                                         <input type="text" class="form-control" id="demand_create_date"
-                                            name="demand_create_date" placeholder="dd-mm-YYYY">
+                                            name="demand_create_date" placeholder="dd-mm-yyyy">
 
                                     </div>
                                 </div>
@@ -289,7 +289,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="fine">Fine</label>
+                                        <label for="fine">Fine (137)</label>
                                         <input type="number" class="form-control" id="fine" name="fine"
                                             placeholder="1000">
                                     </div>
@@ -326,7 +326,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Edit New Arrear</h4>
+                        <h4 class="modal-title">Edit Arrear</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -406,10 +406,8 @@
                 return x;
             }
 
-
-
-
-            $('#tin').keyup(function() {
+            $('#tin').on('input', function() {
+               
                 var tin = $(this).val();
                 if (tin.length == 12) {
 
@@ -460,7 +458,6 @@
                     id: id
                 },
                 success: function(data) {
-
 
                     $('#editModal').modal('show');
                     $('#editModal').find('.modal-body').html(data);

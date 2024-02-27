@@ -41,9 +41,7 @@
                 <input type="tel" class="form-control" id="mobile" name="mobile"
                     value="{{ $StockInfo->mobile }}">
             </div>
-        </div>
-
-    
+        </div>  
 
 
 
@@ -51,35 +49,16 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="address_line_one">Address</label>
-                @php
-                    if($StockInfo->address){
-
-                    $add = explode(', ', strip_tags($StockInfo->address));
-                
-                    }
-                    
-                    
-
-                @endphp
 
                 <input type="text" class="form-control" id="address_line_one"
-                    name="address_line_one" value="{{ $add[0]??'' }}" id="address1" placeholder="Address line one">
-
-                <p class="address1"></p>
+                    name="address_line_one" value="{{ $StockInfo->address_line_one }}" id="address1" placeholder="Address line one">
 
                 <input type="text" class="form-control mt-1" id="address_line_two"
-                    name="address_line_two" value="{{ $add[1] ??'' }}" id="address2" placeholder="Address line two">
+                    name="address_line_two" value="{{ $StockInfo->address_line_two }}" id="address2" placeholder="Address line two">
 
-                    <p class="address2"></p>
 
                 <input type="text" class="form-control mt-1" id="address_line_three"
-                    name="address_line_three"  value="{{ $add[2] ??'' }}"id="address3" placeholder="Address line three">
-
-                    <p class="address3"></p>
-
-
-
-
+                    name="address_line_three"  value="{{ $StockInfo->address_line_three }}"id="address3" placeholder="Address line three">
 
             </div>
         </div>

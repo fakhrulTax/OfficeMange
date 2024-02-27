@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <style>
+        .address p {
+            margin: 0;
+        }
+    </style>
 @endpush
 
 
@@ -22,7 +27,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <button type="button" class="btn btn-primary float-right" data-toggle="modal"
-                            data-target="#addModal"><i class="fas fa-plus"></i> Add item</button>
+                            data-target="#addModal"><i class="fas fa-plus"></i> Add Tax Payer</button>
                     </ol>
                 </div>
             </div>
@@ -59,31 +64,12 @@
                             <tr>
                                 <td>{{ ++$key }}</td>
                                 <td>{{ $stock->tin }}</td>
-                                <td> <span class="text-capitalize font-weight-bold">{{ $stock->name }} </span> <br>
-
-                                    {{-- {{ str_replace('</p><p>', ', ', strip_tags($stock->address)) }} --}}
-
-                                    @php
-                                        $address =  $stock->address;
-
-                                        // Remove HTML paragraph tags
-                                        $address = strip_tags($address);
-
-                                        // Split address by comma
-                                        $parts = explode(',', $address);
-
-                                        // Print the address in 3 lines
-                                       
-
-                                    @endphp
-
-                                        @foreach ($parts as $part) 
-                                            {{ trim($part)}} <br>
-
-                                        @endforeach
-
-
-
+                                <td> 
+                                    {{ $stock->name }} <br>
+                                    {{ $stock->bangla_name }}
+                                    <span class="address">
+                                        {!! $stock->address !!}
+                                    </span>                                    
                                 </td>
                                 <td> {{ $stock->type }}</td>
                                 <td>{{ $stock->file_in_stock ? 'Yes' : 'No' }}</td>
@@ -184,6 +170,7 @@
                                     <label for="type">Tax Payer Type</label>
                                     <select name="type" id="type" class="form-control">
                                         <option value="individual">Individual</option>
+                                        <option value="firm">Firm</option>
                                         <option value="company">Company</option>
                                     </select>
                                 </div>
@@ -193,10 +180,11 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="file_in_stock">File In Stock</label>
+                                    <label for="file_in_stock">File In Stock?</label>
                                     <select name="file_in_stock" id="file_in_stock" class="form-control">
-                                        <option value="1">Yes</option>
                                         <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                        
                                     </select>
                                 </div>
                             </div>
@@ -205,7 +193,7 @@
                                 <div class="form-group">
                                     <label for="last_return">Last Return Submission Year</label>
                                     <input type="number" class="form-control" id="last_return" name="last_return"
-                                        placeholder="2021">
+                                        placeholder="20232024">
                                 </div>
                             </div>
 
@@ -213,10 +201,10 @@
                                 <div class="form-group">
                                     <label for="file_rack">File Rack</label>
                                     <select name="file_rack" id="file_rack" class="form-control">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
+                                        <option value="">File Rack</option>
+                                        @for( $i = 1; $i<=9; $i++ )                                        
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor                                        
                                     </select>
                                 </div>
                             </div>
@@ -224,7 +212,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="address_line_one">Address</label>
+                                    <label for="address_line_one">Address (Fillup 3 lines)</label>
                                     <input type="text" class="form-control" id="address_line_one"
                                         name="address_line_one" placeholder="Address Line One">
 
@@ -250,7 +238,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="addBtn">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="addBtn">Save</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -277,7 +265,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="updateBtn">Update changes</button>
+                    <button type="button" class="btn btn-primary" id="updateBtn">Update</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -336,7 +324,6 @@
                     success: function(data) {
                         if (data.status != 200) {
 
-
                             $('.error').text(data.message);
                         } else {
                             $.toast({
@@ -370,8 +357,6 @@
                     id: id
                 },
                 success: function(data) {
-
-
                     $('#editModal').modal('show');
                     $('#editModal').find('.modal-body').html(data);
                 }
@@ -390,7 +375,6 @@
                     data: $data,
                     success: function(data) {
                         if (data.status != 200) {
-
 
                             $('.error').text(data.message);
 
