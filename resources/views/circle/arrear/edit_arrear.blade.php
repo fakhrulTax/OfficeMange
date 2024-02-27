@@ -63,7 +63,7 @@
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="fine">Fine</label>
+                    <label for="fine">Fine (137)</label>
                     <input type="number" class="form-control" id="fine" name="fine"
                         value="{{ $arrear->fine }}">
                 </div>
@@ -79,4 +79,13 @@
         </div>
     </form>
 
-
+<script>
+    $(document).ready(function() {
+        $('#edit_demand_create_date').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+            todayHighlight: true,
+            weekStart: 6
+        });
+    });
+</script>
