@@ -2,6 +2,14 @@
 
 @section('title', 'Stock View')
 
+@push('css')
+    <style>
+        .address p {
+            margin: 0;
+        }
+    </style>
+@endpush
+
 @section('content')
 
 <div class="content-header">
@@ -34,16 +42,19 @@
                 <div class="card-body">
                     <h5 class=" ">Name: {{$stock->name}}</h5>
                     @if($stock->bangla_name)
-                    <h5>Name: {{$stock->bangla_name}}</h5>
-                    @endif
+                    <h5>Bangala Name: {{$stock->bangla_name}}</h5>
+                    @endif                    
                   
                   <h5>  Mobile Number: {{$stock->mobile}}</h5>
-                  <h5>  Address:   {{ str_replace('</p><p>', ', ', strip_tags($stock->address)) }}</h5>
+                  <h5>Address: </h5>
+                  <div class="address">
+                    {!! $stock->address !!}
+                  </div>
                  
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button  type="button" onclick="edit({{ $stock->id }})" class="btn bg-light">Edit Infomation</button>
+                  <button  type="button" onclick="edit({{ $stock->id }})" class="btn bg-light">Update Infomation</button>
                 </div>
                 <!-- /.card-footer -->
               </div>
@@ -94,7 +105,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="updateBtn">Update changes</button>
+                <button type="button" class="btn btn-primary" id="updateBtn">Update</button>
             </div>
         </div>
         <!-- /.modal-content -->

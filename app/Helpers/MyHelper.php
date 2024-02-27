@@ -26,12 +26,24 @@ class MyHelper
         return $ranges[$range];
     }
 
+    //Address decode without p tag
+    public static function address_decode($htmlString) {
+        preg_match_all('/<p>(.*?)<\/p>/', $htmlString, $matches);
+        return $matches[1];
+    }
+
+    //Address Encode with p tag
+    public static function address_encode($line1, $line2, $line3)
+    {
+        $address = '<p>'. $line1 .'</p><p>'. $line2 .'</p><p>'. $line3 .'</p>';
+        return $address;
+    }
+
 
     //Assessment Year Format
     public static function assessment_year_format( $number )
     {
          return substr($number,0,4).'-'.substr($number,4,8);
-
          
     }
 

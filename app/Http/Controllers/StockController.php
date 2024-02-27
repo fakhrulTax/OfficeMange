@@ -12,7 +12,7 @@ class StockController extends Controller
 {
     public function index(){
 
-        $Stocks = Stock::latest()->get();
+        $Stocks = Stock::latest()->where('circle', Auth::user()->circle)->get();
 
         return view('circle.stock.index', compact('Stocks'));
     }
@@ -38,10 +38,9 @@ class StockController extends Controller
             $circle = Auth::user()->circle;
            
             if($request->address_line_one != null && $request->address_line_two != null && $request->address_line_three != null){
-               
-                // $address = $request->address_line_one . ' | ' . $request-> address_line_two . ' | '. $request->address_line_three;
 
-                $address = '<p>'. $request->address_line_one .'</p> <p>' . $request-> address_line_two .'</p> <p>' . $request->address_line_three .'</p>';
+                $address = MyHelper::address_encode($request->address_line_one, $request->address_line_two, $request->address_line_three);
+                
             }else{
 
                 $address = null;
@@ -81,17 +80,35 @@ class StockController extends Controller
 
 
     public function edit(Request $request){
-
  
         $StockInfo = Stock::find($request->id);
+
+        //Addrees convert to three line
+        if( $StockInfo->address )
+        {
+            $address = MyHelper::address_decode($StockInfo->address);
+            $StockInfo->address_line_one = $address[0];
+            $StockInfo->address_line_two = $address[1];
+            $StockInfo->address_line_three = $address[2];
+        }
+        
         return view('circle.stock.edit_modal', compact('StockInfo'))->render();
 
     }
 
     public function stockEditByid(Request $request){
-
  
         $StockInfo = Stock::find($request->id);
+
+        //Addrees convert to three line
+        if( $StockInfo->address )
+        {
+            $address = MyHelper::address_decode($StockInfo->address);
+            $StockInfo->address_line_one = $address[0];
+            $StockInfo->address_line_two = $address[1];
+            $StockInfo->address_line_three = $address[2];
+        }
+        
         return view('circle.stock.edit_modal2', compact('StockInfo'))->render();
 
     }
@@ -127,9 +144,7 @@ class StockController extends Controller
            
             if($request->address_line_one != null && $request->address_line_two != null && $request->address_line_three != null){
                
-                // $address = $request->address_line_one . ' | ' . $request-> address_line_two . ' | '. $request->address_line_three;
-
-                $address = '<p>'. $request->address_line_one .'</p> <p>' . $request-> address_line_two .'</p> <p>' . $request->address_line_three .'</p>';
+                $address = MyHelper::address_encode($request->address_line_one, $request->address_line_two, $request->address_line_three);
             }else{
 
                 $address = null;
@@ -191,9 +206,8 @@ class StockController extends Controller
            
             if($request->address_line_one != null && $request->address_line_two != null && $request->address_line_three != null){
                
-                // $address = $request->address_line_one . ' | ' . $request-> address_line_two . ' | '. $request->address_line_three;
-
-                $address = '<p>'. $request->address_line_one .'</p>, <p>' . $request-> address_line_two .'</p>, <p>' . $request->address_line_three .'</p>';
+                $address = MyHelper::address_encode($request->address_line_one, $request->address_line_two, $request->address_line_three);
+                
             }else{
 
                 $address = null;
@@ -244,7 +258,6 @@ class StockController extends Controller
 
 
     public function view($id){
-
         $stock = Stock::find($id);
         return view('circle.stock.view', compact('stock'));
     }
