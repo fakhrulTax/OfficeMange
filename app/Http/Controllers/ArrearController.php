@@ -14,7 +14,36 @@ use PDF;
 class ArrearController extends Controller
 {
 
+    //Arrear Notice
+     //Notice
+     public function notice( Request $request )
+     {
+        dd('go');
+         //Validation
+         $request->validate([
+             'issue_date' => 'required',
+             'hearing_date' => 'required',
+         ]);
+         //Get Stock Information
+         $arrears = Arrear::orderBy('assessment_year', 'ASC')->where('tin', $request->tin)->get();
+         $stock = Stock::where('tin',$request->tin)->firstOrFail();
+ 
+         //Add or create Task in Forward Dairy
+         $notice = 'Arrear';
+         $description = '<p>'.$stock->tin.'<p><p>'.$stock->name.'<p>';
+         $deadline = date('Y-m-d',strtotime($request->hearing_date));
+         ForwardDairy::addOrUpdateTaskFromNotice($notice, $description, $deadline);
+ 
+         $pdf = PDF::loadView('circle.arrear.notice', [
+             'stock' => $stock, 
+             'data' => $request, 
+             'arrears' => $arrears, 
+             'collection' => new Collection(),
+             ]);
+         return $pdf->stream('document.pdf');
+     }
 
+    //Arrear Search
     public function search(Request $request){
 
         $arrears = Arrear::query();

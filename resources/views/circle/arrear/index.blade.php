@@ -177,7 +177,7 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-danger btn-sm " onclick="ArreardEdit({{ $arrear->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
-                                    <button class="btn btn-primary btn-sm">Notice</button>
+                                    <button class="btn btn-primary btn-sm"  onclick="arrearModal({{ $arrear->tin }})">Notice</button>
                                 </td>
                             </tr>
                             @php
@@ -346,6 +346,45 @@
             <!-- /.modal-dialog -->
         </div>
     </section>
+
+   <!-- Arrear Modal --> 
+    <div class="modal fade" id="arrearModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Arrear Notice </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('circle.arrear.notice') }}" method="POST" target="_blank" >
+                @csrf
+                <div class="form-group">
+                    <input type="hidden" id="atin" name="tin">
+                    <label for="issue_date">Issue Date</label>
+                    @error('issue_date')
+                    <div class="text text-danger">{{ $message }}</div>
+                    @enderror
+                    <input type="text" id="issue_date" name="issue_date" class="form-control" placeholder="dd-mm-yyyy" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="hearing_date">Hearing Date</label>
+                    @error('hearing_date')
+                    <div class="text text-danger">{{ $message }}</div>
+                    @enderror
+                    <input type="text" id="hearing_date" name="hearing_date" class="form-control" placeholder="dd-mm-yyyy"  autocomplete="off">
+                </div>       
+            </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Print</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 
@@ -356,6 +395,12 @@
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         }
+
+    function arrearModal(tin)
+    {
+        document.getElementById('atin').value = tin;
+        $('#arrearModal').modal('toggle');
+    }
 
         
     </script>

@@ -78,6 +78,7 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::post('/arrear', [ArrearController::class, 'store'])->name('arrearStore');
     Route::get('/arrear/edit', [ArrearController::class, 'edit'])->name('arrearEdit');
     Route::post('/arrear/edit', [ArrearController::class, 'update'])->name('arrearUpdate');
+    Route::post('/arrear/notice', [ArrearController::class, 'notice'])->name('arrear.notice');
     Route::get('/circle/arrears/search', [ArrearController::class, 'search'])->name('arrears.search');
 
 
