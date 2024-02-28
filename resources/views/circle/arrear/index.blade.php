@@ -109,7 +109,6 @@
                         <tr>
                             <th>#</th>
                             <th>Name, Address and TIN</th>
-
                             <th>Status</th>
                             <th>Assessment Year</th>
                             <th>Arrear</th>
