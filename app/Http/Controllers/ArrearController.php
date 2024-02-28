@@ -4,41 +4,42 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Arrear;
+use App\Models\Stock;
+use App\Models\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\MyHelper;
-
 use Illuminate\Support\Facades\DB;
 
 use PDF;
+
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ArrearController extends Controller
 {
 
     //Arrear Notice
-     //Notice
      public function notice( Request $request )
      {
-        dd('go');
+                       
          //Validation
          $request->validate([
              'issue_date' => 'required',
              'hearing_date' => 'required',
          ]);
+
          //Get Stock Information
          $arrears = Arrear::orderBy('assessment_year', 'ASC')->where('tin', $request->tin)->get();
          $stock = Stock::where('tin',$request->tin)->firstOrFail();
- 
-         //Add or create Task in Forward Dairy
-         $notice = 'Arrear';
-         $description = '<p>'.$stock->tin.'<p><p>'.$stock->name.'<p>';
-         $deadline = date('Y-m-d',strtotime($request->hearing_date));
-         ForwardDairy::addOrUpdateTaskFromNotice($notice, $description, $deadline);
+
+         $circle = Auth::user()->circle;
  
          $pdf = PDF::loadView('circle.arrear.notice', [
              'stock' => $stock, 
              'data' => $request, 
              'arrears' => $arrears, 
              'collection' => new Collection(),
+             'circle' => $circle,
+             'Helper' => new MyHelper(),
              ]);
          return $pdf->stream('document.pdf');
      }
@@ -102,12 +103,27 @@ class ArrearController extends Controller
 
     public function index()
     {
-        $arrears = Arrear::where('circle', Auth::user()->circle)
-                    ->orderBy('tin', 'ASC')
-                    ->orderBy('assessment_year', 'ASC')
-                    ->paginate(200); // Adjust the pagination size based on your needs
+        $circle = Auth::user()->circle;
+        
+        $arrears = Arrear::where('circle', $circle)
+        ->orderBy('tin', 'ASC')
+        ->orderBy('assessment_year', 'ASC')
+        ->get()
+        ->groupBy('tin');
 
-        return view('circle.arrear.index', compact('arrears'));
+
+        // Manually paginate the grouped data
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 100; // Adjust the number of items per page as needed
+
+        $currentPageItems = $arrears->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $paginatedData = new LengthAwarePaginator($currentPageItems, count($arrears), $perPage);
+        $paginatedData->setPath(request()->url());
+
+        return view('circle.arrear.index', [
+            'arrears' => $paginatedData, 
+            'Helper' => new MyHelper(),
+        ]);
     }
 
 

@@ -19,7 +19,7 @@ class Collection extends Model
     //Arrear Collection By TIN and Assessment Year
     public static function getArrearByTINAssessmentYear($tin, $assessment_year)
     {
-        $sum = self::where('tin', $tin)->where('assessment_year', $assessment_year)->sum('amount');
+        $sum = self::where('type', 'arrear')->where('tin', $tin)->where('assessment_year', $assessment_year)->sum('amount');
         return $sum;
     }
 
@@ -28,11 +28,11 @@ class Collection extends Model
     {
         if($circles)
         {
-            $sum = self::whereIn('circle', $circles)->where('assessment_year', $assessment_year)->sum('amount');
+            $sum = self::where('type', 'advance')->whereIn('circle', $circles)->where('assessment_year', $assessment_year)->sum('amount');
 
         }else
         {
-            $sum = self::where('assessment_year', $assessment_year)->sum('amount');
+            $sum = self::where('type', 'advance')->where('assessment_year', $assessment_year)->sum('amount');
         }
         return $sum;
     }
@@ -42,13 +42,15 @@ class Collection extends Model
     {
         $query = self::select('tin'); // Select 'tin' as it's in the GROUP BY clause
 
+        $query->where('type', 'advance');
+
         if ($circles) {
             // If circles are provided, filter by circles
             $query->whereIn('circle', $circles);
         }
 
         // Filter by assessment year in both cases
-        $query->where('assessment_year', $assessment_year);
+        $query->where('assessment_year', $assessment_year);        
 
         // Group by 'tin'
         $taxpayers = $query->groupBy('tin')->get();
