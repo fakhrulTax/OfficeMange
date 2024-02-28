@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
     <style>
-        .arrer_address p {
+        .address p {
             margin: 0;
         }
     </style>
@@ -73,19 +73,8 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <select name="paginate" id="paginate" class="form-control">
-                                    <option value="">Paginate</option>
-                                    @for($i = 100; $i<=200; $i++)
-                                        <option value="{{ $i }}"  {{ (Request::get('paginate') == $i) ? 'selected' : '' }}>{{ $i }}</option>
-                                    @endfor
-                            </select>
-                        </div>
-                    </div>
-
                     <div class="col-md-1">
-                        <button type="submit" class="btn btn-sm btn-primary">Search</button>
+                        <button type="submit" class="btn btn-primary">Search</button>
                     </div>
 
 
@@ -108,94 +97,98 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name, Address and TIN</th>
+                            <th>Name, Address & TIN</th>
                             <th>Status</th>
                             <th>Assessment Year</th>
                             <th>Arrear</th>
                             <th>Fine</th>
                             <th>Total</th>
                             <th>Collection</th>
-
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                       
+                    @php 
+                        $i = 0; 
+                        $arrearPageTotal = 0;
+                        $collectionPageTotal = 0;
+                    @endphp
 
-                        @php
-                            $i = 0;
-                            $repeatTIN = '';
-                            $newTIN = '';
-                            $totalArrear = 0;
-                            $totlaFine = 0;
-                            $totalCollection = 0;
+                    @foreach($arrears as $tin => $arrearGroup )
+                        
+                        @php 
+                            $i += 1;                           
+                            $countArrear = count($arrearGroup);
+                            $printedTIN = false;
+                            $arrearSubTotal = 0;
+                            $collectionSubTotal = 0;
                         @endphp
 
-                        @foreach ($arrears as $key => $arrear)
-                        @php
-                            $countForDesiredTin = $arrears->where('tin', $arrear->tin)->count();
-                        @endphp
-                            <tr>
-
+                        @foreach( $arrearGroup as $arrear)
                             
-                                @if($repeatTIN != $arrear->tin)
-                                    <td rowspan="{{ $countForDesiredTin }}">{{ $i + 1 }}</td>
-                                    <td rowspan="{{ $countForDesiredTin }}">
-                                        @if($arrear->stock->bangla_name)
-                                        {{ $arrear->stock->bangla_name }}
-                                        @else
-                                            {{ $arrear->stock->name }}
-                                        @endif
-                                        <div class="arrer_address">
-                                            {!! $arrear->stock->address !!}
-                                        </div>                                        
-                                        {{ $arrear->tin }}
-                                    </td>
-                                    @php
-                                        $repeatTIN = $arrear->tin;
-                                    @endphp
-                                @endif
-                                <td>
-                                    {{ ucfirst($arrear->arrear_type) }}
-                                </td>
-                                <td>
-                                    {{ App\Helpers\MyHelper::assessment_year_format($arrear->assessment_year) }}
-                                </td>
-                                <td class="text-right">
-                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->arrear) }}
-                                </td>
-                                <td class="text-right">
-                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->fine) }}
-                                </td>
-                                <td class="text-right">
-                                    {{ App\Helpers\MyHelper::moneyFormatBD($arrear->arrear + $arrear->fine) }}
-                                </td>
-                                <td class="text-right">
-                                    {{ App\Helpers\MyHelper::moneyFormatBD(App\Models\Collection::getArrearByTINAssessmentYear($arrear->tin, $arrear->assessment_year)) }}
-                                </td>
-                                <td>
-                                    <button class="btn btn-danger btn-sm " onclick="ArreardEdit({{ $arrear->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
-                                    <button class="btn btn-primary btn-sm"  onclick="arrearModal({{ $arrear->tin }})">Notice</button>
-                                </td>
-                            </tr>
-                            @php
-                                $i++;
-                                $totalArrear += $arrear->arrear;
-                                $totlaFine += $arrear->fine;
-                                $totalCollection += App\Models\Collection::getArrearByTINAssessmentYear($arrear->tin, $arrear->assessment_year);
+                        <tr>                           
 
+                            @if(!$printedTIN)
+                                <td rowspan="{{ $countArrear }}">{{ $i }}</td>
+                                <td rowspan="{{ $countArrear }}">
+                                    {{ $arrear->stock->bangla_name ? $arrear->stock->bangla_name : $arrear->stock->name }}                                    
+                                    <div class="address">
+                                        {!! $arrear->stock->address !!}
+                                    </div>    
+                                    {{ $arrear->tin }}                                
+                                </td>
+
+                                @php 
+                                    $printedTIN = true; 
+                                    
+                                @endphp
+
+                            @endif
+
+                            @php                                
+                                $aCollecntion = App\Models\Collection::getArrearByTINAssessmentYear($arrear->tin, $arrear->assessment_year);
                             @endphp
+
+                            <td>{{ $arrear->arrear_type }}</td>
+                            <td>{{ $Helper::assessment_year_format($arrear->assessment_year) }}</td>
+                            <td class="text-right">{{ $Helper::moneyFormatBD($arrear->arrear) }}</td>
+                            <td class="text-right">{{ $Helper::moneyFormatBD($arrear->fine) }}</td>
+                            <td class="text-right">{{ $Helper::moneyFormatBD($arrear->arrear + $arrear->fine) }}</td>
+                            <td class="text-right">{{ $Helper::moneyFormatBD($aCollecntion) }}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm " onclick="ArreardEdit({{ $arrear->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
+                                <button class="btn btn-primary btn-sm"  onclick="arrearModal({{ $arrear->tin }})">Notice</button>
+                            </td>
+                        </tr>  
+
+                        @php
+                            $arrearSubTotal += ($arrear->arrear + $arrear->fine);
+                            $collectionSubTotal += $aCollecntion;
+                            $arrearPageTotal += ($arrear->arrear + $arrear->fine);
+                             $collectionPageTotal += $aCollecntion;
+                        @endphp
+
                         @endforeach
+
+                        <tr class="bg-secondary">
+                            <td>Sub Total</td>
+                            <td colspan="5" class="text-right">{{ $Helper::moneyFormatBD($arrearSubTotal) }}</td>
+                            <td class="text-right">{{ $Helper::moneyFormatBD($collectionSubTotal) }}</td>
+                        </tr>
+                    
+                    @endforeach
+
+                    <tr class="bg-danger">
+                        <td>Total</td>
+                        <td colspan="5" class="text-right">{{ $Helper::moneyFormatBD($arrearPageTotal) }}</td>
+                        <td class="text-right">{{$Helper::moneyFormatBD($collectionPageTotal) }}</td>
+                    </tr>
 
 
                     </tbody>
                     <tfoot>
-                        <th colspan="4" class="text-center">Total</th>
-                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totalArrear) }}</th>
-                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD($totlaFine) }}</th>
-                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD( $totalArrear+ $totlaFine) }}</th>
-                        <th class="text-right">{{ App\Helpers\MyHelper::moneyFormatBD( $totalCollection) }}</th>                        
+
                     </tfoot>
                 </table>
             </div>
