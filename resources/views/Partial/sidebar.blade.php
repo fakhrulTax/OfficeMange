@@ -408,8 +408,8 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('range.arrears', 'all') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'range.arrears' ? 'active' : '' }}">
+                        <a href="{{ route('range.arrear') }}"
+                            class="nav-link {{ Route::currentRouteName() == 'range.arrear' ? 'active' : '' }}">
                             <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Arrear

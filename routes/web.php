@@ -43,6 +43,7 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('stock/view/{id}', [StockController::class, 'view'])->name('stock.view');
     Route::get('/stock/editbyid', [StockController::class, 'stockEditByid'])->name('stockEditByid');
     Route::post('/stock/editbyid', [StockController::class, 'stockUpdateByid'])->name('stockUpdateByid');
+    Route::get('/stock/evn/{tin}', [StockController::class, 'envelop'])->name('stock.env');
 
     //Collection Route
     Route::get('/collection', [CollectionController::class, 'index'])->name('collection.index');
@@ -139,8 +140,11 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
 
     Route::get('/range-dashboard', [RangeController::class, 'index'])->name('dashboard');
 
-    Route::get('range/arrears/{circle}', [RangeController::class, 'RangeArrear'])->name('arrears');
-    Route::post('range/arrear', [RangeController::class, 'RangeArrearSort'])->name('arrearssort');
+    //Arrear
+    Route::get('/range/arrear', [ArrearController::class, 'rangeArrear'])->name('arrear');
+    Route::get('/range/arrear/circle/{circle}', [ArrearController::class, 'index'])->name('arrear.circle');
+    Route::get('/range/arrear/circle/{circle}/search', [ArrearController::class, 'search'])->name('arrear.circle.search');
+   
 
     //TDS Report
     Route::get('/range/tds/report', [TdsController::class, 'tdsRangeReport'])->name('tds.report');

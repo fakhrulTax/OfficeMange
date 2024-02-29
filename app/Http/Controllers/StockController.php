@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Helpers\MyHelper;
 use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 
 class StockController extends Controller
@@ -253,12 +254,21 @@ class StockController extends Controller
         }
     }
 
-
-
-
-
     public function view($id){
         $stock = Stock::find($id);
         return view('circle.stock.view', compact('stock'));
+    }
+
+    //Envelop
+    public function envelop($tin)
+    {
+        $stock = Stock::where('tin', $tin)->first();
+        $officeAddress = config('settings.circle_address_'.Auth::user()->circle);
+        $pdf = PDF::loadView('circle.notice.envelop', [
+            'stock' => $stock,
+            'officeAddress' => $officeAddress
+        ]);
+        return $pdf->stream('document.pdf');
+        
     }
 }

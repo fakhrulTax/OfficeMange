@@ -28,8 +28,25 @@
 <body>
 	<div>
 		<p style="text-align: center;">“বাংলাদেশ রাষ্ট্রীয় সেবায়”</p>
-		<p style="margin-bottom: 0.5in">“সবাই মিলে দিব কর-দেশ হবে স্বনির্ভর”</p>
+		<p style="margin-bottom: 0.3in">“সবাই মিলে দিব কর-দেশ হবে স্বনির্ভর”</p>
 		<p></p>
+		<div style="width:60%; float: left;">
+			<p style="text-decoration: underline;">প্রেরক</p>
+			{!! $officeAddress !!}
+		</div>
+		<div style="width:40%; float: right;">
+			<p style="text-decoration: underline;">প্রাপক</p>
+			@if( $stock->type == 'company' )
+				<p>ব্যবস্থাপনা পরিচালক</p>
+			@endif
+			<p>{{ $stock->bangla_name }}</p>
+
+				{!! $stock->address !!}
+
+				@if($stock->mobile)
+					<p>মোবাইল নং: {{ App\Helpers\MyHelper::en2bn($stock->mobile) }}</p>
+				@endif
+		</div>
 	</div>	
 </body>
 </html>

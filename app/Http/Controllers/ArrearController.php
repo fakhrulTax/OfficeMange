@@ -45,7 +45,9 @@ class ArrearController extends Controller
      }
 
     //Arrear Search
-    public function search(Request $request){
+    public function search(Request $request, $circle = null){
+
+        $circle = $circle ? $circle : Auth::user()->circle;
 
         $arrears = Arrear::query();
 
@@ -57,53 +59,36 @@ class ArrearController extends Controller
             $arrears = $arrears->where('arrear_type', $request->arrear_type);
         }
 
-
-        if(!empty($request->arrear_type)){
-            $arrears = $arrears->where('arrear_type', $request->arrear_type);
-        }
-
         if (!empty($request->from_date) && !empty($request->to_date)) {
 
             $arrears = $arrears->whereBetween('demand_create_date', [date('Y-m-d', strtotime($request->from_date)), date('Y-m', strtotime($request->to_date))]);
         }
 
+        $arrears = $arrears->where('circle', $circle);
 
-        
-        if( isset($request->circle) && !empty($request->circle)){
-            
-            if( $request->circle == "range-1" || $request->circle == "range-2" || $request->circle == "range-3" || $request->circle == "range-4" )
-            {
-                //search for range
-                $circles = MyHelper::ranges($request->circle);
-                $arrears = $arrears->whereIN('circle', $circles);
-            }else
-            {
-                $arrears = $arrears->where('circle', $request->circle);
-            }           
-        }
+        $arrears = $arrears->get();
 
-        if( Auth::user()->user_role == 'circle' )
-        {
-            $arrears = $arrears->where('circle', Auth::user()->circle);
-        }
+        $arrears = $arrears->groupBy('tin');
 
-        if(!empty($request->paginate)){
-            $arrears = $arrears->paginate($request->paginate);
-        }else
-        {
-            $arrears = $arrears->paginate(200);
-        }
+        // Manually paginate the grouped data
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 100; // Adjust the number of items per page as needed
 
-       
+        $currentPageItems = $arrears->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $paginatedData = new LengthAwarePaginator($currentPageItems, count($arrears), $perPage);
+        $paginatedData->setPath(request()->url());
+
         return view('circle.arrear.index', [
-            'arrears' => $arrears, 
-            'title' => 'Advance | Search'
+            'arrears' => $paginatedData, 
+            'Helper' => new MyHelper(),
+            'title' => 'Advance | Search',
+            'circle' => $circle
             ]);
     }
 
-    public function index()
+    public function index( $circle = null )
     {
-        $circle = Auth::user()->circle;
+        $circle = $circle ? $circle : Auth::user()->circle;
         
         $arrears = Arrear::where('circle', $circle)
         ->orderBy('tin', 'ASC')
@@ -123,6 +108,7 @@ class ArrearController extends Controller
         return view('circle.arrear.index', [
             'arrears' => $paginatedData, 
             'Helper' => new MyHelper(),
+            'circle' => $circle
         ]);
     }
 
@@ -246,48 +232,25 @@ class ArrearController extends Controller
          }
     }
  
+    public function rangeArrear()
+    {
+        $circles = MyHelper::ranges('range-' . Auth::user()->range);
 
-    public function CommissionerArrear($circle){
+        $sumDisputedArrear = Arrear::getSumArrearByType('disputed',$circles);
+        $sumUndisputedArrear = Arrear::getSumArrearByType('undisputed',$circles);
 
-        $arrears = Arrear::with('stock')->latest()->get()->groupBy('tin');
-        if($circle != 'all'){
-            $arrears = Arrear::with('stock')->where('circle', $circle)->latest()->get()->groupBy('tin');
-        }
+        $arrearCollection = Collection::arrearCollectionByCircles($circles);
 
-        $result = MyHelper::calculateArrearSum('all');
-
-        $GrandArrear = $result['GrandArrear'];
-        $TotalDisputedArrear = $result['TotalDisputedArrear'];
-        $TotalUndisputedArrear = $result['TotalUndisputedArrear'];
-
-       
-
-        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear', 'arrears', 'circle' ));
-
-    }
-
-
-
-
-    public function CommissionerArrearSort(Request $request ) {
-        
-        $circle = $request->circle;
-        if( $circle == 'all'){
-            $arrears = Arrear::with('stock')->latest()->get()->groupBy('tin');
-            $result = MyHelper::calculateArrearSum('all');
-        }else{
-            $arrears = Arrear::with('stock')->where('circle', $circle)->latest()->get()->groupBy('tin');
-            $result = MyHelper::calculateArrearSum($circle);
-        }
-
-        $GrandArrear = $result['GrandArrear'];
-        $TotalDisputedArrear = $result['TotalDisputedArrear'];
-        $TotalUndisputedArrear = $result['TotalUndisputedArrear'];
-
-       
-
-        return view ('commissioner.arrear.index', compact('GrandArrear', 'TotalDisputedArrear', 'TotalUndisputedArrear', 'arrears', 'circle' ));
-
+        return view('range.arrear.index', [
+            'title' => 'Arrear',
+            'sumDisputedArrear' => $sumDisputedArrear, 
+            'sumUndisputedArrear' => $sumUndisputedArrear,
+            'arrearCollection' => $arrearCollection,
+            'circles' => $circles,
+            'aModel' => new Arrear(),
+            'cModel' => new Collection(),
+            'Helper' => new MyHelper(),
+        ]);
     }
     
     
