@@ -266,8 +266,8 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('commissioner.arrears', 'all') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'commissioner.arrears' ? 'active' : '' }}">
+                        <a href="{{ route('commissioner.arrear') }}"
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.arrear', 'commissioner.arrear.circle', 'commissioner.arrear.circle.search']) ? 'active' : '' }}">
                             <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Arrear
@@ -409,7 +409,7 @@
 
                     <li class="nav-item">
                         <a href="{{ route('range.arrear') }}"
-                            class="nav-link {{ Route::currentRouteName() == 'range.arrear' ? 'active' : '' }}">
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['range.arrear', 'range.arrear.circle', 'range.arrear.circle.search']) ? 'active' : '' }}">
                             <i class="nav-icon fas fa-money-check-alt text-light"></i>
                             <p>
                                 Arrear

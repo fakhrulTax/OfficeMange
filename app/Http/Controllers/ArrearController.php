@@ -252,6 +252,32 @@ class ArrearController extends Controller
             'Helper' => new MyHelper(),
         ]);
     }
+
+
+    public function commissionerArrear()
+    {
+        $circles = [];
+        
+        for ($i = 1; $i <= 22; $i++) {
+            $circles[] = $i;
+        }
+        
+        $sumDisputedArrear = Arrear::getSumArrearByType('disputed',null);
+        $sumUndisputedArrear = Arrear::getSumArrearByType('undisputed',null);
+
+        $arrearCollection = Collection::arrearCollectionByCircles(null);
+
+        return view('commissioner.arrear.index', [
+            'title' => 'Arrear',
+            'sumDisputedArrear' => $sumDisputedArrear, 
+            'sumUndisputedArrear' => $sumUndisputedArrear,
+            'arrearCollection' => $arrearCollection,
+            'circles' => $circles,
+            'aModel' => new Arrear(),
+            'cModel' => new Collection(),
+            'Helper' => new MyHelper(),
+        ]);
+    }
     
     
 }

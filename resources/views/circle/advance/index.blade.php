@@ -216,7 +216,7 @@
             @error('issue_date')
               <div class="text text-danger">{{ $message }}</div>
             @enderror
-            <input type="text" id="issue_date" name="issue_date" class="form-control" placeholder="dd-mm-yyyy">
+            <input type="text" id="issue_date" name="issue_date" class="form-control" placeholder="dd-mm-yyyy" autocomplete="off">
           </div>    
       </div>
         <div class="modal-footer">

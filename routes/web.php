@@ -172,9 +172,9 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
 
     //Arrear Route
-    Route::get('commissioner/arrears/{circle}', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
-
-    Route::post('commissioner/arrear/', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
+    Route::get('/commissioner/arrear', [ArrearController::class, 'commissionerArrear'])->name('arrear');
+    Route::get('/commissioner/arrear/circle/{circle}', [ArrearController::class, 'index'])->name('arrear.circle');
+    Route::get('/commissioner/arrear/circle/{circle}/search', [ArrearController::class, 'search'])->name('arrear.circle.search');
 
     //TDS
     Route::get('/tds/upazila', [UpazilaController::class, 'index'])->name('tds.upazila.index');
