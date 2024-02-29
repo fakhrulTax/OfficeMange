@@ -129,6 +129,11 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
     //Notice Controller
     Route::post('/circle/notice/{tin}/183(3)', [NoticeController::class, 'notice183'])->name('notice.183');
+    Route::post('/circle/notice/{tin}/179', [NoticeController::class, 'notice179'])->name('notice.179');
+    Route::post('/circle/notice/{tin}/212', [NoticeController::class, 'notice212'])->name('notice.212');
+    Route::post('/circle/notice/{tin}/280', [NoticeController::class, 'notice280'])->name('notice.280');
+    Route::post('/circle/notice/{tin}/refix', [NoticeController::class, 'refix'])->name('notice.refix');
+    Route::post('/circle/notice/{tin}/57', [NoticeController::class, 'notice57'])->name('notice.57');
 
 
 });

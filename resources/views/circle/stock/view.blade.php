@@ -71,8 +71,28 @@
 
                     <div class="row">
 
-                        <div class="col-md-3 mb-3">
-                            <button class="btn btn-success" class="mb-2" data-toggle="modal" data-target="#oneEightyThree">183(3)</button>
+                        <div class="col-md-2 mb-3">
+                            <button class="btn btn-success" class="mb-2" data-toggle="modal" data-target="#oneSeventyNine">179</button>
+                        </div>
+
+                        <div class="col-md-2 mb-3">
+                            <button class="btn btn-secondary" class="mb-2" data-toggle="modal" data-target="#oneEightyThree">183(3)</button>
+                        </div>
+
+                        <div class="col-md-2 mb-3">
+                            <button class="btn btn-danger" class="mb-2" data-toggle="modal" data-target="#twoTwelve">212(93)</button>
+                        </div>
+
+                        <div class="col-md-2 mb-3">
+                            <button class="btn btn-warning" class="mb-2" data-toggle="modal" data-target="#twoEighty">280</button>
+                        </div>
+
+                        <div class="col-md-2 mb-3">
+                            <button class="btn btn-default" class="mb-2" data-toggle="modal" data-target="#refix">Refix</button>
+                        </div>
+
+                        <div class="col-md-2 mb-3">
+                            <button class="btn btn-info" class="mb-2" data-toggle="modal" data-target="#it57">IT-57</button>
                         </div>
 
                     </div>
@@ -114,6 +134,11 @@
 </div>
 
 @include('circle.stock.modal.one_eighty_three');
+@include('circle.stock.modal.one_seventy_nine');
+@include('circle.stock.modal.two_twelve');
+@include('circle.stock.modal.two_eighty');
+@include('circle.stock.modal.refix');
+@include('circle.stock.modal.it57');
 
 
 @endsection

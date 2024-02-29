@@ -27,6 +27,99 @@ class NoticeController extends Controller
         return $pdf->stream('document.pdf');                
     }
 
+    //179
+    public function notice179(Request $request, $tin)
+    { 
+        //Validation
+        $request->validate([
+            'assessment_year' => 'required',
+            'issue_date' => 'required',
+            'hearing_date' => 'required',
+        ]);       
+
+        //Get Stock Information
+        $stock = Stock::where('tin',$tin)->firstOrFail();
+
+        $pdf = PDF::loadView('circle.notice.one_seventy_nine', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper()]);
+        return $pdf->stream('document.pdf');                
+    }
+
+       //212 Notice Controllsr
+       public function notice212(Request $request, $tin)
+       {
+           //Validation
+           $request->validate([
+               'assessment_year' => 'required',
+               'issue_date' => 'required',
+               'hearing_date' => 'required',
+               'cause' => 'required'
+           ]);
+
+           //Get Stock Information
+           $stock = Stock::where('tin',$tin)->firstOrFail();
+           
+           $pdf = PDF::loadView('circle.notice.two_twelve', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper(), ]);
+           return $pdf->stream('document.pdf');                
+       }
+
+       
+       //Refix
+       public function refix(Request $request, $tin)
+       {
+           //Validation
+           $request->validate([
+               'assessment_year' => 'required',
+               'issue_date' => 'required',
+               'hearing_date' => 'required',
+           ]);
+
+           //Get Stock Information
+           $stock = Stock::where('tin',$tin)->firstOrFail();
+           $circle = Auth::user()->circle;
+           
+           $pdf = PDF::loadView('circle.notice.refix', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper(), 'circle' => $circle]);
+           return $pdf->stream('document.pdf');                
+       }
+
+       
+    //280
+    public function notice280(Request $request, $tin)
+    {
+        //Validation
+        $request->validate([
+            'assessment_year' => 'required',
+            'issue_date' => 'required',
+            'hearing_date' => 'required',
+            'notice_section' => 'required',
+            'fine_section' => 'required'
+        ]);
+
+        //Get Stock Information
+        $stock = Stock::where('tin',$tin)->firstOrFail();
+        
+        $pdf = PDF::loadView('circle.notice.two_eighty', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper(), ]);
+        return $pdf->stream('document.pdf');                
+    }
+
+    //IT57
+    public function notice57(Request $request, $tin)
+    {
+        //Validation
+        $request->validate([
+            'assessment_year' => 'required',
+            'issue_date' => 'required',
+            'notice_section' => 'required',
+        ]);
+
+        //Get Stock Information
+        $stock = Stock::where('tin',$tin)->firstOrFail();
+        $circle = Auth::user()->circle;
+        
+        $pdf = PDF::loadView('circle.notice.fifty_seven', ['stock' => $stock, 'data' => $request, 'circle' => $circle, 'Helper' => new MyHelper(), ]);
+        return $pdf->stream('document.pdf');                
+    }
+
+
 
 
 
@@ -78,91 +171,8 @@ class NoticeController extends Controller
          return $pdf->stream('document.pdf');                
     }
    
-     //183
-     public function newRefix(Request $request, $tin)
-     {
-         //Validation
-         $request->validate([
-             'assessment_year' => 'required',
-             'issue_date' => 'required',
-             'hearing_date' => 'required',
-         ]);
-         //Get Stock Information
-         $stock = Stock::where('tin',$tin)->firstOrFail();
-         
-        //Add or create Task in Forward Dairy
-        $notice = 'Refix';
-        $description = '<p>'.$stock->tin.'<p><p>'.$stock->name.'<p>';
-        $deadline = date('Y-m-d',strtotime($request->hearing_date));
-        ForwardDairy::addOrUpdateTaskFromNotice($notice, $description, $deadline);
-                 
-         //Convert Numeric Digit English To Bangla
-         $request->assessment_year = en2bn($request->assessment_year);
-         $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-         $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-         $stock->tin = en2bn(tinSlice($stock->tin));
-         
-         $pdf = PDF::loadView('pages.Notice.new_refix', ['stock' => $stock, 'data' => $request]);
-         return $pdf->stream('document.pdf');                
-     }
-
-    //280
-    public function notice280(Request $request, $tin)
-    {
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-        ]);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-
-        //Add or create Task in Forward Dairy
-        $notice = '280';
-        $description = '<p>'.$stock->tin.'<p><p>'.$stock->name.'<p>';
-        $deadline = date('Y-m-d',strtotime($request->hearing_date));
-        ForwardDairy::addOrUpdateTaskFromNotice($notice, $description, $deadline);
-
-        //Convert Numeric Digit English To Bangla
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));
-        
-        $pdf = PDF::loadView('pages.Notice.two_eighty', ['stock' => $stock, 'data' => $request]);
-        return $pdf->stream('document.pdf');                
-    }
      
-    
-    
-    //179
-    public function notice179(Request $request, $tin)
-    {
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-        ]);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-
-        //Add or create Task in Forward Dairy
-        $notice = '179';
-        $description = '<p>'.$stock->tin.'<p><p>'.$stock->name.'<p>';
-        $deadline = date('Y-m-d',strtotime($request->hearing_date));
-        ForwardDairy::addOrUpdateTaskFromNotice($notice, $description, $deadline);
-
-        //Convert Numeric Digit English To Bangla
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));
-              
-        $pdf = PDF::loadView('pages.Notice.one_seventy_nine', ['stock' => $stock, 'data' => $request]);
-        return $pdf->stream('document.pdf');                
-    }
+     
     
     //79 Notice Controllsr
     public function notice79(Request $request, $tin)
@@ -240,33 +250,7 @@ class NoticeController extends Controller
         return $pdf->stream('document.pdf');                
     }
     
-    //212 Notice Controllsr
-    public function notice212(Request $request, $tin)
-    {
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-        ]);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-        
-        //Add or create Task in Forward Dairy
-        $notice = '212';
-        $description = '<p>'.$stock->tin.'<p><p>'.$stock->name.'<p>';
-        $deadline = date('Y-m-d',strtotime($request->hearing_date));
-        ForwardDairy::addOrUpdateTaskFromNotice($notice, $description, $deadline);
-
-        //Convert Numeric Digit English To Bangla
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));
-        
-        $pdf = PDF::loadView('pages.Notice.two_twelve', ['stock' => $stock, 'data' => $request]);
-        return $pdf->stream('document.pdf');                
-    }
+ 
     //130 Notice Controllsr
     public function notice130(Request $request, $tin)
     {
@@ -287,26 +271,7 @@ class NoticeController extends Controller
         $pdf = PDF::loadView('pages.Notice.one_thirty', ['stock' => $stock, 'data' => $request]);
         return $pdf->stream('document.pdf');                
     }
-    //Refix Notice Controllsr
-    public function refix(Request $request, $tin)
-    {
-          //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-        ]);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-        //Convert Numeric Digit English To Bangla
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));
-        
-        $pdf = PDF::loadView('pages.Notice.refix', ['stock' => $stock, 'data' => $request]);
-        return $pdf->stream('document.pdf');                
-    }
+    
     //Letter Address
     public function letter($tin)
     {
