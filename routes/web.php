@@ -94,9 +94,6 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 	Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 	Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
 
-    //Notice
-    Route::post('notice/{tin}/{section}', [NoticeController::class, 'notice183'])->name('notice.183');
-
     //TDS routes
     Route::get('/tds', [TdsController::class, 'index'])->name('tds.index');    
     Route::get('/tds/create', [TdsController::class, 'create'])->name('tds.create');
@@ -130,6 +127,13 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/advance/search', [AdvanceController::class, 'search'])->name('advance.search');
 
 
+    //Notice Controller
+    Route::post('/circle/notice/{tin}/183(3)', [NoticeController::class, 'notice183'])->name('notice.183');
+    Route::post('/circle/notice/{tin}/179', [NoticeController::class, 'notice179'])->name('notice.179');
+    Route::post('/circle/notice/{tin}/212', [NoticeController::class, 'notice212'])->name('notice.212');
+    Route::post('/circle/notice/{tin}/280', [NoticeController::class, 'notice280'])->name('notice.280');
+    Route::post('/circle/notice/{tin}/refix', [NoticeController::class, 'refix'])->name('notice.refix');
+    Route::post('/circle/notice/{tin}/57', [NoticeController::class, 'notice57'])->name('notice.57');
 
 
 });
@@ -172,9 +176,9 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
 
     //Arrear Route
-    Route::get('commissioner/arrears/{circle}', [ArrearController::class, 'CommissionerArrear'])->name('arrears');
-
-    Route::post('commissioner/arrear/', [ArrearController::class, 'CommissionerArrearSort'])->name('arrearssort');
+    Route::get('/commissioner/arrear', [ArrearController::class, 'commissionerArrear'])->name('arrear');
+    Route::get('/commissioner/arrear/circle/{circle}', [ArrearController::class, 'index'])->name('arrear.circle');
+    Route::get('/commissioner/arrear/circle/{circle}/search', [ArrearController::class, 'search'])->name('arrear.circle.search');
 
     //TDS
     Route::get('/tds/upazila', [UpazilaController::class, 'index'])->name('tds.upazila.index');

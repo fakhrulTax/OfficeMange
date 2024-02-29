@@ -297,10 +297,8 @@
         $(function() {
 
             $("#circle_table").DataTable({
-                // ajax: "{{ route('commissioner.tds.collection.index') }}",
-                // processing: true,
-                // serverSide: false,
-                order: [[ 1, 'asc' ]],                
+                paging: false,
+                ordering: false,                
                 "responsive": false,
                 "lengthChange": true,
                 "autoWidth": true,
@@ -309,7 +307,6 @@
             }).buttons().container().appendTo('#circle_table_wrapper .col-md-6:eq(0)');
             
             $("#distict_table").DataTable({
-                order: [[ 1, 'asc' ]],
                 "responsive": false,
                 "lengthChange": true,
                 "autoWidth": true,

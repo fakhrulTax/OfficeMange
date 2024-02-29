@@ -154,7 +154,7 @@
     <script>
         $(function() {
             $("#example1").DataTable({
-
+                order:[[1, 'ASC']],
                 "responsive": true,
                 "lengthChange": true,
                 "autoWidth": false,

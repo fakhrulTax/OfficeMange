@@ -50,6 +50,8 @@
             <form action="{{ Route('circle.arrears.search') }}" method="GET" class="form">
             @elseif( Auth::user()->user_role == 'range' )
             <form action="{{ Route('range.arrear.circle.search', $circle) }}" method="GET" class="form">
+            @elseif( Auth::user()->user_role == 'commissioner' )
+            <form action="{{ Route('commissioner.arrear.circle.search', $circle) }}" method="GET" class="form">
             @endif
 
                 <div class="row">
