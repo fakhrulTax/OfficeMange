@@ -28,6 +28,32 @@ class Arrear extends Model
         return $this->belongsTo(Stock::class, 'tin', 'tin');
     }
 
+    //Get Sum of Arrear Taxpayer By Circle
+    public static function sumArrearTaxPayers( $circle )
+    {
+        $taxPayers = self::where('circle', $circle)->get()->groupBy('tin');
+
+        return $taxPayers? count($taxPayers): 0;
+    }
+
+    //Get Arrear By Type By Circles
+    public static function getSumArrearByType($type, array $circles = null)
+    {
+        if( $circles )
+        {
+            $arrearSum = self::where('arrear_type', $type)->whereIn('circle', $circles)->sum('arrear');
+            $fineSum = self::where('arrear_type', $type)->whereIn('circle', $circles)->sum('fine');
+        }else
+        {
+            $arrearSum = self::where('arrear_type', $type)->sum('arrear');
+            $fineSum = self::where('arrear_type', $type)->sum('fine');            
+        }       
+        
+        $sumArrear = $arrearSum + $fineSum;
+
+        return $sumArrear ? $sumArrear: 0;
+    }
+
     //Check Arrear available in database
     public static function checkArrear($tin, $assessment_year)
     {

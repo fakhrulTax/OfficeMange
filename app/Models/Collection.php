@@ -37,6 +37,20 @@ class Collection extends Model
         return $sum;
     }
 
+    //Arrear Collection By circle 
+    public static function arrearCollectionByCircles($circles = null)
+    {
+        if($circles)
+        {
+            $sum = self::where('type', 'arrear')->whereIn('circle', $circles)->sum('amount');
+
+        }else
+        {
+            $sum = self::where('type', 'arrear')->sum('amount');
+        }
+        return $sum ? $sum : 0;
+    }
+
     // Advance Collection By circle and Assessment Year
     public static function advanceTaxPaidTaxPayers($circles = null, $assessment_year)
     {

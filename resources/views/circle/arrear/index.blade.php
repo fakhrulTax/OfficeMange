@@ -28,8 +28,12 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
+                        @if( Auth::user()->user_role == 'circle' )
                         <button type="button" class="btn btn-primary float-right" data-toggle="modal"
                             data-target="#addModal"><i class="fas fa-plus"></i> Add Arrear</button>
+                        @else
+                            <h3 class="text-success">Circle-{{ $circle }}</h3>
+                        @endif
                     </ol>
                 </div>
             </div>
@@ -41,7 +45,13 @@
 
 
         <div class="card" style="padding: 10px">
+
+            @if( Auth::user()->user_role == 'circle' )
             <form action="{{ Route('circle.arrears.search') }}" method="GET" class="form">
+            @elseif( Auth::user()->user_role == 'range' )
+            <form action="{{ Route('range.arrear.circle.search', $circle) }}" method="GET" class="form">
+            @endif
+
                 <div class="row">
 
                     <div class="col-md-3">
@@ -87,10 +97,7 @@
         <div class="card">
 
             <!-- /.card-header -->
-            <div class="card-body">
-               
-
-
+            <div class="card-body">      
 
                 <table class="table table-bordered table-striped">
 
@@ -104,7 +111,9 @@
                             <th>Fine</th>
                             <th>Total</th>
                             <th>Collection</th>
-                            <th>Action</th>
+                            @if( Auth::user()->user_role == 'circle' )
+                                <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -156,10 +165,14 @@
                             <td class="text-right">{{ $Helper::moneyFormatBD($arrear->fine) }}</td>
                             <td class="text-right">{{ $Helper::moneyFormatBD($arrear->arrear + $arrear->fine) }}</td>
                             <td class="text-right">{{ $Helper::moneyFormatBD($aCollecntion) }}</td>
+
+                            @if( Auth::user()->user_role == 'circle' )
                             <td>
                                 <button class="btn btn-danger btn-sm " onclick="ArreardEdit({{ $arrear->id }})" data-toggle="modal" data-target="#editModal">Edit</button>
                                 <button class="btn btn-primary btn-sm"  onclick="arrearModal({{ $arrear->tin }})">Notice</button>
                             </td>
+                            @endif
+
                         </tr>  
 
                         @php

@@ -140,8 +140,11 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
 
     Route::get('/range-dashboard', [RangeController::class, 'index'])->name('dashboard');
 
-    Route::get('range/arrears/{circle}', [RangeController::class, 'RangeArrear'])->name('arrears');
-    Route::post('range/arrear', [RangeController::class, 'RangeArrearSort'])->name('arrearssort');
+    //Arrear
+    Route::get('/range/arrear', [ArrearController::class, 'rangeArrear'])->name('arrear');
+    Route::get('/range/arrear/circle/{circle}', [ArrearController::class, 'index'])->name('arrear.circle');
+    Route::get('/range/arrear/circle/{circle}/search', [ArrearController::class, 'search'])->name('arrear.circle.search');
+   
 
     //TDS Report
     Route::get('/range/tds/report', [TdsController::class, 'tdsRangeReport'])->name('tds.report');
