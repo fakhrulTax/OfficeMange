@@ -3,24 +3,37 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Stock;
-use App\Models\ForwardDairy;
 use PDF;
 use App\Helpers\MyHelper;
 use Illuminate\Support\Facades\Auth;
 
 class NoticeController extends Controller
 { 
-    public function index($tin)
-    {
+
+    //183
+    public function notice183(Request $request, $tin)
+    { 
+        //Validation
+        $request->validate([
+            'assessment_year' => 'required',
+            'issue_date' => 'required',
+            'hearing_date' => 'required',
+        ]);       
+
+        //Get Stock Information
         $stock = Stock::where('tin',$tin)->firstOrFail();
-    	return view('pages.Notice.index',['title' => 'Notice|Create a Notice', 'stock' => $stock]);
+
+        $pdf = PDF::loadView('circle.notice.one_eighty_three', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper()]);
+        return $pdf->stream('document.pdf');                
     }
-    //Envelop
-    public function envelop($tin)
-    {   $stock =  Stock::where('tin',$tin)->first();
-        $pdf = PDF::loadView('pages.Notice.envelop', ['stock' => $stock]);
-        return $pdf->stream('document.pdf'); 
-    }
+
+
+
+
+
+
+
+
     
     //214 Demand
     public function notice214(Request $request, $tin)
@@ -121,51 +134,7 @@ class NoticeController extends Controller
         return $pdf->stream('document.pdf');                
     }
      
-    //183
-    public function notice183(Request $request, $tin)
-    {
-
-
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-        ]);       
-
-
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-
-        $circle = config('settings.circle_name_'.Auth::user()->circle);
- 
-        // if( $stock->mobile )
-        // {
-        //     $text = 'আপনার নিকট ১৮৩(৩) ধারার একটি নোটিশ প্রেরণ করা হয়েছে। শুনানি '. $request->hearing_date . 'খ্রি.। '. $circle;
-        //    $response =  Myhelper::sendMessage($stock->mobile, $text, 'Notice 183(3)');
-        // }
-
-        
-        
-        //Add or create Task in Forward Dairy
-        $notice = '183(3)';
-        $description = '<p>'.$stock->tin.'<p><p>'.$stock->name.'<p>';
-        $deadline = date('Y-m-d',strtotime($request->hearing_date));
-
-        //Add Forward Dairy
-        //ForwardDairy::addOrUpdateTaskFromNotice($notice, $description, $deadline);
-
-      
-        //Convert Numeric Digit English To Bangla
-        $request->assessment_year = MyHelper::en2bn($request->assessment_year);
-        $request->issue_date =  MyHelper::en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date =  MyHelper::en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        // $stock->tin =  MyHelper::en2bn(tinSlice($stock->tin));   
-        $stock->tin =  MyHelper::en2bn($stock->tin);    
-
-        $pdf = PDF::loadView('circle.notice.one_eighty_three', ['stock' => $stock, 'data' => $request]);
-        return $pdf->stream('document.pdf');                
-    }
+    
     
     //179
     public function notice179(Request $request, $tin)

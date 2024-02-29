@@ -68,11 +68,15 @@
                     <h3 >Notice</h3>
                 </div>
                 <div class="card-body">
+
                     <div class="row">
-                        <div class="col-md-3">
-                            <button class="btn btn-success" data-toggle="modal" data-target="#oneEightyThree">183(3)</button>
+
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-success" class="mb-2" data-toggle="modal" data-target="#oneEightyThree">183(3)</button>
                         </div>
+
                     </div>
+
                 </div>
             </div>
         </div>
@@ -94,11 +98,7 @@
                 </button>
             </div>
 
-            <div class="modal-body">
-
-
-
-                
+            <div class="modal-body">                
 
                 {{-- Edit Form load here from ajax --}}
 
@@ -112,6 +112,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
 @include('circle.stock.modal.one_eighty_three');
 
 

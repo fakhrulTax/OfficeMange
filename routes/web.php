@@ -94,9 +94,6 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 	Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 	Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
 
-    //Notice
-    Route::post('notice/{tin}/{section}', [NoticeController::class, 'notice183'])->name('notice.183');
-
     //TDS routes
     Route::get('/tds', [TdsController::class, 'index'])->name('tds.index');    
     Route::get('/tds/create', [TdsController::class, 'create'])->name('tds.create');
@@ -130,6 +127,8 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/advance/search', [AdvanceController::class, 'search'])->name('advance.search');
 
 
+    //Notice Controller
+    Route::post('/circle/notice/{tin}/183(3)', [NoticeController::class, 'notice183'])->name('notice.183');
 
 
 });

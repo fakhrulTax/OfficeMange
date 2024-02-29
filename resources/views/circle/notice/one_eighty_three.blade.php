@@ -66,6 +66,7 @@
 	    	<p>........................................................................</p>
 	    	<p>........................................................................</p>
 	    	<p>........................................................................</p>
+			<p>........................................................................</p>
     	</div>
     </div>
     
@@ -109,16 +110,22 @@
     		</div>
     	</div>
     </div>
-        
-	<p style="position: absolute; top: 4.55in; left: 2in">{{ $data->assessment_year }}</p>
-	<p style="position: absolute; top:4.22in; left: 2in">{{ $stock->tin }}</p>
-	<p style="position: absolute; top:2.7in; left: 2in">{{ $stock->tin }}</p>
+
+	<p style="position: absolute; top:2.7in; left: 2in">{{ $Helper::en2bn($stock->tin) }}</p>
+	<p style="position: absolute; top:2.65in; right:1.1in">{{ $Helper::en2bn($data->issue_date) }} খ্রি.</p>
+
 	<div style="position: absolute; top:3.15in; left: 2in ">
 		<p>{{ $stock->bangla_name }}</p>
 		{!! htmlspecialchars_decode( $stock->address ) !!}
+		@if( $stock->mobile )
+			<p>মোবাইল নং: {{ $Helper::en2bn($stock->mobile) }}</p>
+		@endif
 	</div>
-	<p style="position: absolute; top:2.65in; right:1.3in">{{ $data->issue_date }}</p>
-	<p style="position: absolute; top: 5.55in; left: 1.55in">{{ $data->hearing_date }}</p>			
+	
+	<p style="position: absolute; top:4.55in; left: 2in">{{ $Helper::en2bn($stock->tin) }}</p>        
+	<p style="position: absolute; top: 4.85in; left: 2in">{{ $Helper::en2bn($Helper::assessment_year_format($data->assessment_year)) }}</p>	
+	
+	<p style="position: absolute; top: 5.85in; left: 1.50in">{{ $Helper::en2bn($data->hearing_date) }} খ্রি.</p>			
 	
 </body>
 </html>
