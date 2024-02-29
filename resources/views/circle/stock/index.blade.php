@@ -79,6 +79,7 @@
                                 <td>
                                     <button class="btn btn-primary btn-sm"
                                         onclick="edit({{ $stock->id }})">Edit</button>
+                                    <a href="{{ route('circle.stock.env',$stock->tin) }}" target="_blank" class="btn btn-sm btn-warning">ENV</a>
                                     <a href="{{ route('circle.stock.view', $stock->id) }}"
                                         class="btn btn-success btn-sm">View</a>
                                 </td>
