@@ -63,13 +63,13 @@
 
                     <div class="col-md-2">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="from_date" name="from_date" placeholder="From Date" value="{{ Request::get('from_date') }}">
+                            <input type="text" class="form-control" id="from_date" name="from_date" placeholder="From Date" value="{{ Request::get('from_date') }}" autocomplete="off">
                         </div>
                     </div>
 
                     <div class="col-md-2">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="to_date" name="to_date" placeholder="To Date" value="{{ Request::get('to_date') }}">
+                            <input type="text" class="form-control" id="to_date" name="to_date" placeholder="To Date" value="{{ Request::get('to_date') }}" autocomplete="off">
                         </div>
                     </div>
 
@@ -173,7 +173,7 @@
 
                         <tr class="bg-secondary">
                             <td>Sub Total</td>
-                            <td colspan="5" class="text-right">{{ $Helper::moneyFormatBD($arrearSubTotal) }}</td>
+                            <td colspan="6" class="text-right">{{ $Helper::moneyFormatBD($arrearSubTotal) }}</td>
                             <td class="text-right">{{ $Helper::moneyFormatBD($collectionSubTotal) }}</td>
                         </tr>
                     
@@ -181,7 +181,7 @@
 
                     <tr class="bg-danger">
                         <td>Total</td>
-                        <td colspan="5" class="text-right">{{ $Helper::moneyFormatBD($arrearPageTotal) }}</td>
+                        <td colspan="6" class="text-right">{{ $Helper::moneyFormatBD($arrearPageTotal) }}</td>
                         <td class="text-right">{{$Helper::moneyFormatBD($collectionPageTotal) }}</td>
                     </tr>
 
@@ -302,7 +302,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="addBtn" disabled>Save changes</button>
+                        <button type="button" class="btn btn-primary" id="addBtn" disabled>Save</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -330,7 +330,7 @@
 
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="updateBtn">Save changes</button>
+                        <button type="button" class="btn btn-primary" id="updateBtn">Save</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->

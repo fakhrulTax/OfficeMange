@@ -47,6 +47,8 @@ class ArrearController extends Controller
     //Arrear Search
     public function search(Request $request){
 
+        $circle = Auth::user()->circle;
+
         $arrears = Arrear::query();
 
         if(!empty($request->tin)){
@@ -57,46 +59,28 @@ class ArrearController extends Controller
             $arrears = $arrears->where('arrear_type', $request->arrear_type);
         }
 
-
-        if(!empty($request->arrear_type)){
-            $arrears = $arrears->where('arrear_type', $request->arrear_type);
-        }
-
         if (!empty($request->from_date) && !empty($request->to_date)) {
 
             $arrears = $arrears->whereBetween('demand_create_date', [date('Y-m-d', strtotime($request->from_date)), date('Y-m', strtotime($request->to_date))]);
         }
 
+        $arrears = $arrears->where('circle', $circle);
 
-        
-        if( isset($request->circle) && !empty($request->circle)){
-            
-            if( $request->circle == "range-1" || $request->circle == "range-2" || $request->circle == "range-3" || $request->circle == "range-4" )
-            {
-                //search for range
-                $circles = MyHelper::ranges($request->circle);
-                $arrears = $arrears->whereIN('circle', $circles);
-            }else
-            {
-                $arrears = $arrears->where('circle', $request->circle);
-            }           
-        }
+        $arrears = $arrears->get();
 
-        if( Auth::user()->user_role == 'circle' )
-        {
-            $arrears = $arrears->where('circle', Auth::user()->circle);
-        }
+        $arrears = $arrears->groupBy('tin');
 
-        if(!empty($request->paginate)){
-            $arrears = $arrears->paginate($request->paginate);
-        }else
-        {
-            $arrears = $arrears->paginate(200);
-        }
+        // Manually paginate the grouped data
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 100; // Adjust the number of items per page as needed
 
-       
+        $currentPageItems = $arrears->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $paginatedData = new LengthAwarePaginator($currentPageItems, count($arrears), $perPage);
+        $paginatedData->setPath(request()->url());
+
         return view('circle.arrear.index', [
-            'arrears' => $arrears, 
+            'arrears' => $paginatedData, 
+            'Helper' => new MyHelper(),
             'title' => 'Advance | Search'
             ]);
     }
