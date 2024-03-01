@@ -64,9 +64,6 @@
 <!-- toastr init js-->
 <script src="{{ asset('jquery-toast/toastr.init.js') }}"></script>
 
-
-
-
 <!-- Bootstrap 4 -->
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
