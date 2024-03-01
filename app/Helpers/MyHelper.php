@@ -54,6 +54,63 @@ class MyHelper
        return str_replace($en, $bn, $number);
     }
 
+    //Total in bangla
+    public static function  num2bangla($number)
+    {
+        if (($number < 0) || ($number > 999999999))
+        {
+            return "নাম্বারটি অতিরিক্ত বড়";
+        } elseif (!is_numeric($number))
+        {
+            return "বৈধ নাম্বার নয়";
+        }
+
+        $Kt = floor($number / 10000000); /* Koti */
+        $number -= $Kt * 10000000;
+        $Gn = floor($number / 100000);  /* lakh  */
+        $number -= $Gn * 100000;
+        $kn = floor($number / 1000);     /* Thousands (kilo) */
+        $number -= $kn * 1000;
+         $Hn = floor($number / 100);      /* Hundreds (hecto) */
+        $number -= $Hn * 100;
+        $Dn = floor($number / 10);       /* Tens (deca) */
+        $n = $number % 10;               /* Ones */
+        $res = "";
+        $hund = ["", "এক", "দুই", "তিন", "চার", "পাঁচ", "ছয়", "সাত", "আট", "নয়", "দশ", "এগার", "বার", "তের", "চৌদ্দ", "পনের", "ষোল", "সতের", "আঠার", "ঊনিশ", "বিশ", "একুশ", "বাইশ", "তেইশ", "চব্বিশ", "পঁচিশ", "ছাব্বিশ", "সাতাশ", "আঠাশ", "ঊনত্রিশ", "ত্রিশ", "একত্রিশ", "বত্রিশ", "তেত্রিশ", "চৌত্রিশ", "পয়ত্রিশ", "ছত্রিশ", "সতত্রিশ", "আটত্রিশ", "ঊনচল্লিশ", "চল্লিশ", "একচল্লিশ", "বেয়াল্লিশ", "তেতাল্লিশ", "চোয়াল্লিশ", "পঁয়তাল্লিশ", "ছেচল্লিশ", "সতচল্লিশ", "আটচল্লিশ", "ঊনপঞ্চাশ", "পঞ্চাশ", "একান্ন", "বাহান্ন", "তেপান্ন", "চোয়ান্ন", "পঁঞ্চান্ন", "ছাপ্পান্ন", "সাতান্ন", "আটান্ন", "ঊনষাট", "ষাট", "একষট্টি", "বাষট্টি", "তেষট্টি", "চৌষট্টি", "পঁয়ষট্টি", "ছেষট্টি", "সতাষট্টি", "আটষট্টি", "ঊনসত্তর", "সত্তর", "একাত্তর", "বাহাত্তর", "তেহাত্তর", "চোয়াত্তর", "পঁচাত্তর", "ছিয়াত্তর", "সাতাত্তর", "আটাত্তর", "ঊনআশি", "আশি", "একাশি", "বিরাশি", "তিরাশি", "চোরাশি", "পঁচাশি", "ছিয়াশি", "সাতাশি", "অটাশি", "ঊননব্বই", "নব্বই", "একানব্বই", "বিরানব্বই", "তিরানব্বই", "চুরানব্বই", "পঁচানব্বই", "ছিয়ানব্বই", "সাতানব্বই", "আটানব্বই", "নিরানব্বই", "একশ"];
+        if ($Kt)
+        {
+            $res .= $hund[$Kt] . " কোটি ";
+        }
+        if ($Gn)
+        {
+            $res .= $hund[$Gn] . " লক্ষ";
+        }
+        if ($kn)
+        {
+            $res .= (empty($res) ? "" : " ") .
+                $hund[$kn] . " হাজার";
+        }
+        if ($Hn)
+        {
+            $res .= (empty($res) ? "" : " ") .
+                $hund[$Hn] . " শত";
+        }
+        if ($Dn || $n)
+        {
+            if (!empty($res))
+            {
+                $res .= " ";
+            }
+                $res .= $hund[$Dn * 10 + $n];
+        }
+        if (empty($res))
+        {
+            $res = "শূন্য";
+        }
+        return $res;
+
+    }
+
     //Short Name
     public static function sortName($name){
         $sort_name = strtolower($name);
@@ -109,61 +166,7 @@ class MyHelper
         return $thecash; // writes the final format where $currency is the currency symbol.
     }
 
-
-
-    public static function calculateArrearSum($circle = null) {
-
-        $user = Auth::user();
     
-        if($user->user_role == 'range' && $circle == 'all') {
-            $circles = self::rangWiseCircle($user->range); 
-    
-            $totals = Arrear::whereIn('circle', $circles)
-                ->selectRaw('SUM(arrear) as total_arrear, SUM(fine) as total_fine')
-                ->first();
-    
-            $disputed = Arrear::whereIn('circle', $circles)
-                ->where('arrear_type', 'disputed')
-                ->selectRaw('SUM(arrear) as disputed_arrear, SUM(fine) as disputed_fine')
-                ->first();
-    
-            $undisputed_arrear = $totals->total_arrear - ($disputed->disputed_arrear ?? 0);
-            $undisputed_fine = $totals->total_fine - ($disputed->disputed_fine ?? 0);
-    
-            return $result = [
-                'GrandArrear' => number_format(($totals->total_arrear ?? 0) + ($totals->total_fine ?? 0)),
-                'TotalDisputedArrear' => number_format(($disputed->disputed_arrear ?? 0) + ($disputed->disputed_fine ?? 0)),
-                'TotalUndisputedArrear' => number_format(($undisputed_arrear ?? 0) + ($undisputed_fine ?? 0)),
-            ];
-    
-        }
-    
-        $query = Arrear::query();
-    
-        if ($circle !== 'all') {
-            $query->where('circle', $circle);
-        }
-    
-        $totals = $query->selectRaw('SUM(arrear) as total_arrear, SUM(fine) as total_fine')
-                       ->first();
-    
-        $disputed = $query->where('arrear_type', 'disputed')
-                          ->selectRaw('SUM(arrear) as disputed_arrear, SUM(fine) as disputed_fine')
-                          ->first();
-    
-        $undisputed_arrear = $totals->total_arrear - ($disputed->disputed_arrear ?? 0);
-        $undisputed_fine = $totals->total_fine - ($disputed->disputed_fine ?? 0);
-    
-        return $result = [
-            'GrandArrear' => number_format(($totals->total_arrear ?? 0) + ($totals->total_fine ?? 0)),
-            'TotalDisputedArrear' => number_format(($disputed->disputed_arrear ?? 0) + ($disputed->disputed_fine ?? 0)),
-            'TotalUndisputedArrear' => number_format(($undisputed_arrear ?? 0) + ($undisputed_fine ?? 0)),
-        ];
-    }
-
-    
-
-
     public static function rangWiseCircle($range):array
     {
         $ranges = [
