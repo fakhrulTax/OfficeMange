@@ -12,6 +12,26 @@ use Toastr;
 class NoticeController extends Controller
 { 
 
+    //Order Sheet
+    public function orderSheet(Request $request, $tin)
+    { 
+        dd('working');
+        //Validation
+        $request->validate([
+            'type' => 'required',
+            'assessment_year' => 'required',
+            'issue_date' => 'required',
+            'hearing_date' => 'required',
+        ]);       
+
+        //Get Stock Information
+        $stock = Stock::where('tin',$tin)->firstOrFail();
+
+        $pdf = PDF::loadView('circle.notice.order_sheet', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper()]);
+        return $pdf->stream('document.pdf');                
+    }
+    
+
     //183
     public function notice183(Request $request, $tin)
     { 
