@@ -58,7 +58,7 @@ class CollectionController extends Controller
 
     public function create()
     {
-        return view('circle.Collection.create',['title' => 'Collection|Add a Collection']);
+        return view('circle.collection.create',['title' => 'Collection|Add a Collection']);
     }
 
     //Store Collection
