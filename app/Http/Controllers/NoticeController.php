@@ -3,12 +3,34 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Stock;
+use App\Models\Arrear;
 use PDF;
 use App\Helpers\MyHelper;
 use Illuminate\Support\Facades\Auth;
+use Toastr;
 
 class NoticeController extends Controller
 { 
+
+    //Order Sheet
+    public function orderSheet(Request $request, $tin)
+    { 
+        dd('working');
+        //Validation
+        $request->validate([
+            'type' => 'required',
+            'assessment_year' => 'required',
+            'issue_date' => 'required',
+            'hearing_date' => 'required',
+        ]);       
+
+        //Get Stock Information
+        $stock = Stock::where('tin',$tin)->firstOrFail();
+
+        $pdf = PDF::loadView('circle.notice.order_sheet', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper()]);
+        return $pdf->stream('document.pdf');                
+    }
+    
 
     //183
     public function notice183(Request $request, $tin)
@@ -119,81 +141,66 @@ class NoticeController extends Controller
         return $pdf->stream('document.pdf');                
     }
 
+      //214 Demand
+      public function demand(Request $request, $tin)
+      {
 
-
-
-
-
-
-
-
-    
-    //214 Demand
-    public function notice214(Request $request, $tin)
-    {
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-            'tax' => 'required|numeric',
-        ]);
+          //Validation
+          $request->validate([
+              'assessment_year' => 'required',
+              'issue_date' => 'required',
+              'hearing_date' => 'required',
+              'tax' => 'required|numeric',
+              'surcharge' => 'required|numeric',
+              'interest' => 'required|numeric',
+              'fine' => 'required|numeric',
+          ]);
+          
+          //Total
+          $total = $request->tax + $request->surcharge + $request->interest + $request->fine;
         
-        //Total
-        $total = $request->tax + $request->surcharge + $request->interest + $request->fine;
-        $totalInWord = num2bangla($total);
-        //Number With Comma
-        $total = moneyFormatBD($total);
-        $request->tax = moneyFormatBD($request->tax);
-        $request->fine = moneyFormatBD($request->fine);
-        $request->interest = moneyFormatBD($request->interest);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-        //Add or create Task in Forward Dairy
-        $notice = 'Demand';
-        $description = '<p>'.$stock->tin.'<p><p>'.$stock->name.'<p>';
-        $deadline = date('Y-m-d',strtotime($request->hearing_date));
-        ForwardDairy::addOrUpdateTaskFromNotice($notice, $description, $deadline);
+          //Add Arrear if new
+          $arrear = Arrear::where('tin', $tin)->where('assessment_year', $request->assessment_year)
+                            ->where('circle', Auth::user()->circle)->first();
+          if( $arrear )
+          {
+            Toastr::error('This Tax Payer has Arrear For Same Ass. Year. Update Arrear Manualy..', 'danger');  
+          }else
+          {
+            //Create Arrer
 
-        //Convert Numeric Digit English To Bangla 
-        $total = en2bn($total);
-        $request->tax = en2bn($request->tax);
-        $request->surcharge = en2bn($request->surcharge);
-        $request->interest = en2bn($request->interest);
-        $request->fine = en2bn($request->fine);
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));       
-        
-         $pdf = PDF::loadView('pages.Notice.two_fourteen', ['stock' => $stock, 'data' => $request, 'total' => $total, 'totalInWord' => $totalInWord
-     ]);
-         return $pdf->stream('document.pdf');                
-    }
-   
-     
-     
-    
-    //79 Notice Controllsr
-    public function notice79(Request $request, $tin)
-    {
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-        ]);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-        //Convert Numeric Digit English To Bangla
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));
-        
-        $pdf = PDF::loadView('pages.Notice.seventy_nine', ['stock' => $stock, 'data' => $request]);
-        return $pdf->stream('document.pdf');                
-    }
+                Arrear::create([
+                    'arrear_type' => 'undisputed',
+                    'tin' => $tin,
+                    'demand_create_date' => date('Y-m-d', strtotime($request->issue_date)),
+                    'assessment_year' => $request->assessment_year,
+                    'arrear' => $total,
+                    'circle' => Auth::user()->circle,
+                    'fine' => 0,
+                ]);
+                Toastr::success('Arrear Added Successfuly.', 'success');  
+          }          
+
+          //Get Stock Information
+          $stock = Stock::where('tin',$tin)->firstOrFail(); 
+          
+           $pdf = PDF::loadView('circle.notice.demand', [
+                    'stock' => $stock, 
+                    'data' => $request, 
+                    'Helper' => new MyHelper(),
+                    'total' => $total
+            ]);
+           return $pdf->stream('document.pdf');                
+      }
+
+
+
+
+
+
+
+
+
     //93-130 OrderSheet
     public function ordersheet93(Request $request, $tin)
     {
@@ -206,72 +213,12 @@ class NoticeController extends Controller
         //Get Stock Information
         $stock = Stock::where('tin',$tin)->firstOrFail();
             
-        $pdf = PDF::loadView('pages.Notice.defaultOrderSheet', ['stock' => $stock, 'data' => $request]);
+        $pdf = PDF::loadView('circle.notice.fifty_seven', ['stock' => $stock, 'data' => $request]);
         return $pdf->stream('document.pdf');   
     }
-    //83 Notice Controllsr
-    public function notice83(Request $request, $tin)
-    {
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-        ]);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-        //Convert Numeric Digit English To Bangla
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));
-        
-        $pdf = PDF::loadView('pages.Notice.eighty_three', ['stock' => $stock, 'data' => $request]);
-        return $pdf->stream('document.pdf');                
-    }
-    //93 Notice Controllsr
-    public function notice93(Request $request, $tin)
-    {
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-        ]);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-        //Convert Numeric Digit English To Bangla
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));
-        
-        $pdf = PDF::loadView('pages.Notice.ninety_three', ['stock' => $stock, 'data' => $request]);
-        return $pdf->stream('document.pdf');                
-    }
+
     
- 
-    //130 Notice Controllsr
-    public function notice130(Request $request, $tin)
-    {
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-        ]);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-        //Convert Numeric Digit English To Bangla
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));
-        
-        $pdf = PDF::loadView('pages.Notice.one_thirty', ['stock' => $stock, 'data' => $request]);
-        return $pdf->stream('document.pdf');                
-    }
-    
+     
     //Letter Address
     public function letter($tin)
     {
@@ -283,79 +230,5 @@ class NoticeController extends Controller
         $pdf = PDF::loadView('pages.Notice.letter', ['stock' => $stock]);
         return $pdf->stream('document.pdf');                
     }
-    //Demand
-    public function demand(Request $request, $tin)
-    {
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-            'tax' => 'required',
-            'class' => 'required',
-        ]);
-        //Total
-        $total = $request->tax + $request->fine + $request->interest+ $request->others;
-        $totalInWord = num2bangla($total);
-        //Number With Comma
-        $total = moneyFormatBD($total);
-        $request->tax = moneyFormatBD($request->tax);
-        $request->fine = moneyFormatBD($request->fine);
-        $request->interest = moneyFormatBD($request->interest);
-        $request->others = moneyFormatBD($request->others);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-        //Convert Numeric Digit English To Bangla 
-        $total = en2bn($total);
-        $request->tax = en2bn($request->tax);
-        $request->fine = en2bn($request->fine);
-        $request->interest = en2bn($request->interest);
-        $request->others = en2bn($request->others);
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));        
-        
-         $pdf = PDF::loadView('pages.Notice.demand', ['stock' => $stock, 'data' => $request, 'total' => $total, 'totalInWord' => $totalInWord]);
-         return $pdf->stream('document.pdf');                
-    }
-    //Demand
-    public function newDemand(Request $request, $tin)
-    {
-        //Validation
-        $request->validate([
-            'assessment_year' => 'required',
-            'issue_date' => 'required',
-            'hearing_date' => 'required',
-            'tax' => 'required|numeric',
-            'class' => 'required',
-        ]);
-        //Total
-        $total = $request->tax + $request->surcharge + $request->interest + $request->lateInterest + $request->fine + $request->others;
-        $totalInWord = num2bangla($total);
-        //Number With Comma
-        $total = moneyFormatBD($total);
-        $request->tax = moneyFormatBD($request->tax);
-        $request->fine = moneyFormatBD($request->fine);
-        $request->interest = moneyFormatBD($request->interest);
-        $request->others = moneyFormatBD($request->others);
-        //Get Stock Information
-        $stock = Stock::where('tin',$tin)->firstOrFail();
-        //Convert Numeric Digit English To Bangla 
-        $total = en2bn($total);
-        $request->tax = en2bn($request->tax);
-        $request->surcharge = en2bn($request->surcharge);
-        $request->interest = en2bn($request->interest);
-        $request->lateInterest = en2bn($request->lateInterest);
-        $request->fine = en2bn($request->fine);
-        $request->others = en2bn($request->others);
-        $request->assessment_year = en2bn($request->assessment_year);
-        $request->issue_date = en2bn(date('d-m-Y',strtotime($request->issue_date)));
-        $request->hearing_date = en2bn(date('d-m-Y',strtotime($request->hearing_date)));
-        $stock->tin = en2bn(tinSlice($stock->tin));       
-        
-         $pdf = PDF::loadView('pages.Notice.newdemand', ['stock' => $stock, 'data' => $request, 'total' => $total, 'totalInWord' => $totalInWord
-     ]);
-         return $pdf->stream('document.pdf');                
-    }
+ 
 }

@@ -134,6 +134,8 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::post('/circle/notice/{tin}/280', [NoticeController::class, 'notice280'])->name('notice.280');
     Route::post('/circle/notice/{tin}/refix', [NoticeController::class, 'refix'])->name('notice.refix');
     Route::post('/circle/notice/{tin}/57', [NoticeController::class, 'notice57'])->name('notice.57');
+    Route::post('/circle/notice/{tin}/demand', [NoticeController::class, 'demand'])->name('notice.demand');
+    Route::post('/circle/notice/{tin}/orderSheet', [NoticeController::class, 'orderSheet'])->name('notice.order.sheet');
 
 
 });

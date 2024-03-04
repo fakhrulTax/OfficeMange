@@ -95,6 +95,14 @@
                             <button class="btn btn-info" class="mb-2" data-toggle="modal" data-target="#it57">IT-57</button>
                         </div>
 
+                        <div class="col-md-2 mb-3">
+                            <button class="btn btn-warning" class="mb-2" data-toggle="modal" data-target="#demand">Demand</button>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <button class="btn btn-info" class="mb-2" data-toggle="modal" data-target="#order">Order Sheet</button>
+                        </div>
+
                     </div>
 
                 </div>
@@ -133,12 +141,14 @@
     <!-- /.modal-dialog -->
 </div>
 
-@include('circle.stock.modal.one_eighty_three');
-@include('circle.stock.modal.one_seventy_nine');
-@include('circle.stock.modal.two_twelve');
-@include('circle.stock.modal.two_eighty');
-@include('circle.stock.modal.refix');
-@include('circle.stock.modal.it57');
+@include('circle.stock.modal.one_eighty_three')
+@include('circle.stock.modal.one_seventy_nine')
+@include('circle.stock.modal.two_twelve')
+@include('circle.stock.modal.two_eighty')
+@include('circle.stock.modal.refix')
+@include('circle.stock.modal.it57')
+@include('circle.stock.modal.demand')
+@include('circle.stock.modal.order_sheet')
 
 
 @endsection
