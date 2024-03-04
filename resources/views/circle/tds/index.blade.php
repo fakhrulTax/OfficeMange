@@ -209,12 +209,12 @@
         <!-- /.card -->
 
    <div class="card-footer clearfix">
-            <ul class="pagination pagination-sm m-0 float-right">
+        <ul class="pagination pagination-sm m-0 float-right">
 
-                {{ $tdses->links("pagination::bootstrap-4") }}
+            {{ $tdses->links("pagination::bootstrap-4") }}
 
-            </ul>
-        </div>
+        </ul>
+    </div>
 
 
 

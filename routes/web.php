@@ -96,9 +96,11 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
     //TDS routes
     Route::get('/tds', [TdsController::class, 'index'])->name('tds.index');    
-    Route::get('/tds/create', [TdsController::class, 'create'])->name('tds.create');
-     
+    Route::get('/tds/create', [TdsController::class, 'create'])->name('tds.create');     
     Route::post('/tds', [TdsController::class, 'store'])->name('tds.store');
+    Route::get('/tds/create/zilla/{zilla_id}/upazila/{upazila_id}', [TdsController::class, 'createByUpazila'])->name('tds.create.upazila');  
+
+    
     Route::get('/tds/edit/{id}', [TdsController::class, 'edit'])->name('tds.edit');
     Route::post('/tds/edit/{id}', [TdsController::class, 'update'])->name('tds.update');
     Route::get('/circle/tds/upazila/organization', [UpazilaController::class, 'upazilaOrganization'])->name('tds.upazila.organization'); 
