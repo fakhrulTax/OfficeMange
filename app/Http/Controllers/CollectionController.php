@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Collection;
 use App\Models\Arrear;
+use App\Models\Stock;
 use Toastr;
 
 
@@ -58,7 +59,7 @@ class CollectionController extends Controller
 
     public function create()
     {
-        return view('circle.Collection.create',['title' => 'Collection|Add a Collection']);
+        return view('circle.collection.create',['title' => 'Collection|Add a Collection']);
     }
 
     //Store Collection
@@ -83,7 +84,14 @@ class CollectionController extends Controller
                 return back()->withInput();
             }
         }
-        
+
+        //Check tin is available in stock
+        $stock = Stock::where('tin', $request->tin)->first();
+        if( !$stock )
+        {
+            Toastr::error('You have to add TIN from Stock.', 'danger');
+            return back()->withInput();
+        }
 
         //  //Check The Advance is availavle in Advance Table
         // if( $request->type == 'advance' )

@@ -28,6 +28,12 @@
       @if(isset($updateType)  && $updateType == 'edit')
       <form action="{{ route('circle.tds.update', $editTds->id) }}" method="POST" >
         @csrf
+       
+        @if($clickedRoute)
+            <input type="hidden" name="clicked_route" value=" {{ $clickedRoute ? $clickedRoute : '' }} ">
+            <input type="hidden" name="zilla_id" value="{{ $editTds->upazila->zilla->id }}" class="form-control">
+            <input type="hidden" name = "upazila_id" value="{{ $editTds->upazila->id }}" class="form-control">
+        @endif
         <div class="row">
 
             <div class="col-md-4">
@@ -60,7 +66,7 @@
                 <div class="form-group">
                     <label for="collection_month">Collection Month</label>
                     <input type="text" name="collection_month" id="collection_month"
-                        placeholder="01-2024" value="{{ date('m-Y', strtotime($editTds->collection_month)) }}" class="form-control" autofocus>
+                        placeholder="01-2024" value="{{ date('m-Y', strtotime($editTds->collection_month)) }}" class="form-control">
                 </div>
             </div>       
 
@@ -103,6 +109,8 @@
       @else
         <form action="{{ route('circle.tds.store') }}" method="POST">
             @csrf
+            
+
             <div class="row">
 
                 <div class="col-md-4">
@@ -130,7 +138,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="upazila">Upazilla</label>
-                        <select class="form-control" name="upazila_id" id="upazila" required>
+                        <select class="form-control" name="upazila_id" id="upazila" required autofocus>
                             <option value="">Select Upazilla</option>
 
                             @foreach( $selectedUpazilas as $upazila )
@@ -174,7 +182,7 @@
                     <div class="form-group">
                         <label for="collection_month">Collection Month</label>
                         <input type="text" id="collection_month" name="collection_month" 
-                            placeholder="01-2024" class="form-control" value="{{ old('collection_month') }}" required>
+                            placeholder="01-2024" class="form-control" value="{{ old('collection_month') }}" required autocomplete="off">
 
                             @error('collection_month')
                             <span class="text-danger" role="alert">
@@ -188,8 +196,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="tds">TDS</label>
-                        <input type="number" id="tds" name="tds" placeholder="TDS" class="form-control"
-                            autofocus >
+                        <input type="number" id="tds" name="tds" placeholder="TDS" class="form-control">
                             @error('tds')
                             <span class="text-danger" role="alert">
                                 <strong> {{ $message }}</strong>
@@ -203,8 +210,7 @@
 
                     <div class="form-group">
                         <label for="bill">Bill</label>
-                        <input type="number" id="bill" name="bill" placeholder="bill" class="form-control" value="{{ old('bill') }}"
-                            autofocus>
+                        <input type="number" id="bill" name="bill" placeholder="bill" class="form-control" value="{{ old('bill') }}">
 
                             @error('bill')
                             <span class="text-danger" role="alert">

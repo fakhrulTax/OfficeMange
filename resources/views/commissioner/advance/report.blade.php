@@ -95,7 +95,13 @@
                                         @endphp
                                         @foreach( $circles as $circle )
                                             <tr>
-                                                <td>Circle-{{ $circle }}</td>
+
+                                                @if( Auth::user()->user_role == 'commissioner' )
+                                                    <td> <a href="{{ route('commissioner.advance.circle', $circle) }}">Circle-{{ $circle }}</a> </td>
+                                                @elseif( Auth::user()->user_role == 'range' )
+                                                    <td> <a href="{{ route('range.advance.circle', $circle) }}">Circle-{{ $circle }}</a> </td>
+                                                @endif
+
                                                 <td>{{  App\Helpers\MyHelper::moneyFormatBD(count(App\Models\Advance::getAdvanceTaxPayersByCircle([$circle], $assessment_year))) }}</td>
                                                 <td>{{  App\Helpers\MyHelper::moneyFormatBD(count(App\Models\Collection::advanceTaxPaidTaxPayers([$circle], $assessment_year))) }}</td>
                                                 <td class="text-right">{{  App\Helpers\MyHelper::moneyFormatBD(App\Models\Collection::advanceCollectionByCircles([$circle], $assessment_year)) }}</td>
