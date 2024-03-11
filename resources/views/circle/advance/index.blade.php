@@ -13,7 +13,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Advance</h1>
+                    <h1 class="m-0">Advance <span class="text-success">({{ $circle }})</span></h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -33,10 +33,13 @@
         <div class="card">
             <div class="card-body">
                 @if( Auth::user()->user_role == 'circle' )
-                <form action="{{ route('circle.advance.search') }}" method="GET">
+                    <form action="{{ route('circle.advance.search') }}" method="GET">
                 @elseif( Auth::user()->user_role == 'commissioner' )
-                <form action="{{ route('commissioner.advance.search') }}" method="GET">
+                    <form action="{{ route('commissioner.advance.circle.search', $circle) }}" method="GET">                        
+                @elseif( Auth::user()->user_role == 'range' )
+                    <form action="{{ route('range.advance.circle.search', $circle) }}" method="GET">
                 @endif
+
                     @csrf
                     <div class="row">
 
@@ -55,24 +58,6 @@
                             </div>
                         </div>
                         
-                        @if( Auth::user()->user_role != 'circle' )
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <select name="circle" id="circle" class="form-control">
-                                    <option value="">Select Circle</option>
-
-                                    <option value="range-1" {{ (Request::get('circle') == 'range-1') ? 'selected' : '' }}>Range-1</option>
-                                    <option value="range-2" {{ (Request::get('circle') == 'range-2') ? 'selected' : '' }}>Range-2</option>
-                                    <option value="range-3" {{ (Request::get('circle') == 'range-3') ? 'selected' : '' }}>Range-3</option>
-                                    <option value="range-4" {{ (Request::get('circle') == 'range-4') ? 'selected' : '' }}>Range-4</option>                                    
-
-                                    @for($i = 1; $i<=22; $i++)
-                                        <option value="{{ $i }}"  {{ (Request::get('circle') == $i) ? 'selected' : '' }}>Circle-{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                        </div>
-                        @endif
 
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-primary">Search</button>

@@ -256,7 +256,7 @@
                     <li class="nav-item">
                         <a href="{{ route('commissioner.advance.index') }}"
 
-                            class="nav-link {{ Route::currentRouteName() == 'commissioner.advance.index' || Route::currentRouteName() == 'circle.advance.search' || Route::currentRouteName() == 'commissioner.advance.search' ? 'active' : '' }}">
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.advance.index', 'commissioner.advance.circle', 'commissioner.advance.circle.search']) ? 'active' : '' }}">
 
                             <i class="nav-icon fab fa-speakap text-light"></i>
                             <p>
@@ -399,7 +399,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('range.advance.report') }}" class="nav-link {{ Route::currentRouteName() == 'range.advance.report' ? 'active' : '' }}"co>
+                        <a href="{{ route('range.advance.report') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['range.advance.report', 'range.advance.circle', 'range.advance.circle.search']) ? 'active' : '' }}"co>
                             <i class="nav-icon fas fa-list text-light"></i>
                             <p>
                                 Advance

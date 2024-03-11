@@ -161,7 +161,9 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
     Route::get('/range/tds/report/circles/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgDistUpazila'])->name('tds.report.upazila');
 
     //Advance
-    Route::get('/range/advance', [AdvanceController::class, 'advanceReport'])->name('advance.report');
+    Route::get('/range/advance', [AdvanceController::class, 'advanceReport'])->name('advance.report');    
+    Route::get('/range/advance/circle/{circle}', [AdvanceController::class, 'advanceIndex'])->name('advance.circle');
+    Route::get('/range/advance/circle/{circle}/search', [AdvanceController::class, 'search'])->name('advance.circle.search');
 });
 
 
@@ -215,6 +217,8 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     //Advance Route
     Route::get('/commissioner/advance', [AdvanceController::class, 'advanceReport'])->name('advance.index');
+    Route::get('/commissioner/advance/circle/{circle}', [AdvanceController::class, 'advanceIndex'])->name('advance.circle');
+    Route::get('/commissioner/advance/circle/{circle}/search', [AdvanceController::class, 'search'])->name('advance.circle.search');
     
 
     //Task routes
