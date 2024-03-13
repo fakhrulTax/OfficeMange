@@ -24,6 +24,24 @@ use App\Http\Controllers\AdvanceController;
 
 
 Route::get('/', function () {
+
+    if (auth()->check()) {
+
+        if(Auth::user()->user_role == 'circle')
+        {
+            return redirect()->route('circle.dashboard');
+        }
+        elseif(Auth::user()->user_role == 'commissioner')
+        {
+            return redirect()->route('commissioner.dashboard');
+        }
+        elseif(Auth::user()->user_role == 'range')
+        {
+            return redirect()->route('range.dashboard');
+        }
+
+    }
+
     return view('auth.login');
 });
 
