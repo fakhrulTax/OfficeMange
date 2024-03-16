@@ -15,8 +15,7 @@ class NoticeController extends Controller
     //Order Sheet
     public function orderSheet(Request $request, $tin)
     { 
-        dd('working');
-        //Validation
+       
         $request->validate([
             'type' => 'required',
             'assessment_year' => 'required',
