@@ -48,6 +48,7 @@
         @endphp
 
         <nav class="mt-2">
+
             {{-- circle sidebar start from here  --}}
 
 
@@ -59,11 +60,21 @@
 
 
                 @if ($user->user_role == 'circle')
+
                     <li class="nav-item">
                         <a href="{{ route('circle.dashboard') }}" class="nav-link {{ Route::currentRouteName() == 'circle.dashboard' ? 'active' : ''}} ">
                             <i class="nav-icon fas fa-home text-light"></i>
                             <p>
                                 Home
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('circle.task.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['circle.task.index', 'circle.task.store', 'circle.task.destroy', 'circle.task.updateStatus']) ? 'active' : ''}} ">
+                            <i class="nav-icon fab fa-dailymotion text-danger"></i>
+                            <p>
+                                Forward Dairy
                             </p>
                         </a>
                     </li>

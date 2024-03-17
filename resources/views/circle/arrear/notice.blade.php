@@ -43,13 +43,16 @@
 
 	<div style="margin-top: 0.2in">
 		<p>{{ $stock->bangla_name }}</p>
-		{!! $stock->address !!}		
+		{!! $stock->address !!}	
+		@if($stock->mobile)
+			মোবাইল নং: {{ App\Helpers\MyHelper::en2bn($stock->mobile) }}
+		@endif
 		<p>টিআইএন: {{$Helper::en2bn($stock->tin) }}</p>
 	</div>
 
 	<p style="text-indent: 0.5in; margin-top: 0.2in">বিষয়: বকেয়া আয়কর পরিশোধ প্রসঙ্গে ।</p>	
 	<p style="text-indent: 0.5in;margin-top: 0.2in">উপর্যুক্ত বিষয়ের প্রতি আপনার দৃষ্টি আকর্ষণ করছি ।</p>
-	<p style="text-indent: 0.5in;margin-top: 0.2in; text-align: justify;">নিম্নে বর্ণিত ছক মোতাবেক আপনার নিকট হতে আয়কর দাবি অদ্যাবদি পরিশোধ করা হয়নি মর্মে নথি দৃষ্টে প্রতীয়মান হয়:-</p>
+	<p style="text-indent: 0.5in;margin-top: 0.2in; text-align: justify;">নিম্নে বর্ণিত ছক মোতাবেক আপনার নিকট হতে আয়কর দাবি অদ্যাবধি পরিশোধ করা হয়নি মর্মে নথি দৃষ্টে প্রতীয়মান হয়:-</p>
 	
 	<div style="margin-top: 0.2in">
 		<table style="margin: 0 auto">
@@ -59,6 +62,8 @@
 				<td style="width: 1.5in; text-align: center;">জরিমানা</td>
 				<td style="width: 1.8in; text-align: center;">মোট বকেয়া দাবি</td>
 			</tr>
+
+			@php  $totalArrear = 0; @endphp
 			
 			@foreach( $arrears as $arrear )
 
@@ -69,10 +74,12 @@
 			$c = $collection->getArrearByTINAssessmentYear($stock->tin, $arrear->assessment_year);
 			$af = $a + $f;
 
-				if( ($af <= $c) )
-				{
-					continue;
-				}
+			if( ($af <= $c) )
+			{
+				continue;
+			}
+
+			$totalArrear += ($af - $c);
 				
 			@endphp
 			
@@ -87,6 +94,11 @@
 				</td>
 			</tr>
 			@endforeach
+
+			<tr>
+				<td colspan="3">মোট</td>
+				<td>{{ $Helper::en2bn($Helper::moneyFormatBD($totalArrear)) }}</td>
+			</tr>
 		</table>
 	</div>
 

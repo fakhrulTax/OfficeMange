@@ -32,6 +32,7 @@ class Task extends Model
         // Check if a task with the same description and deadline exists
          $existingTask = self::where('description', $description)->where('deadline',$deadline)
          ->first();
+         
          if ($existingTask) {
              // Update the existing task's type by appending the new type
              if( !str_contains( $existingTask->type, $notice) )
