@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Arrear;
 use App\Models\Stock;
 use App\Models\Collection;
+use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\MyHelper;
 use Illuminate\Support\Facades\DB;
@@ -32,6 +33,12 @@ class ArrearController extends Controller
          $stock = Stock::where('tin',$request->tin)->firstOrFail();
 
          $circle = Auth::user()->circle;
+
+        //Create or Update Task
+        $notice = 'Arrear';
+        $description = '<p>'.$stock->tin.'</p><p>'.$stock->name.'</p>';
+        $deadline = date('Y-m-d',strtotime($request->hearing_date));
+        Task::addOrUpdateTaskFromNotice($notice, $description, $deadline);
  
          $pdf = PDF::loadView('circle.arrear.notice', [
              'stock' => $stock, 
