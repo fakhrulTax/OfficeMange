@@ -37,7 +37,7 @@ class CollectionController extends Controller
         $collections = $collections->where('circle', Auth::user()->circle);
         $collections = $collections->paginate(100);
 
-        return view('circle.Collection.index',[
+        return view('circle.collection.index',[
             'title' => 'Collection|Search', 
             'collections' => $collections,
             'search' => $request
