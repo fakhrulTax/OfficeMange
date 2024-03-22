@@ -199,8 +199,8 @@ class TdsController extends Controller
         ]);
 
         Toastr::success('TDS Added Successfully', 'Success');
-
-        return redirect()->route('circle.tds.create.upazila', [$request->zilla_id, $request->upazila_id]);
+        return redirect()->route('circle.tds.index');
+        //return redirect()->route('circle.tds.create.upazila', [$request->zilla_id, $request->upazila_id]);
     }
 
     //Create By Upazila
