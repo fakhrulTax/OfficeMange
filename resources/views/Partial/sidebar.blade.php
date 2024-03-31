@@ -296,6 +296,16 @@
                             </p>
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('commissioner.stock') }}"
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.stock', 'commissioner.stock.search']) ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-list  text-light"></i>
+                            <p>
+                                Stock
+                            </p>
+                        </a>
+                    </li>
                     
 
                     <li class="nav-item">

@@ -198,6 +198,12 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     Route::get('/commissioner-dashboard', [CommissionerController::class, 'index'])->name('dashboard');
 
+    //Stock Route
+    Route::get('/commissioner/stock', [StockController::class, 'commissionerIndex'])->name('stock');
+    Route::get('/commissioner/stock/search', [StockController::class, 'search'])->name('stock.search');
+    Route::post('/commissioner/stock/upload', [StockController::class, 'upload'])->name('stock.upload');
+    Route::delete('commissioner/stock/{id}', [StockController::class, 'destroy'])->name('stock.delete');
+
 
     //Arrear Route
     Route::get('/commissioner/arrear', [ArrearController::class, 'commissionerArrear'])->name('arrear');

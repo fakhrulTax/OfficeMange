@@ -171,9 +171,11 @@ class TdsController extends Controller
             'tds' => 'required',
         ]);
 
-       //check exists for same month and upazila and organization
+        // Date Format
+       $formattedDate = date('Y-m', strtotime('01-' . $request->collection_month));
 
-       $check = Tds_collection::where('collection_month', $request->collection_month)
+       //check exists for same month and upazila and organization
+       $check = Tds_collection::where('collection_month', $formattedDate)
        ->where('upazila_id', $request->upazila_id)
        ->where('organization_id', $request->organization_id)
        ->first();
@@ -181,15 +183,11 @@ class TdsController extends Controller
        if($check){
         Toastr::error('TDS Already Added', 'Error');
         return redirect()->back();
-       }
-
-       // Date Format
-        $carbonDate = Carbon::createFromFormat('m-Y', $request->collection_month);
-        $formatedDate = $carbonDate->format('Y-m');
+       }       
 
         $tds = Tds_collection::create([
            
-            'collection_month' => $formatedDate,
+            'collection_month' => $formattedDate,
             'upazila_id' => $request->upazila_id,
             'organization_id' => $request->organization_id,
             'tds' => $request->tds,
@@ -199,8 +197,8 @@ class TdsController extends Controller
         ]);
 
         Toastr::success('TDS Added Successfully', 'Success');
-
-        return redirect()->route('circle.tds.create.upazila', [$request->zilla_id, $request->upazila_id]);
+        return redirect()->route('circle.tds.index');
+        //return redirect()->route('circle.tds.create.upazila', [$request->zilla_id, $request->upazila_id]);
     }
 
     //Create By Upazila
@@ -244,9 +242,12 @@ class TdsController extends Controller
             'tds' => 'required',
         ]);
 
+        $formattedDate = date('Y-m', strtotime('01-' . $request->collection_month));
+
         $tds = Tds_collection::find($id);
+
         //check exists for same month and upazila and organization
-        $check = Tds_collection::where('collection_month', $request->collection_month)
+        $check = Tds_collection::where('collection_month', $formattedDate)
         ->where('upazila_id',  $tds->upazila_id)
         ->where('organization_id',$tds->organization_id)
         ->where('id', '!=', $id)
@@ -255,18 +256,16 @@ class TdsController extends Controller
         if($check){
             Toastr::error('TDS Already Added', 'Error');
             return redirect()->back();
-        }
-
-        // Date Format
-        $carbonDate = Carbon::createFromFormat('m-Y', $request->collection_month);
-        $formatedDate = $carbonDate->format('Y-m');
+        }            
+        
 
         $tds->update([
-            'collection_month' => $formatedDate,
+            'collection_month' => $formattedDate,
             'tds' => $request->tds,
             'bill' => $request->bill,
             'comments' => $request->comments
         ]);
+        
         Toastr::success('TDS Updated Successfully', 'Success');
 
         if(  $request->clicked_route == 'circle.tds.create.upazila' )
