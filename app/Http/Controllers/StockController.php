@@ -89,7 +89,7 @@ class StockController extends Controller
     //Circle Index
     public function index(){
 
-        $Stocks = Stock::latest()->where('circle', Auth::user()->circle)->get();
+        $Stocks = Stock::latest()->where('circle', Auth::user()->circle)->paginate(500);
 
         return view('circle.stock.index', compact('Stocks'));
     }
