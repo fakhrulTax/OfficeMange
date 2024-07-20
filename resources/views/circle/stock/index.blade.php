@@ -3,11 +3,6 @@
 @section('title', 'Stocks')
 
 @push('css')
-    <!--  Datatable -->
-
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <style>
         .address p {
             margin: 0;
@@ -22,7 +17,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Stocks({{ count($Stocks) }})</h1>
+                    <h1 class="m-0">Stocks({{ count($stocks) }})</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -40,9 +35,74 @@
 
         <div class="card">
 
+            <!-- card heder -->
+            <div class="card-header">
+                <form action="{{ route('circle.stockSearch') }}" method="GET">              
+                 <div class="row">
+                   <div class="col-md-4">
+                     <div class="form-group">
+                       <label for="tin">TIN</label>
+                       <input type="number" id="tin" name="tin" placeholder="TIN" class="form-control" value="{{ isset($search->tin)?$search->tin: '' }}" autofocus>
+                     </div>
+                   </div>
+                   <div class="col-md-4">
+                     <div class="form-group">
+                       <label for="name">Name</label>
+                       <input type="text" id="name" name="name" placeholder="Name" class="form-control" value="{{ isset($search->name)?$search->name:'' }}">
+                     </div>
+                   </div>
+                   <div class="col-md-4">
+                     <div class="form-group">
+                       <label for="file_has">Files?</label>
+                       <select name="file_has" id="file_has" class="form-control">
+                         <option value="">File Has?</option>
+                         <option value="1" {{ (isset($search->file_has) && $search->file_has == 1)?'selected':'' }}>Yes</option>
+                         <option value="0" {{ (isset($search->file_has) && $search->file_has == 0)?'selected':'' }}>No</option>
+                       </select>
+                     </div>
+                   </div>
+                 </div>
+                 <div class="row">
+                   <div class="col-md-4">
+                     <div class="form-group">
+                      <label for="last_return">Last Return Year</label>
+                       <input type="number" name="last_return" placeholder="Last Return" class="form-control" value="{{ isset($search->last_return)?$search->last_return: '' }}">
+                     </div>
+                   </div>
+                   <div class="col-md-4">
+                     <div class="form-group">
+                       <label for="default_year">Default Year</label>
+                       <input type="number" id="default_year" name="default_year" placeholder="Default Year" class="form-control" value="{{ isset($search->default_year)?$search->default_year: '' }}">
+                     </div>
+                   </div>
+                   <div class="col-md-2">
+                     <div class="form-group">
+                       <label for="sort_by">Sort By</label>
+                       <select name="sort_by" id="sort_by" class="form-control">
+                         <option value="">Sort By</option>
+                         <option value="tin" {{ (isset($search->sort_by) && $search->sort_by == 'tin')?'selected':'' }}>TIN</option>
+                         <option value="sort_name" {{ (isset($search->sort_by) && $search->sort_by == 'name')?'selected':'' }}>Name</option>
+                       </select>
+                     </div>
+                   </div>
+                   <div class="col-md-2">
+                     <div class="form-group">
+                       <label for="asc_desc">Sort Type</label>
+                       <select name="asc_desc" id="asc_desc" class="form-control">
+                         <option value="">Sort Type</option>
+                         <option value="ASC" {{ (isset($search->asc_desc) && $search->asc_desc == 'ASC')?'selected':'' }}>ASC</option>
+                         <option value="DESC" {{ (isset($search->asc_desc) && $search->asc_desc == 'DESC')?'selected':'' }}>DESC</option>
+                       </select>
+                     </div>
+                   </div>
+                 </div>
+                 <button type="submit" class="btn btn-primary">Search</button>
+               </form> 
+            </div>
+
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -60,7 +120,7 @@
 
 
 
-                        @foreach ($Stocks as $key => $stock)
+                        @foreach ($stocks as $key => $stock)
                             <tr>
                                 <td>{{ ++$key }}</td>
                                 <td>{{ $stock->tin }}</td>
@@ -81,25 +141,24 @@
                                         onclick="edit({{ $stock->id }})">Edit</button>
                                     <a href="{{ route('circle.stock.env',$stock->tin) }}" target="_blank" class="btn btn-sm btn-warning">ENV</a>
                                     <a href="{{ route('circle.stock.view', $stock->id) }}"
-                                        class="btn btn-success btn-sm">View</a>
+                                        class="btn btn-success btn-sm">Notice</a>
                                 </td>
                             </tr>
                         @endforeach
 
 
-
-
-
-
-
-
                     </tbody>
-                    <tfoot>
-
-                    </tfoot>
                 </table>
             </div>
             <!-- /.card-body -->
+
+            <!-- card-footer -->
+            <div class="card-footer">
+                <ul class="pagination pagination-sm m-0 float-right">
+                  {{ $stocks->links("pagination::bootstrap-4") }}
+                </ul>
+            </div>
+            <!-- card-footer -->
         </div>
         <!-- /.card -->
 
@@ -278,41 +337,8 @@
 
 
 @push('js')
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    <!-- AdminLTE App -->
+    
 
-
-    <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": true,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
-    </script>
     <script>
         $(document).ready(function() {
 
