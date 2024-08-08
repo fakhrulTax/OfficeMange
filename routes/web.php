@@ -20,6 +20,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\TdsController;
 use App\Http\Controllers\AdvanceController;
+use App\Http\Controllers\RetarnController;
 
 
 
@@ -34,6 +35,9 @@ Auth::routes();
 Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     
     Route::get('/circle-dashboard', [CircleController::class, 'index'])->name('dashboard');
+
+    //Return 
+    Route::get('/return/create', [RetarnController::class, 'create'])->name('return.create');  
 
     //Stock Route
     Route::get('/stock', [StockController::class, 'index'])->name('stock');
