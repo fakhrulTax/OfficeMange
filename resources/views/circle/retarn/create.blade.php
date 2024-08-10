@@ -33,7 +33,7 @@
             <div class="card-body">
 
             <!-- Form -->             
-            <form action="" method="POST">
+            <form method="POST" action="{{ route('circle.return.store') }}">
             @csrf
 
                 <div class="container">
@@ -48,12 +48,16 @@
                                         @php
                                             $a = config('settings.assessment_year_'.Auth::user()->circle);  
                                         @endphp
-                                         
+
+                                        <option value="">Ass. Year</option>
                                         @for($i= 1; $i<=25; $i++)
-                                            <option value="{{ $a }}" {{ (old('assessment_year') == $a) ? 'selected' : '' }}>{{ $Helper::assessment_year_format($a) }}</option>
+
+                                            <option value="{{ $a }}" {{ (session('last_assessment_year') == $a || old('assessment_year') == $a) ? 'selected' : '' }}>{{ $Helper::assessment_year_format($a) }}</option>
+
                                             @php
                                                 $a = $a-10001;  
                                             @endphp
+
                                         @endfor
                                 </select>
                             </div>
@@ -62,18 +66,18 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="register">Register*</label>
-                                <select name="register" id="register" class="form-control" required>
-                                    <option value="a" {{ (old('register') == 'a') ? 'selected' : '' }}>A</option>
-                                    <option value="b" {{ (old('register') == 'b') ? 'selected' : '' }}>B</option>
-                                    <option value="c" {{ (old('register') == 'c') ? 'selected' : '' }}>C</option>
-                                    <option value="d" {{ (old('register') == 'd') ? 'selected' : '' }}>D</option>
-                                    <option value="normal" {{ (old('register') == 'normal') ? 'selected' : '' }}>Normal</option>
+                                <select name="register" id="register" class="form-control" onchange="getRegisterSerial()" required>
+                                    <option value="">Register</option>
+                                    <option value="a" {{ (session('last_register') == 'a' || old('register') == 'a') ? 'selected' : '' }}>A</option>
+                                    <option value="b" {{ (session('last_register') == 'b' || old('register') == 'b') ? 'selected' : '' }}>B</option>
+                                    <option value="c" {{ (session('last_register') == 'c' || old('register') == 'c') ? 'selected' : '' }}>C</option>
+                                    <option value="d" {{ (session('last_register') == 'd' || old('register') == 'd') ? 'selected' : '' }}>D</option>
                                 </select>
                                 @error('register')
                                     <div class="text text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>      
+                        </div>   
                         
                         <div class="col-md-3">
                             <div class="form-group">                        
@@ -88,7 +92,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="register_serial">Register Serial*</label>                                
-                                <input type="number" name="register_serial" id="register_serial" placeholder="Register Serial" class="form-control" value="" required>
+                                <input type="number" name="register_serial" id="register_serial" placeholder="Register Serial" class="form-control" value="{{ session('next_register_serial', old('register_serial')) }}" required>
                                 @error('register_serial')
                                 <div class="text text-danger">{{ $message }}</div>
                                 @enderror
@@ -97,7 +101,7 @@
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="tin">TIN*</label>
+                                <label for="tin" id="tinLabel">TIN*</label>
                                 <input type="number" name="tin" id="tin" placeholder="TIN" class="form-control" value="{{ old('tin') }}" onkeyup="getStock()" autofocus required>                            
                                 @error('tin')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -134,9 +138,9 @@
 
                        <div class="col-md-3">
                             <div class="form-group">
-                                <label for="income_of_poltrey_fisheries">Poultry/Fish Income</label>
-                                <input type="number" name="income_of_poltrey_fisheries" id="income_of_poltrey_fisheries" placeholder="Poultry/Fish Income" class="form-control" value="{{ old('income_of_poltrey_fisheries') }}">                            
-                                @error('income_of_poltrey_fisheries')
+                                <label for="income_of_poultry_fisheries">Poultry/Fish Income</label>
+                                <input type="number" name="income_of_poultry_fisheries" id="income_of_poultry_fisheries" placeholder="Poultry/Fish Income" class="form-control" value="{{ old('income_of_poultry_fisheries') }}">                            
+                                @error('income_of_poultry_fisheries')
                                 <div class="text text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -144,10 +148,10 @@
 
                        <div class="col-md-3">
                             <div class="form-group">
-                                <label for="income_of_remitance">Remittance Income</label>
-                                <input type="number" name="income_of_remitance" id="income_of_remitance" placeholder="Remittance Income" class="form-control" value="{{ old('income_of_remitance') }}">      
+                                <label for="income_of_remittance">Remittance Income</label>
+                                <input type="number" name="income_of_remittance" id="income_of_remittance" placeholder="Remittance Income" class="form-control" value="{{ old('income_of_remittance') }}">      
 
-                                @error('income_of_remitance')
+                                @error('income_of_remittance')
                                 <div class="text text-danger">{{ $message }}</div>
                                 @enderror
                                 
@@ -345,8 +349,94 @@
 
 
 @push('js')
-    <script>     
+<script> 
 
+    function getStock() {
+        let tin = document.getElementById('tin').value;
+        let _token = "{{ csrf_token() }}";
+
+        let data = {
+            _token: _token,
+            tin: tin
+        };
+
+        // Validate TIN length and format
+        if (tin.length === 12 && !isNaN(tin)) {
+            jQuery.ajax({
+                url: "{{ route('circle.retarn.stock.check') }}",
+                type: "POST",
+                data: data,
+                success: function(response) {
+                    let tinInput = document.getElementById('tin');
+                    let tinLabel = document.getElementById('tinLabel');
+
+                    // Reset styles
+                    tinInput.style.background = "";
+                    tinInput.style.color = "";
+                    tinLabel.style.color = "";
+
+                    // Update styles based on response
+                    if (response.circleStatus === 'not added') {
+                        tinInput.style.background = "red";
+                    } else if (response.circleStatus === 'another') {
+                        alert('TIN is out of circle.');
+                        tinInput.style.background = "yellow";
+                        tinInput.style.color = "black";
+                        tinLabel.style.color = "red";
+                        tinLabel.innerText = response.name + " (" + response.circle + ")";
+                    } else if (response.circleStatus === 'same') {
+                        tinInput.style.background = "green";
+                        tinInput.style.color = "white";
+                        tinLabel.style.color = "green";
+                        tinLabel.innerText = response.name + " (" + response.circle + ")";
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                }
+            });
+        } 
+    }
+
+
+        //Get the last Register Serial Number and update
+        function getRegisterSerial()
+        {
+            document.getElementById('register_serial').value = 'wait...';
+            let assessment_year = document.getElementById('assessment_year').value;
+            let register = document.getElementById('register').value;
+            let _token   = "{{ csrf_token() }}";
+
+            let data = {
+                _token: _token,
+                assessment_year: assessment_year,
+                register: register
+             }
+
+            if( assessment_year == "" || register == "" )
+            {
+                alert('Select Ass. Year and Register First');
+            }else
+            {
+                jQuery.ajax({
+                url : "{{ route('circle.return.register.serial') }}",
+                type: "POST",
+                data: data,
+                success: function(response)
+                    {
+                        if (response.next_register_serial) {
+                            document.getElementById('register_serial').value = response.next_register_serial;
+                        } else {
+                            console.error('next_register_serial not found in response');
+                        }
+                        
+                    },
+                error: function(xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                    }
+                });
+            }
+        }
 
 
     </script>

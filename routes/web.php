@@ -38,6 +38,9 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
     //Return 
     Route::get('/return/create', [RetarnController::class, 'create'])->name('return.create');  
+    Route::post('/return/store', [RetarnController::class, 'store'])->name('return.store');  
+    Route::post('/return/registerSerial', [RetarnController::class, 'getRegisterSerial'])->name('return.register.serial');  
+    Route::post('/return/checkTIN', [RetarnController::class, 'checkTIN'])->name('retarn.stock.check');
 
     //Stock Route
     Route::get('/stock', [StockController::class, 'index'])->name('stock');
@@ -48,7 +51,8 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('stock/view/{id}', [StockController::class, 'view'])->name('stock.view');
     Route::get('/stock/editbyid', [StockController::class, 'stockEditByid'])->name('stockEditByid');
     Route::post('/stock/editbyid', [StockController::class, 'stockUpdateByid'])->name('stockUpdateByid');
-    Route::get('/stock/evn/{tin}', [StockController::class, 'envelop'])->name('stock.env');
+    Route::get('/stock/evn/{tin}', [StockController::class, 'envelop'])->name('stock.env');   
+
 
     //Collection Route
     Route::get('/collection', [CollectionController::class, 'index'])->name('collection.index');
