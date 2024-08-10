@@ -167,7 +167,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="source_tax">Source Tax</label>
-                                <input type="number" name="source_tax" id="source_tax" placeholder="Source Tax" class="form-control" value="{{ old('source_tax') }}">      
+                                <input type="number" name="source_tax" id="source_tax" placeholder="Source Tax" class="form-control" value="{{ old('source_tax') }}" onkeyup="totalTax()">      
 
                                 @error('source_tax')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -179,7 +179,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="advance_tax">Advance Tax</label>
-                                <input type="number" name="advance_tax" id="advance_tax" placeholder="Advance Tax" class="form-control" value="{{ old('advance_tax') }}">      
+                                <input type="number" name="advance_tax" id="advance_tax" placeholder="Advance Tax" class="form-control" value="{{ old('advance_tax') }}" onkeyup="totalTax()">      
 
                                 @error('advance_tax')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -191,7 +191,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="retarn_tax">Return Tax</label>
-                                <input type="number" name="retarn_tax" id="retarn_tax" placeholder="Return Tax" class="form-control" value="{{ old('retarn_tax') }}">      
+                                <input type="number" name="retarn_tax" id="retarn_tax" placeholder="Return Tax" class="form-control" value="{{ old('retarn_tax') }}" onkeyup="totalTax()">      
 
                                 @error('retarn_tax')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -203,7 +203,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="late_fee">Late Fee</label>
-                                <input type="number" name="late_fee" id="late_fee" placeholder="Late Fee" class="form-control" value="{{ old('late_fee') }}">      
+                                <input type="number" name="late_fee" id="late_fee" placeholder="Late Fee" class="form-control" value="{{ old('late_fee') }}" onkeyup="totalTax()">      
 
                                 @error('late_fee')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -215,7 +215,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="sercharge">Surcharge</label>
-                                <input type="number" name="sercharge" id="sercharge" placeholder="Surcharge" class="form-control" value="{{ old('sercharge') }}">      
+                                <input type="number" name="sercharge" id="sercharge" placeholder="Surcharge" class="form-control" value="{{ old('sercharge') }}" onkeyup="totalTax()">      
 
                                 @error('sercharge')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -227,7 +227,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="total_tax">Total Tax</label>
-                                <input type="number" name="total_tax" id="total_tax" placeholder="Total Tax" class="form-control" value="{{ old('total_tax') }}">      
+                                <input type="number" name="total_tax" id="total_tax" placeholder="Total Tax" class="form-control" value="{{ old('total_tax') }}" readonly>      
 
                                 @error('total_tax')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -287,7 +287,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="tax_of_schedule_one">Tax of Schedule One</label>
-                                <input type="number" name="tax_of_schedule_one" id="tax_of_schedule_one" placeholder="Tax of Schedule One" class="form-control" value="{{ old('tax_of_schedule_one') }}">      
+                                <input type="number" name="tax_of_schedule_one" id="tax_of_schedule_one" placeholder="Tax of Schedule One" class="form-control" value="{{ old('tax_of_schedule_one') }}" onkeyup="totalTax()">      
 
                                 @error('tax_of_schedule_one')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -299,7 +299,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="special_tax">Special Tax</label>
-                                <input type="number" name="special_tax" id="special_tax" placeholder="Special Tax" class="form-control" value="{{ old('special_tax') }}">      
+                                <input type="number" name="special_tax" id="special_tax" placeholder="Special Tax" class="form-control" value="{{ old('special_tax') }}" onkeyup="totalTax()">      
 
                                 @error('special_tax')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -351,6 +351,22 @@
 @push('js')
 <script> 
 
+    //Total Tax
+  function totalTax()
+  {
+        let source_tax = document.getElementById('source_tax').value;
+        let advance_tax = document.getElementById('advance_tax').value;
+        let retarn_tax = document.getElementById('retarn_tax').value;
+        let late_fee = document.getElementById('late_fee').value;
+        let sercharge = document.getElementById('sercharge').value;
+        let tax_of_schedule_one = document.getElementById('tax_of_schedule_one').value;
+        let special_tax = document.getElementById('special_tax').value;
+      
+
+      total_tax = Number(source_tax) + Number(advance_tax) + Number(retarn_tax) + Number(late_fee) + Number(sercharge) + Number(tax_of_schedule_one) + Number(special_tax);
+      document.getElementById('total_tax').value = total_tax;
+  }
+    //Check the Stock
     function getStock() {
         let tin = document.getElementById('tin').value;
         let _token = "{{ csrf_token() }}";

@@ -23,9 +23,22 @@ use App\Http\Controllers\AdvanceController;
 use App\Http\Controllers\RetarnController;
 
 
-
 Route::get('/', function () {
-    return view('auth.login');
+    if (auth()->check()) {
+        if(Auth::user()->user_role == 'circle')
+        {
+            return redirect()->route('circle.dashboard');
+        }
+        elseif(Auth::user()->user_role == 'commissioner')
+        {
+            return redirect()->route('commissioner.dashboard');
+        }
+        elseif(Auth::user()->user_role == 'range')
+        {
+            return redirect()->route('range.dashboard');
+        }
+    }
+        return view('auth.login');
 });
 
 Auth::routes();
@@ -39,6 +52,7 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     //Return 
     Route::get('/return/create', [RetarnController::class, 'create'])->name('return.create');  
     Route::post('/return/store', [RetarnController::class, 'store'])->name('return.store');  
+    Route::get('/return', [RetarnController::class, 'index'])->name('return.index');  
     Route::post('/return/registerSerial', [RetarnController::class, 'getRegisterSerial'])->name('return.register.serial');  
     Route::post('/return/checkTIN', [RetarnController::class, 'checkTIN'])->name('retarn.stock.check');
 
@@ -78,10 +92,8 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/movement/{id}/receive', [MovementController::class, 'receive'])->name('movement.receive');
     Route::put('/movement/receive/{id}', [MovementController::class, 'receiveUpdate'])->name('movement.receive.update');
 
-
     //Tin checker
     Route::get('/tin-checker/{tin}', [StockController::class, 'tinChecker'])->name('tinChecker');
-
 
     //Arrear routes
     Route::get('/arrears', [ArrearController::class, 'index'])->name('arrears');

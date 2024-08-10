@@ -42,6 +42,13 @@ class RetarnController extends Controller
         return response()->json(['next_register_serial' => $next_register_serial]);
     }
 
+    //Index
+    public function index()
+    {
+        $retarns = Retarn::where('circle', Auth::user()->circle)->orderBy('id', 'Desc')->paginate(1);
+        return view('circle.retarn.index', ['retarns' => $retarns]);
+    }
+
     //Return Create
     public function create(){
         return view('circle.retarn.create', ['Helper' => new MyHelper()]);
