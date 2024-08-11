@@ -80,6 +80,7 @@
 
 
 
+
             {{-- circle sidebar start from here  --}}
 
 
@@ -94,8 +95,6 @@
 
 
                 @if ($user->user_role == 'circle')
-
-
 
                     <li class="nav-item">
 
@@ -522,6 +521,7 @@
                             class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.advance.index', 'commissioner.advance.circle', 'commissioner.advance.circle.search']) ? 'active' : '' }}">
 
 
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.advance.index', 'commissioner.advance.circle', 'commissioner.advance.circle.search']) ? 'active' : '' }}">
 
                             <i class="nav-icon fab fa-speakap text-light"></i>
 
@@ -597,9 +597,16 @@
 
                     </li>
 
+                    <li class="nav-item">
+                        <a href="{{ route('commissioner.stock') }}"
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.stock', 'commissioner.stock.search']) ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-list  text-light"></i>
+                            <p>
+                                Stock
+                            </p>
+                        </a>
+                    </li>
                     
-
-
 
                     <li class="nav-item">
 
@@ -824,9 +831,7 @@
 
 
                     <li class="nav-item">
-
                         <a href="{{ route('range.advance.report') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['range.advance.report', 'range.advance.circle', 'range.advance.circle.search']) ? 'active' : '' }}"co>
-
                             <i class="nav-icon fas fa-list text-light"></i>
 
                             <p>

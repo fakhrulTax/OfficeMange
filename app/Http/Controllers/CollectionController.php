@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Collection;
 use App\Models\Arrear;
+use App\Models\Stock;
 use Toastr;
 
 
@@ -36,7 +37,7 @@ class CollectionController extends Controller
         $collections = $collections->where('circle', Auth::user()->circle);
         $collections = $collections->paginate(100);
 
-        return view('circle.Collection.index',[
+        return view('circle.collection.index',[
             'title' => 'Collection|Search', 
             'collections' => $collections,
             'search' => $request
@@ -58,7 +59,7 @@ class CollectionController extends Controller
 
     public function create()
     {
-        return view('circle.Collection.create',['title' => 'Collection|Add a Collection']);
+        return view('circle.collection.create',['title' => 'Collection|Add a Collection']);
     }
 
     //Store Collection
@@ -83,7 +84,14 @@ class CollectionController extends Controller
                 return back()->withInput();
             }
         }
-        
+
+        //Check tin is available in stock
+        $stock = Stock::where('tin', $request->tin)->first();
+        if( !$stock )
+        {
+            Toastr::error('You have to add TIN from Stock.', 'danger');
+            return back()->withInput();
+        }
 
         //  //Check The Advance is availavle in Advance Table
         // if( $request->type == 'advance' )
@@ -117,10 +125,12 @@ class CollectionController extends Controller
     public function edit($id)
     {
         $collection = Collection::find($id);
+
         return view('circle.collection.edit',[
             'title' => 'Collection|Edit a Collection',
             'collection' => $collection
         ]);
+
     }
 
     //Collection Update
@@ -135,15 +145,27 @@ class CollectionController extends Controller
             'challan_date' => 'required',
         ]);
 
+        
         //Check The Arrear is availavle in Arrear Table
+        if( $request->type == 'arrear' )
+        {
+            $arrear = Arrear::checkArrear($request->tin, $request->assessment_year);
 
-        $arrear = Arrear::checkArrear($request->tin, $request->assessment_year);
+            if (!$arrear) {
+                Toastr::error('There is no arrear for this TIN and Assessment Year', 'danger');
+                return back()->withInput();
+            }
+        }
 
-        if (!$arrear) {
-            Toastr::error('There is no arrear for this TIN and Assessment Year', 'danger');
+        //Check tin is available in stock
+        $stock = Stock::where('tin', $request->tin)->first();
+        if( !$stock )
+        {
+            Toastr::error('You have to add TIN from Stock.', 'danger');
             return back()->withInput();
         }
 
+        
         Collection::where('id', $request->id)->update([
             'type' => $request->type,
             'tin' => $request->tin,

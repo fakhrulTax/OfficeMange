@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Stock;
 use App\Models\Arrear;
+use App\Models\Task;
 use PDF;
 use App\Helpers\MyHelper;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +16,7 @@ class NoticeController extends Controller
     //Order Sheet
     public function orderSheet(Request $request, $tin)
     { 
-        dd('working');
-        //Validation
+       
         $request->validate([
             'type' => 'required',
             'assessment_year' => 'required',
@@ -45,6 +45,13 @@ class NoticeController extends Controller
         //Get Stock Information
         $stock = Stock::where('tin',$tin)->firstOrFail();
 
+        //Create or Update Task
+         $notice = '183(3)';
+         $description = '<p>'.$stock->tin.'</p><p>'.$stock->name.'</p>';
+         $deadline = date('Y-m-d',strtotime($request->hearing_date));
+         Task::addOrUpdateTaskFromNotice($notice, $description, $deadline);
+
+        //Print Notice
         $pdf = PDF::loadView('circle.notice.one_eighty_three', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper()]);
         return $pdf->stream('document.pdf');                
     }
@@ -62,6 +69,13 @@ class NoticeController extends Controller
         //Get Stock Information
         $stock = Stock::where('tin',$tin)->firstOrFail();
 
+        //Create or Update Task
+        $notice = '179';
+        $description = '<p>'.$stock->tin.'</p><p>'.$stock->name.'</p>';
+        $deadline = date('Y-m-d',strtotime($request->hearing_date));
+        Task::addOrUpdateTaskFromNotice($notice, $description, $deadline);
+
+       //Print Notice
         $pdf = PDF::loadView('circle.notice.one_seventy_nine', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper()]);
         return $pdf->stream('document.pdf');                
     }
@@ -79,7 +93,14 @@ class NoticeController extends Controller
 
            //Get Stock Information
            $stock = Stock::where('tin',$tin)->firstOrFail();
-           
+
+            //Create or Update Task
+            $notice = '212';
+            $description = '<p>'.$stock->tin.'</p><p>'.$stock->name.'</p>';
+            $deadline = date('Y-m-d',strtotime($request->hearing_date));
+            Task::addOrUpdateTaskFromNotice($notice, $description, $deadline);
+
+        //Print Notice           
            $pdf = PDF::loadView('circle.notice.two_twelve', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper(), ]);
            return $pdf->stream('document.pdf');                
        }
@@ -98,6 +119,14 @@ class NoticeController extends Controller
            //Get Stock Information
            $stock = Stock::where('tin',$tin)->firstOrFail();
            $circle = Auth::user()->circle;
+
+            //Create or Update Task
+            $notice = 'refix';
+            $description = '<p>'.$stock->tin.'</p><p>'.$stock->name.'</p>';
+            $deadline = date('Y-m-d',strtotime($request->hearing_date));
+            Task::addOrUpdateTaskFromNotice($notice, $description, $deadline);
+
+            //Print Notice  
            
            $pdf = PDF::loadView('circle.notice.refix', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper(), 'circle' => $circle]);
            return $pdf->stream('document.pdf');                
@@ -118,7 +147,14 @@ class NoticeController extends Controller
 
         //Get Stock Information
         $stock = Stock::where('tin',$tin)->firstOrFail();
-        
+
+         //Create or Update Task
+         $notice = '280';
+         $description = '<p>'.$stock->tin.'</p><p>'.$stock->name.'</p>';
+         $deadline = date('Y-m-d',strtotime($request->hearing_date));
+         Task::addOrUpdateTaskFromNotice($notice, $description, $deadline);
+
+        //Print Notice         
         $pdf = PDF::loadView('circle.notice.two_eighty', ['stock' => $stock, 'data' => $request, 'Helper' => new MyHelper(), ]);
         return $pdf->stream('document.pdf');                
     }
@@ -182,8 +218,15 @@ class NoticeController extends Controller
           }          
 
           //Get Stock Information
-          $stock = Stock::where('tin',$tin)->firstOrFail(); 
+          $stock = Stock::where('tin',$tin)->firstOrFail();
           
+           //Create or Update Task
+           $notice = 'Demand';
+           $description = '<p>'.$stock->tin.'</p><p>'.$stock->name.'</p>';
+           $deadline = date('Y-m-d',strtotime($request->hearing_date));
+           Task::addOrUpdateTaskFromNotice($notice, $description, $deadline);
+
+         //Print Notice            
            $pdf = PDF::loadView('circle.notice.demand', [
                     'stock' => $stock, 
                     'data' => $request, 
@@ -192,12 +235,6 @@ class NoticeController extends Controller
             ]);
            return $pdf->stream('document.pdf');                
       }
-
-
-
-
-
-
 
 
 

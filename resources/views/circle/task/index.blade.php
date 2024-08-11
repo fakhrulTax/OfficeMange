@@ -2,7 +2,11 @@
 
 @section('title','Tasks')
 @push('css')
-   
+   <style>
+    .description p{
+        margin:0;
+    }
+   </style>
 @endpush
 
 
@@ -63,7 +67,7 @@
              @else
 
             <!-- /.card-header -->
-            <div class="card-body">
+            <div class="card-body bg-warning">
                 <table class="table">
                     <thead>
                         <tr>
@@ -77,7 +81,7 @@
                         @foreach($tasks as $task)
                         <tr>
                             <td style="{{ ($task->priority == 1) ? 'color:blue' : '' }}">@if ($task->status) <del>{{ $task->type }}</del> @else{{ $task->type }}@endif</td>
-                            <td style="{{ ($task->priority == 1) ? 'color:blue' : '' }}">@if ($task->status) <del>{!! $task->description !!}</del> @else {!! $task->description !!}@endif</td>
+                            <td style="{{ ($task->priority == 1) ? 'color:blue' : '' }}" class="description">@if ($task->status) <del>{!! $task->description !!}</del> @else {!! $task->description !!}@endif</td>
                             <td style="@if ($task->deadline <= now()) color: red; @endif">{{ date('d-m-Y', strtotime($task->deadline)) }}</td>
                             <td>
                                 @if($task->type != 'commissioner' && $task->type != 'rage' && $task->type != 'technical')

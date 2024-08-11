@@ -79,18 +79,19 @@ class AdvanceController extends Controller
     }
     
 
-    public function advanceIndex(){
+    public function advanceIndex($circle = null){
 
-        $advances = Advance::orderBy('id', 'DESC')->where('circle', Auth::user()->circle)->paginate(100);
-
-        if( Auth::user()->user_role == 'commissioner' )
+        if( !$circle )
         {
-            $advances = Advance::orderBy('id', 'DESC')->paginate(100);
+            $circle = Auth::user()->circle;
         }
+
+        $advances = Advance::orderBy('id', 'DESC')->where('circle', $circle)->paginate(100);
 
         return view('circle.advance.index', [
             'title' => 'Advance Tax',
-            'advances' => $advances
+            'advances' => $advances,
+            'circle' => $circle,
             ]);
     }
 
@@ -195,27 +196,18 @@ class AdvanceController extends Controller
     }
 
 
-    public function search(Request $request){
+    public function search(Request $request, $circle = null){
+
+        if( !$circle )
+        {
+            $circle = Auth::user()->circle;
+        }
+
         $advances = Advance::query();
 
         if(!empty($request->tin)){
             $advances = $advances->where('tin', $request->tin);
         }
-
-        if( isset($request->circle) && !empty($request->circle)){
-
-            
-            if( $request->circle == "range-1" || $request->circle == "range-2" || $request->circle == "range-3" || $request->circle == "range-4" )
-            {
-                //search for range
-                $circles = MyHelper::ranges($request->circle);
-                $advances = $advances->whereIN('circle', $circles);
-            }else
-            {
-                $advances = $advances->where('circle', $request->circle);
-            }           
-        }
-
 
 
         if(!empty($request->advance_assessment_year)){
@@ -226,18 +218,15 @@ class AdvanceController extends Controller
         }
 
 
-        if( Auth::user()->user_role == 'circle' )
-        {
-            $advances = $advances->where('circle', Auth::user()->circle);
-        }
+        $advances = $advances->where('circle', $circle);
 
-        $advances = $advances->paginate(200);
-
+        $advances = $advances->paginate(150);
 
        
         return view('circle.advance.index', [
             'advances' => $advances, 
-            'title' => 'Advance | Search'
+            'title' => 'Advance | Search',
+            'circle' => $circle
             ]);
     }
 

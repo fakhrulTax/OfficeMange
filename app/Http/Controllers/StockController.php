@@ -10,6 +10,7 @@ use App\Imports\StocksImport;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 use Toastr;
+use Toastr;
 
 
 class StockController extends Controller
@@ -122,9 +123,82 @@ class StockController extends Controller
     }
 
     //Circle Index
+    //Upload
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'stockFile' => 'required|mimes:xls,xlsx,csv'
+        ]);
+    
+        // Store the uploaded file and get its path
+        $path = $request->file('stockFile')->store('temp');
+    
+        // Import data from the Excel file
+        try {
+
+            Excel::import(new StocksImport, storage_path('app').'/'.$path);
+            //return back()->with('success', 'Excel file imported successfully.');
+
+        } catch (\Exception $e) {
+
+            // Handle any exceptions that occur during the import process
+
+            return back()->with('error', 'Error importing Excel file: '.$e->getMessage());
+            
+        }
+    }
+
+    //Search
+    public function search(Request $request)
+    {
+        $stocks = Stock::query();
+
+        if(!empty($request->tin))
+        {
+            $stocks = $stocks->where('tin', '=', $request->tin);
+        }    
+        
+        if(!empty($request->name))
+        {
+            $stocks = $stocks->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->name) . '%']);
+        }     
+        
+        if(!empty($request->type))
+        {
+            $stocks = $stocks->where('type', '=', $request->type);
+        }  
+
+        if (isset($request->file_in_stock) || $request->file_in_stock === '0') 
+        {
+            $stocks = $stocks->where('file_in_stock', '=', $request->file_in_stock);
+        }
+
+        if(!empty($request->circle))
+        {
+            $stocks = $stocks->where('circle', '=', $request->circle);
+        }  
+        
+        $stocks = $stocks->paginate(100);
+
+        return view('commissioner.stock.index',[
+            'stocks' => $stocks,
+            'search' => $request
+        ]);
+    }
+
+
+    //Commissioner Index
+    public function commissionerIndex()
+    {
+        $stocks = Stock::latest()->paginate(100);
+
+        return view('commissioner.stock.index', compact('stocks'));
+    }
+
+    //Circle Index
     public function index(){
 
-        $stocks = Stock::latest()->where('circle', Auth::user()->circle)->paginate(2);
+        $Stocks = Stock::latest()->where('circle', Auth::user()->circle)->paginate(500);
 
         return view('circle.stock.index', compact('stocks'));
     }

@@ -24,7 +24,10 @@ use App\Http\Controllers\RetarnController;
 
 
 Route::get('/', function () {
+
+
     if (auth()->check()) {
+
         if(Auth::user()->user_role == 'circle')
         {
             return redirect()->route('circle.dashboard');
@@ -117,9 +120,11 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
 
     //TDS routes
     Route::get('/tds', [TdsController::class, 'index'])->name('tds.index');    
-    Route::get('/tds/create', [TdsController::class, 'create'])->name('tds.create');
-     
+    Route::get('/tds/create', [TdsController::class, 'create'])->name('tds.create');     
     Route::post('/tds', [TdsController::class, 'store'])->name('tds.store');
+    Route::get('/tds/create/zilla/{zilla_id}/upazila/{upazila_id}', [TdsController::class, 'createByUpazila'])->name('tds.create.upazila');  
+
+    
     Route::get('/tds/edit/{id}', [TdsController::class, 'edit'])->name('tds.edit');
     Route::post('/tds/edit/{id}', [TdsController::class, 'update'])->name('tds.update');
     Route::get('/circle/tds/upazila/organization', [UpazilaController::class, 'upazilaOrganization'])->name('tds.upazila.organization'); 
@@ -180,7 +185,9 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
     Route::get('/range/tds/report/circles/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgDistUpazila'])->name('tds.report.upazila');
 
     //Advance
-    Route::get('/range/advance', [AdvanceController::class, 'advanceReport'])->name('advance.report');
+    Route::get('/range/advance', [AdvanceController::class, 'advanceReport'])->name('advance.report');    
+    Route::get('/range/advance/circle/{circle}', [AdvanceController::class, 'advanceIndex'])->name('advance.circle');
+    Route::get('/range/advance/circle/{circle}/search', [AdvanceController::class, 'search'])->name('advance.circle.search');
 });
 
 
@@ -196,6 +203,12 @@ Route::middleware(['auth', 'role:technical'])->name('technical.')->group(functio
 Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(function () {
 
     Route::get('/commissioner-dashboard', [CommissionerController::class, 'index'])->name('dashboard');
+
+    //Stock Route
+    Route::get('/commissioner/stock', [StockController::class, 'commissionerIndex'])->name('stock');
+    Route::get('/commissioner/stock/search', [StockController::class, 'search'])->name('stock.search');
+    Route::post('/commissioner/stock/upload', [StockController::class, 'upload'])->name('stock.upload');
+    Route::delete('commissioner/stock/{id}', [StockController::class, 'destroy'])->name('stock.delete');
 
 
     //Arrear Route
@@ -234,6 +247,8 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
 
     //Advance Route
     Route::get('/commissioner/advance', [AdvanceController::class, 'advanceReport'])->name('advance.index');
+    Route::get('/commissioner/advance/circle/{circle}', [AdvanceController::class, 'advanceIndex'])->name('advance.circle');
+    Route::get('/commissioner/advance/circle/{circle}/search', [AdvanceController::class, 'search'])->name('advance.circle.search');
     
 
     //Task routes
