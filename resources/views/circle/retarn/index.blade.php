@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('title','Collections')
+@section('title','Return')
 
 @push('css')
    
@@ -88,7 +88,7 @@
                                 </td>
 
                                 <td>
-                                    174: {{ $helper::moneyFormatBD($retarn->retarn_tax) }} <br>
+                                    173: {{ $helper::moneyFormatBD($retarn->retarn_tax) }} <br>
 
                                     @if($retarn->source_tax)
                                         AIT: {{ $helper::moneyFormatBD($retarn->source_tax) }} <br> 
