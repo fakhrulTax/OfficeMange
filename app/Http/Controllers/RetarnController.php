@@ -45,8 +45,11 @@ class RetarnController extends Controller
     //Index
     public function index()
     {
-        $retarns = Retarn::where('circle', Auth::user()->circle)->orderBy('id', 'Desc')->paginate(1);
-        return view('circle.retarn.index', ['retarns' => $retarns]);
+        $retarns = Retarn::where('circle', Auth::user()->circle)->orderBy('id', 'DESC')->paginate(500);
+        return view('circle.retarn.index', [
+                                'retarns' => $retarns, 
+                                'helper' => new MyHelper(),
+                    ]);
     }
 
     //Return Create
@@ -101,6 +104,7 @@ class RetarnController extends Controller
         // Store the validated data in the database
         $retarn = new Retarn($validatedData);
         $retarn->circle = Auth::user()->circle;
+        $retarn->name = $stock->name;
         $retarn->save();
 
         // Store the last register_serial and register in session

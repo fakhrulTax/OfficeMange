@@ -11,7 +11,7 @@ class Retarn extends Model
     use HasFactory;
 
     protected $fillable = [
-        'register','return_submission_date','register_serial','tin',
+        'register','return_submission_date','register_serial','tin', 'name',
         'assessment_year','source_of_income','income',
         'income_of_poultry_fisheries','income_of_remittance',
         'tax_of_schedule_one','special_tax','special_invest',

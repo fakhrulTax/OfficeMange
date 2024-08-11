@@ -19,11 +19,12 @@ return new class extends Migration
             $table->date('return_submission_date');
             $table->bigInteger('register_serial');
             $table->bigInteger('tin');
+            $table->string('name');
             $table->integer('assessment_year'); 
             $table->string('source_of_income')->nullable();
             $table->bigInteger('income')->default(0);
-            $table->bigInteger('income_of_poultry_fisheries')->default(0);
-            $table->bigInteger('income_of_remittance')->default(0);       
+            $table->bigInteger('income_of_poultry_fisheries')->nullable()->default(0);
+            $table->bigInteger('income_of_remittance')->nullable()->default(0);       
 
             $table->bigInteger('tax_of_schedule_one')->nullable()->default(0);
             $table->bigInteger('special_tax')->nullable()->default(0);
