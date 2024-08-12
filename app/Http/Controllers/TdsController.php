@@ -367,8 +367,9 @@ class TdsController extends Controller
 
         if( !empty($request->zilla_search) && empty($request->upazila_search)){
             $upzila = Upazila::where('zilla_id', $request->zilla_search)->orderBy('name')->get();
-
+            
             $tdsList = $tdsList->whereIn('upazila_id', $upzila->pluck('id'));
+    
 
         }
 
@@ -376,6 +377,7 @@ class TdsController extends Controller
     
         if(!empty($request->upazila_search)){
             $tdsList = $tdsList->where('upazila_id', $request->upazila_search);
+            
         }
        
         if(!empty($request->organization_search)){
@@ -390,8 +392,7 @@ class TdsController extends Controller
             $tdsList = $tdsList->whereBetween('collection_month', [$request->start_month, $request->end_month]);
         }
     
-        $tdsList = $tdsList->where('circle', Auth::user()->circle)
-            ->with('upazila', 'organization')
+        $tdsList = $tdsList->with('upazila', 'organization')
             ->paginate(100);        
     
         return view ('commissioner.tds.index', compact('tdsList', 'zillas'));

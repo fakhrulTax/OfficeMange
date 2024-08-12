@@ -11,7 +11,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 use Toastr;
 
-
 class StockController extends Controller
 {
     //Upload
@@ -77,6 +76,41 @@ class StockController extends Controller
         ]);
     }
 
+    public function circleSearch(Request $request)
+    {        
+        $stocks = Stock::query();
+
+        if(!empty($request->tin))
+        {
+            $stocks = $stocks->where('tin', '=', $request->tin);
+        }    
+        
+        if(!empty($request->name))
+        {
+            $stocks = $stocks->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->name) . '%']);
+        }     
+        
+        if ( isset($request->file_has)  ) 
+        {
+            if( $request->file_has == 1 )
+            {
+                $stocks = $stocks->where('file_in_stock', '=', 1);
+            }
+            else
+            {
+                $stocks = $stocks->where('file_in_stock', '=', 0);
+            }
+           
+        }
+        
+        $stocks = $stocks->paginate(1);
+
+        return view('circle.stock.index',[
+            'stocks' => $stocks,
+            'search' => $request
+        ]);
+    }
+
 
     //Commissioner Index
     public function commissionerIndex()
@@ -86,12 +120,13 @@ class StockController extends Controller
         return view('commissioner.stock.index', compact('stocks'));
     }
 
+
     //Circle Index
     public function index(){
 
-        $Stocks = Stock::latest()->where('circle', Auth::user()->circle)->paginate(500);
+        $stocks = Stock::latest()->where('circle', Auth::user()->circle)->paginate(500);
 
-        return view('circle.stock.index', compact('Stocks'));
+        return view('circle.stock.index', compact('stocks'));
     }
 
 
