@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <a href="" class="btn btn-primary float-right"><i class="fas fa-minus"></i> Back To Return</a>
+                        <a href="{{ route('circle.return.index') }}" class="btn btn-primary float-right"><i class="fas fa-minus"></i> Back To Return</a>
                     </ol>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                         <div class="col-md-3">
                             <div class="form-group">                        
                                 <label for="return_submission_date">Subimission Date*</label>                                
-                                <input type="text" name="return_submission_date" id="return_submission_date" class="form-control" value="{{ date('d-m-Y') }}" placeholder="dd-mm-yyyy" required>
+                                <input type="text" name="return_submission_date" id="return_submission_date" class="form-control" value="{{ session('subission_date'), date('d-m-Y') }}" placeholder="dd-mm-yyyy" required>
                                 @error('return_submission_date')
                                 <div class="text text-danger">{{ $message }}</div>
                                 @enderror

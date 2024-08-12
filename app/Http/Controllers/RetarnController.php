@@ -112,6 +112,7 @@ class RetarnController extends Controller
             'next_register_serial' => $request->register_serial + 1,
             'last_register' => $request->register,
             'last_assessment_year' => $request->assessment_year,
+            'subission_date' =>  $request->return_submission_date,
         ]);
 
         Toastr::success('Return Added Successful', 'success');

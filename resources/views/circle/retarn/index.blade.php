@@ -70,8 +70,8 @@
                                     {{ $retarn->tin }} <br>
                                     {{ $retarn->name }} <br>
                                     {{ $helper::assessment_year_format($retarn->assessment_year) }} <br>
-                                    {{ $retarn->register }}-{{ $retarn->register_serial }} <br>
-                                    {{ date('m-d-Y', strtotime($retarn->return_submission_date)) }}
+                                    {{ ucfirst($retarn->register) }}-{{ $retarn->register_serial }} <br>
+                                    {{ date('d-m-Y', strtotime($retarn->return_submission_date)) }}
                                 </td>
 
                                 <td>{{ $retarn->source_of_income }}</td>
