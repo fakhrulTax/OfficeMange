@@ -52,6 +52,8 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     //Return 
     Route::get('/return/create', [RetarnController::class, 'create'])->name('return.create');  
     Route::post('/return/store', [RetarnController::class, 'store'])->name('return.store');  
+    Route::get('/return/{id}/edit', [RetarnController::class, 'edit'])->name('return.edit');  
+    Route::put('/return/{id}', [RetarnController::class, 'update'])->name('return.update');  
     Route::get('/return', [RetarnController::class, 'index'])->name('return.index');  
     Route::post('/return/registerSerial', [RetarnController::class, 'getRegisterSerial'])->name('return.register.serial');  
     Route::post('/return/checkTIN', [RetarnController::class, 'checkTIN'])->name('retarn.stock.check');

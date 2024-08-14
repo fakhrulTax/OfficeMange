@@ -123,7 +123,7 @@
                                 <td>{{ $helper::moneyFormatBD($retarn->comments) }}</td>
                                 <td>
                                     <a href="#" class="btn btn-info btn-sm">View</a> <br>
-                                    <a href="#" class="btn btn-warning btn-sm mt-1">Edit</a> <br>
+                                    <a href="{{ route('circle.return.edit', $retarn) }}" class="btn btn-warning btn-sm mt-1">Edit</a> <br>
                                     <a href="#" class="btn btn-danger btn-sm mt-1">Order</a>
                                 </td>
                             </tr>
