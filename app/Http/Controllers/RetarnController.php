@@ -8,10 +8,19 @@ use App\Models\Retarn;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\MyHelper;
 use Toastr;
+use PDF;
 
 
 class RetarnController extends Controller
 {
+    //Order Sheet
+    public function orderSheet($id)
+    {
+        $retarn = Retarn::findOrFail($id);
+
+        $pdf = PDF::loadView('circle.retarn.order_sheet', ['retarn' => $retarn, 'Helper' => new MyHelper()]);
+        return $pdf->stream('document.pdf');        
+    }
 
     //Check the Valid TIN
     public function checkTIN(Request $request)
@@ -45,7 +54,7 @@ class RetarnController extends Controller
     //Index
     public function index()
     {
-        $retarns = Retarn::where('circle', Auth::user()->circle)->orderBy('id', 'DESC')->paginate(500);
+        $retarns = Retarn::where('circle', Auth::user()->circle)->orderBy('id', 'DESC')->paginate(200);
         return view('circle.retarn.index', [
                                 'retarns' => $retarns, 
                                 'helper' => new MyHelper(),

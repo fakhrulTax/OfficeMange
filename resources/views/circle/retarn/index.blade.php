@@ -59,6 +59,9 @@
                             @php 
                                 $i = 1; 
                                 $sum173 = 0;
+                                $sumSercharge = 0;
+                                $sumS1 = 0;
+                                $sumSP = 0;
                             @endphp
 
                             @foreach($retarns as $retarn)
@@ -120,17 +123,19 @@
                                 </td>
 
                                 <td>{{ $helper::moneyFormatBD($retarn->net_asset) }}</td>
-                                <td>{{ $helper::moneyFormatBD($retarn->comments) }}</td>
+                                <td>{{ $retarn->comments }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-info btn-sm">View</a> <br>
                                     <a href="{{ route('circle.return.edit', $retarn) }}" class="btn btn-warning btn-sm mt-1">Edit</a> <br>
-                                    <a href="#" class="btn btn-danger btn-sm mt-1">Order</a>
+                                    <a href="{{ route('circle.retarn.orderSheet', $retarn) }}" target="_blank" class="btn btn-danger btn-sm mt-1">Order</a>
                                 </td>
                             </tr>
 
                             @php 
                                 $i++; 
                                 $sum173 = $sum173 + $retarn->retarn_tax;
+                                $sumSercharge = $sumSercharge + $retarn->sercharge;
+                                $sumS1 = $sumS1 + $retarn->tax_of_schedule_one;
+                                $sumSP = $sumSP + $retarn->special_tax;
                             @endphp
                             
                             @endforeach
@@ -140,7 +145,12 @@
                         <tfoot>
                             <tr>
                                 <th colspan = 4>Total Tax</th>
-                                <th colspan = 4>{{ $helper::moneyFormatBD($sum173) }}</th>
+                                <th colspan = 4>
+                                    173 : {{ $helper::moneyFormatBD($sum173) }} <br>
+                                    Ser : {{ $helper::moneyFormatBD($sumSercharge) }} <br>
+                                    S1  : {{ $helper::moneyFormatBD($sumS1) }} <br>
+                                    SP  : {{ $helper::moneyFormatBD($sumSP) }}
+                                </th>
                             </tr>
                         </tfoot>
 
