@@ -520,9 +520,6 @@
 
                             class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.advance.index', 'commissioner.advance.circle', 'commissioner.advance.circle.search']) ? 'active' : '' }}">
 
-
-                            class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.advance.index', 'commissioner.advance.circle', 'commissioner.advance.circle.search']) ? 'active' : '' }}">
-
                             <i class="nav-icon fab fa-speakap text-light"></i>
 
                             <p>
