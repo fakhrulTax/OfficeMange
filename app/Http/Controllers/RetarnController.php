@@ -7,6 +7,8 @@ use App\Models\Stock;
 use App\Models\Retarn;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\MyHelper;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RetarnExport;
 use Toastr;
 use PDF;
 
@@ -54,12 +56,19 @@ class RetarnController extends Controller
     //Index
     public function index()
     {
-        $retarns = Retarn::where('circle', Auth::user()->circle)->orderBy('id', 'DESC')->paginate(200);
+        $assessment_year = config('settings.assessment_year_'.Auth::user()->circle);
+
+        $retarns = Retarn::where('circle', Auth::user()->circle)
+        ->orderBy('id', 'DESC')
+        ->where('assessment_year', $assessment_year)
+        ->paginate(200);
         return view('circle.retarn.index', [
                                 'retarns' => $retarns, 
                                 'helper' => new MyHelper(),
                     ]);
     }
+
+    
 
     //Return Create
     public function create(){
@@ -193,6 +202,120 @@ class RetarnController extends Controller
         Toastr::success('Return Update Successful', 'success');
         return redirect()->route('circle.return.index')->with('success', 'Retarn has been updated successfully.');
 
-    }                            
+    } 
+    
+    //Filter Return
+    public function filter(Request $request)
+    {
+        // Start the query with filtering based on the authenticated user's circle
+        $query = Retarn::where('circle', Auth::user()->circle);
+
+        // Apply filters conditionally
+        if ($request->filled('tin')) {
+            $query->where('tin', $request->get('tin'));
+        }
+
+        if ($request->filled('assessment_year')) {
+            $query->where('assessment_year', $request->get('assessment_year'));
+        }
+
+        if ($request->filled('source_of_income')) {
+            $query->where('source_of_income', 'LIKE', '%' . $request->get('source_of_income') . '%');
+        }
+
+        
+
+        if ($request->filled('income_of_poultry_fisheries')) {
+            if ($request->get('income_of_poultry_fisheries') == '1') {
+                // If "Yes" is selected (income exists)
+                $query->whereNotNull('income_of_poultry_fisheries');
+                $query->where('income_of_poultry_fisheries','!=',0);
+            } elseif ($request->get('income_of_poultry_fisheries') == '0') {
+                // If "No" is selected (income does not exist)
+                $query->where(function ($query) {
+                    $query->whereNull('income_of_poultry_fisheries');
+                });
+            }
+        }
+
+        if ($request->filled('income_of_remittance')) {
+            if ($request->get('income_of_remittance') == '1') {
+                // If "Yes" is selected (income exists)
+                $query->whereNotNull('income_of_remittance');
+                $query->where('income_of_remittance','!=',0);
+            } elseif ($request->get('income_of_remittance') == '0') {
+                // If "No" is selected (income does not exist)
+                $query->where(function ($query) {
+                    $query->whereNull('income_of_remittance');
+                });
+            }
+        }
+
+
+        if ($request->filled('sercharge')) {
+            if ($request->get('sercharge') == '1') {
+                // If "Yes" is selected (income exists)
+                $query->whereNotNull('sercharge');
+                $query->where('sercharge','!=',0);
+            } elseif ($request->get('sercharge') == '0') {
+                // If "No" is selected (income does not exist)
+                $query->where(function ($query) {
+                    $query->whereNull('sercharge');
+                });
+            }
+        }
+
+        
+        // Check for submission dates
+        if ($request->filled('submission_date_from') && $request->filled('submission_date_to')) {
+            $submissionDateFrom = date('Y-m-d', strtotime($request->get('submission_date_from')));
+            $submissionDateTo = date('Y-m-d', strtotime($request->get('submission_date_to')));
+            
+            // Filter by date range
+            $query->whereBetween('return_submission_date', [$submissionDateFrom, $submissionDateTo]);
+        } elseif ($request->filled('submission_date_from')) {
+            // If only the 'from' date is provided
+            $query->where('return_submission_date', '>=', $request->get('submission_date_from'));
+        } elseif ($request->filled('submission_date_to')) {
+            // If only the 'to' date is provided
+            $query->where('return_submission_date', '<=', $request->get('submission_date_to'));
+        }
+
+        // Apply sorting
+        if ($request->filled('order_by')) {
+            $query->orderBy($request->get('order_by'), $request->get('asc_desc', 'ASC')); // Default to 'ASC'
+        } else {
+            $query->orderBy('id', 'DESC'); // Default sorting by ID
+        }
+
+        // Paginate the results
+        $retarns = $query->paginate(200)->appends($request->except('page'));
+
+        // Return the view with the filtered results and helper
+        return view('circle.retarn.index', [
+            'retarns' => $retarns,
+            'helper' => new MyHelper(),
+        ]);
+    }
+
+
+    //Excel Download
+    public function excel(Request $request)
+    {
+        $query = [];
+
+        if ($request->filled('register')) {
+            $query['register'] = $request->register;
+        }
+        if ($request->filled('assessment_year')) {
+            $query['assessment_year'] = $request->assessment_year;
+        }
+        if ($request->filled('submission_date_from') && $request->filled('submission_date_to')) {
+            $query[] = ['return_submission_date', '>=', date('Y-m-d', strtotime($request->submission_date_from))];
+            $query[] = ['return_submission_date', '<=', date('Y-m-d', strtotime($request->submission_date_to))];
+        }
+        return Excel::download(new RetarnExport($query), 'returns.xlsx');
+    }
+
 
 }

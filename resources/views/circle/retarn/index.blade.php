@@ -12,14 +12,35 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+
+                <div class="col-sm-2">
                     <h1 class="m-0">Return</h1>
                 </div>
-                <div class="col-sm-6">
+
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                        Search
+                    </button>
+                </div>
+
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModa2">
+                        Excel
+                    </button>
+                </div>
+
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModa3">
+                        Register
+                    </button>
+                </div>
+
+                <div class="col-sm-3">
                     <ol class="breadcrumb float-sm-right">
                         <a href="{{ route('circle.return.create') }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add Return</a>
                     </ol>
                 </div>
+
             </div>
         </div>
 
@@ -174,6 +195,11 @@
 
     </section>
 
+
+
+<!-- Filter Modal -->
+@include('circle.retarn.modal.filter')
+@include('circle.retarn.modal.excel')
 
     
 @endsection

@@ -246,7 +246,7 @@
 
                     <li class="nav-item">
 
-                        <a href="{{ route('circle.return.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['circle.return.index', 'circle.return.create'])  ? 'active' : ''}} ">
+                        <a href="{{ route('circle.return.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['circle.return.index', 'circle.return.create', 'circle.return.filter'])  ? 'active' : ''}} ">
 
                             <i class="nav-icon fas fa-registered text-light"></i>
 
