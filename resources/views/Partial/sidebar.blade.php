@@ -412,7 +412,7 @@
 
                     {{ in_array(Route::currentRouteName(),
 
-                        ['commissioner.tds.collection.index', 'commissioner.tdsList.index', 'commissioner.tds.upazila.index', 'commissioner.tds.organization.index', 'commissioner.tds.upazila.organization', 'commissioner.tds.collection.zilla' ] ) ? 'menu-is-opening menu-open' : '' }}">
+                        ['commissioner.tds.collection.index', 'commissioner.tdsList.index', 'commissioner.tds.upazila.index', 'commissioner.tds.organization.index', 'commissioner.tds.upazila.organization', 'commissioner.tds.collection.zilla', 'commissioner.tds.year' ] ) ? 'menu-is-opening menu-open' : '' }}">
 
                         <a href="#" class="nav-link">
 
@@ -434,7 +434,7 @@
 
                             <li class="nav-item">
 
-                                <a href="{{ route('commissioner.tds.collection.index') }}" class="nav-link {{ in_array(Route::currentRouteName(),['commissioner.tds.collection.index', 'commissioner.tds.collection.zilla' ] ) ? 'active' : '' }}">
+                                <a href="{{ route('commissioner.tds.collection.index') }}" class="nav-link {{ in_array(Route::currentRouteName(),['commissioner.tds.collection.index', 'commissioner.tds.collection.zilla', 'commissioner.tds.year' ] ) ? 'active' : '' }}">
 
                                     <i class="far fa-circle nav-icon text-light"></i>
 

@@ -174,6 +174,7 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
 
     //TDS Report
     Route::get('/range/tds/report', [TdsController::class, 'tdsRangeReport'])->name('tds.report');
+    Route::get('/range/tds/report/assessment_year', [TdsController::class, 'tdsRangeReportYear'])->name('tds.year');
     Route::get('/range/tds/report/circle/{circle}', [TdsController::class, 'tdsReport'])->name('tds.report.circle');
     Route::get('/range/tds/report/circle/{circle}/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.circle.upazila');
     Route::get('/range/tds/report/circles/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgDistUpazila'])->name('tds.report.upazila');
@@ -239,6 +240,7 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::get('/tds/report/circle/{circle}', [TdsController::class, 'tdsReport'])->name('tds.report.circle');
     Route::get('/tds/report/circle/{circle}/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.circle.upazila');
     Route::get('/tds-list/search', [TdsController::class, 'commissionTdsSearch'])->name('tdsList.search');
+    Route::get('/tds/report/assessment_year', [TdsController::class, 'commissionTdsAssessmentYear'])->name('tds.year');
 
     //Advance Route
     Route::get('/commissioner/advance', [AdvanceController::class, 'advanceReport'])->name('advance.index');

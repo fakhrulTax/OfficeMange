@@ -40,6 +40,40 @@ class TdsController extends Controller
             'circleDatas' => $circleDatas,
             'upazilaData' => $upazilaData,
             'orgDatas' => $orgDatas,
+            'assessment_year' => $assessment_year,
+            'search_assessment_year' => $assessment_year,
+        ]);
+    }
+
+    //TDS Report For Range By Assessment Year
+    public function tdsRangeReportYear(Request $request)
+    {
+        $request->validate([
+            'assessment_year' => 'required|digits:8|numeric',
+        ]);
+        $assessment_year = $request->assessment_year;
+        $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year);
+        $circles = Myhelper::ranges( 'range-' . Auth::user()->range );
+
+        //Circle Data
+         $circleDatas = Tds_collection::getAssessmentYearCollectionByCircle($monthRange, $circles);
+
+        //Upazila Data
+        $upazilaIds = Tds_collection::whereIn('circle', $circles)->distinct()->pluck('upazila_id')->toArray();       
+        $upazilaData = count($upazilaIds) ? Tds_Collection::getAssessmentYearCollectionByUpazila($upazilaIds, $monthRange, $circles) : [];
+        
+        //Organization Data
+        $orgIds = Tds_collection::whereIn('circle', $circles)->distinct()->pluck('organization_id')->toArray();
+        $orgDatas = count($orgIds) ? Tds_collection::getAssessmentYearCollectionByOrganization($orgIds, $monthRange, $circles) : [];
+      
+        return view('range.tds.report', [
+            'title' => 'TDS Report',
+            'monthRange' => $monthRange,
+            'circleDatas' => $circleDatas,
+            'upazilaData' => $upazilaData,
+            'orgDatas' => $orgDatas,
+            'assessment_year' => config('settings.assessment_year_commissioner'),
+            'search_assessment_year' => $assessment_year,
         ]);
     }
 
@@ -322,9 +356,6 @@ class TdsController extends Controller
 
 
 
-
-
-
     public function upazilaList($zilla){
 
         $upazilla = Upazila::where('zilla_id', $zilla)->orderBy('name')->get();
@@ -350,7 +381,7 @@ class TdsController extends Controller
     public function commissionTdsIndex(){
         $zillas = Zilla::orderBy('name')->get();
 
-        $tdsList = Tds_collection::orderBy('circle', 'ASC')->with('upazila', 'organization')
+        $tdsList = Tds_collection::orderBy('created_at', 'DESC')->with('upazila', 'organization')
 
         ->paginate(100);
      
@@ -437,7 +468,56 @@ class TdsController extends Controller
             'toatalNonGovtTDS' => $toatalNonGovtTDS,
             'circleData' => $circleData,
             'zillas' => $zillas,
-            'orgDatas' => $orgDatas 
+            'orgDatas' => $orgDatas,
+            'assessment_year' =>  $assessment_year,
+            'search_assessment_year' => $assessment_year,
+        ]);
+    }
+
+    //TDS Assessment Year Change
+    public function commissionTdsAssessmentYear(Request $request)
+    {
+        $request->validate([
+            'assessment_year' => 'required|digits:8|numeric',
+        ]);
+        //Settings
+        $assessment_year = $request->assessment_year;
+        $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year);
+
+        //Get Govt or Non Govt Organization
+        $govtOrganizationIds = Organization::getOrganizationIdsByType(true);         
+        $nonGovtOrganizationIds = Organization::getOrganizationIdsByType(false); 
+        
+        //Get Total Govt. or Non Govt Org
+        $toatalGovtTDS = Tds_collection::totalCollectionByOrg( $assessment_year, $govtOrganizationIds);
+        $toatalNonGovtTDS = Tds_collection::totalCollectionByOrg( $assessment_year, $nonGovtOrganizationIds); 
+        
+        //Circle Data
+        $circleData = Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
+
+        //dd($circleData);
+
+        //Zillas
+        $zillas = Zilla::orderBy('name')->get();
+
+         //Organization Data
+         $orgIds = array_merge($govtOrganizationIds, $nonGovtOrganizationIds);         
+         $orgDatas = count($orgIds) ? Tds_collection::getAssessmentYearCollectionByOrganization($orgIds, $monthRange, $circles = null) : [];
+         
+         //dd($orgDatas);
+
+        return view('commissioner.tds.collection_index', [
+            'title' => 'TDS Report',
+            'monthRange' => $monthRange,
+            'govtOrgNumber' => count($govtOrganizationIds), 
+            'nonGovtOrgNumber' => count($nonGovtOrganizationIds), 
+            'toatalGovtTDS' => $toatalGovtTDS,
+            'toatalNonGovtTDS' => $toatalNonGovtTDS,
+            'circleData' => $circleData,
+            'zillas' => $zillas,
+            'orgDatas' => $orgDatas,
+            'assessment_year' =>  config('settings.assessment_year_commissioner'),
+            'search_assessment_year' => $assessment_year
         ]);
     }
 
