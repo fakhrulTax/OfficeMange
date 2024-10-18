@@ -36,8 +36,8 @@ class Tds_collection extends Model
         $endYear = substr($assessment_year, 4, 4);
 
         // Format the date range
-        $fromDate = $startYear . '-07-01';
-        $toDate = $endYear . '-06-30';
+        $fromDate = $startYear . '-07';
+        $toDate = $endYear . '-06';
         
         $totalCollection = self::whereIn('organization_id', $orgIds)
         ->whereBetween('collection_month', [$fromDate, $toDate])
