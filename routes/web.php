@@ -240,7 +240,6 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::get('/tds/report/circle/{circle}', [TdsController::class, 'tdsReport'])->name('tds.report.circle');
     Route::get('/tds/report/circle/{circle}/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.circle.upazila');
     Route::get('/tds-list/search', [TdsController::class, 'commissionTdsSearch'])->name('tdsList.search');
-    Route::get('/tds/report/assessment_year', [TdsController::class, 'commissionTdsAssessmentYear'])->name('tds.year');
 
     //Advance Route
     Route::get('/commissioner/advance', [AdvanceController::class, 'advanceReport'])->name('advance.index');
@@ -269,6 +268,8 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     //Settings
 	Route::get('/commissioner/setting', [SettingController::class, 'index'])->name('setting.index');
 	Route::post('/commissioner/setting', [SettingController::class, 'update'])->name('setting.update');
+	Route::post('/commissioner/update/assessment_year', [SettingController::class, 'updateAssessmentYear'])->name('setting.update.assessment');
+
 
     //SMS routes
     Route::get('commissioner/sms', [SMSController::class, 'index'])->name('sms');

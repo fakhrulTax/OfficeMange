@@ -7,12 +7,38 @@ use App\Models\Arrear;
 use App\Models\User;
 use App\Models\SMSModel;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 
 
 
 class MyHelper
 {
+
+    //Get Current Assessment Year
+    public static function currentAssessmentYear($date = null)
+    {
+        // If no date is provided, use the current date
+        $date = $date ? Carbon::parse($date) : Carbon::now();
+
+        // Get the year of the given date
+        $currentYear = $date->year;
+
+        // Fiscal year starts on July 1st and ends on June 30th
+        // Check if the current date is before July 1st of the current year
+        if ($date->lt(Carbon::create($currentYear, 7, 1))) {
+            // If before July, it's part of the previous fiscal year
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
+        } else {
+            // Otherwise, it's part of the current fiscal year
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        }
+
+        // Return the fiscal year in the format YYYYYYYY (e.g., 20232024)
+        return $startYear . $endYear;
+    }
     
     public static function ranges($range)
     {

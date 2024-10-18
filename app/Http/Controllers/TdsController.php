@@ -474,52 +474,6 @@ class TdsController extends Controller
         ]);
     }
 
-    //TDS Assessment Year Change
-    public function commissionTdsAssessmentYear(Request $request)
-    {
-        $request->validate([
-            'assessment_year' => 'required|digits:8|numeric',
-        ]);
-        //Settings
-        $assessment_year = $request->assessment_year;
-        $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year);
-
-        //Get Govt or Non Govt Organization
-        $govtOrganizationIds = Organization::getOrganizationIdsByType(true);         
-        $nonGovtOrganizationIds = Organization::getOrganizationIdsByType(false); 
-        
-        //Get Total Govt. or Non Govt Org
-        $toatalGovtTDS = Tds_collection::totalCollectionByOrg( $assessment_year, $govtOrganizationIds);
-        $toatalNonGovtTDS = Tds_collection::totalCollectionByOrg( $assessment_year, $nonGovtOrganizationIds); 
-        
-        //Circle Data
-        $circleData = Tds_collection::getAssessmentYearCollectionByCircle($monthRange);
-
-        //dd($circleData);
-
-        //Zillas
-        $zillas = Zilla::orderBy('name')->get();
-
-         //Organization Data
-         $orgIds = array_merge($govtOrganizationIds, $nonGovtOrganizationIds);         
-         $orgDatas = count($orgIds) ? Tds_collection::getAssessmentYearCollectionByOrganization($orgIds, $monthRange, $circles = null) : [];
-         
-         //dd($orgDatas);
-
-        return view('commissioner.tds.collection_index', [
-            'title' => 'TDS Report',
-            'monthRange' => $monthRange,
-            'govtOrgNumber' => count($govtOrganizationIds), 
-            'nonGovtOrgNumber' => count($nonGovtOrganizationIds), 
-            'toatalGovtTDS' => $toatalGovtTDS,
-            'toatalNonGovtTDS' => $toatalNonGovtTDS,
-            'circleData' => $circleData,
-            'zillas' => $zillas,
-            'orgDatas' => $orgDatas,
-            'assessment_year' =>  config('settings.assessment_year_commissioner'),
-            'search_assessment_year' => $assessment_year
-        ]);
-    }
 
     public function collectionZilla($zillaId)
     {

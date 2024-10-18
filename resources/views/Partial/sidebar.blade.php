@@ -7,9 +7,13 @@
     <div class="row">
 
         <div class="col-md-4">
-
-            <a href="{{ route('circle.dashboard') }}" class="brand-link elevation-4">
-
+            @if( Auth::user()->user_role == 'commissioner' )
+                <a href="{{ route('commissioner.dashboard') }}" class="brand-link elevation-4">
+            @elseif( Auth::user()->user_role == 'range' )
+                <a href="{{ route('range.dashboard') }}" class="brand-link elevation-4">
+            @else
+                <a href="{{ route('circle.dashboard') }}" class="brand-link elevation-4">
+            @endif
                 <img src="{{ asset('img/logo.png') }}" class="img-circle elevation-2" alt="User Image" style="width: 55px">
 
                 <span class="brand-text font-weight-light" style="font-size: 16px"></span>

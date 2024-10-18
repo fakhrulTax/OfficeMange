@@ -20,24 +20,6 @@
 
                 <div class="col-md-6">
 
-                    <form class="form-inline" action="{{ route('commissioner.tds.year') }}" method="GET">
-                    @csrf
-                        <div class="form-group mx-sm-3 mb-2">
-                            <label for="assessment_year" class="sr-only">Assessment Year</label>
-                            <select name="assessment_year" id="assessment_year" class="form-control">
-                            <option value="{{ $assessment_year }}" 
-                                {{ $search_assessment_year == $assessment_year ? 'selected' : '' }}>
-                                {{ App\Helpers\MyHelper::assessment_year_format($assessment_year) }}
-                            </option>
-                                <option value="{{ $assessment_year - 10001 }}" {{ isset($search_assessment_year) && $search_assessment_year == ($assessment_year - 10001)  ? 'selected' : '' }}> {{ App\Helpers\MyHelper::assessment_year_format($assessment_year - 10001) }}</option>
-                                <option value="{{ $assessment_year - 20002 }}" {{ isset($search_assessment_year) && $search_assessment_year == ($assessment_year - 20002) ? 'selected' : '' }}> {{ App\Helpers\MyHelper::assessment_year_format($assessment_year - 20002) }}</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
-
-                    </form>
-
                 </div>
 
             </div>
