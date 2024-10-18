@@ -609,7 +609,7 @@
 
                         <a href="{{ route('commissioner.users') }}"
 
-                            class="nav-link {{ Route::currentRouteName() == 'commissioner.users' ? 'active' : '' }} ">
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.users', 'commissioner.user.create', 'commissioner.user.edit']) ? 'active' : '' }} ">
 
                             <i class="nav-icon fas fa-users text-light"></i>
 

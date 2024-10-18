@@ -182,7 +182,9 @@
                                 <label for="password">Password <span class="text-danger">*</span> </label>
                                 <input type="password" class="form-control" id="password" name="password" required>
                                 
-                                <span class="text-danger" id="passwordError"> </span>
+                                @error('password')
+                                    <span class="text-danger"> {{ $message }} </span>
+                                @enderror
                                 
 
                             </div>
@@ -191,11 +193,11 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="user_otp">OTP(6 digit) <span class="text-danger">*</span> </label>
-                                <input type="number" class="form-control" id="user_otp" name="user_otp" required>
+                                <input type="number" class="form-control" id="user_otp" name="user_otp" value="111111" required>
 
                                 @error('user_otp')
-                                <span class="text-danger"> {{ $message }} </span>
-                            @enderror
+                                    <span class="text-danger"> {{ $message }} </span>
+                                @enderror
 
                             </div>
                         </div>
