@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Helpers\MyHelper;
 use App\Models\Stock;
+use App\Models\Retarn;
 use Illuminate\Support\Facades\Auth;
 use App\Imports\StocksImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -37,6 +38,37 @@ class StockController extends Controller
             
         }
     }
+
+    //Register
+    public function register()
+    {
+        $stockNumber = Stock::where('circle', Auth::user()->circle)->count();
+
+        // Get the current assessment year
+        $currentAssessmentYear = MyHelper::currentAssessmentYear();
+        $assessmentYears = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $assessmentYears[] = $currentAssessmentYear - (10001 * $i);
+        }
+
+        // Eager load the retarns using the existing Eloquent relationship
+        $stocks = Stock::where('circle', Auth::user()->circle)
+                   ->with(['retarns' => function($query) use ($assessmentYears) {
+                       $query->whereIn('assessment_year', $assessmentYears)
+                             ->orderBy('created_at', 'desc'); // Assuming `created_at` is used to track latest
+                   }])
+                   ->orderBy('tin', 'ASC')
+                   ->paginate(200);
+
+        return view('circle.stock.register', [
+            'stocks' => $stocks,
+            'stockNumber' => $stockNumber,
+            'assessmentYears' => $assessmentYears,
+            'MyHelper' => new MyHelper(),
+        ]);
+    }
+
 
     //Search
     public function search(Request $request)
@@ -123,10 +155,15 @@ class StockController extends Controller
 
     //Circle Index
     public function index(){
+        $stockNumber = Stock::where('circle', Auth::user()->circle)->count();;
 
         $stocks = Stock::latest()->where('circle', Auth::user()->circle)->paginate(500);
 
-        return view('circle.stock.index', compact('stocks'));
+        return view('circle.stock.index', [
+            'stocks' => $stocks,
+            'stockNumber' => $stockNumber
+
+        ]);
     }
 
 
@@ -396,4 +433,6 @@ class StockController extends Controller
         Toastr::success('TIN Delete Successfull', 'success');
         return redirect()->back();
     }
+
+    
 }

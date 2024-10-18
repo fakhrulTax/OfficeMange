@@ -6,10 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Collection;
 use App\Models\Advance;
+use App\Models\Retarn;
 
 class Stock extends Model
 {
     use HasFactory;
+
+    public function retarns()
+    {
+        return $this->hasMany(Retarn::class, 'tin', 'tin'); // Assuming 'tin' is the foreign key
+    }
 
     public function collections()
     {

@@ -317,5 +317,4 @@ class RetarnController extends Controller
         return Excel::download(new RetarnExport($query), 'returns.xlsx');
     }
 
-
 }

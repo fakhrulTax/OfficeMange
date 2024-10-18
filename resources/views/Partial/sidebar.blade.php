@@ -230,7 +230,7 @@
 
                     <li class="nav-item">
 
-                        <a href="{{ route('circle.stock') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['circle.stock', 'circle.stock.view'])  ? 'active' : ''}} ">
+                        <a href="{{ route('circle.stock') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['circle.stock', 'circle.stock.view', 'circle.stock.register'])  ? 'active' : ''}} ">
 
                             <i class="nav-icon fas fa-list text-light"></i>
 

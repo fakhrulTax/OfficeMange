@@ -313,6 +313,33 @@ class MyHelper
 
         return $months;
     }
+    //Format Two Lines
+    public static function formatToTwoLines($string, $maxLength = 30)
+    {
+        // Split the string into words
+        $words = explode(' ', $string);
+        $formattedString = '';
+        $currentLine = '';
+
+        foreach ($words as $word) {
+            // Check if adding the next word exceeds the max length
+            if (strlen($currentLine) + strlen($word) + 1 <= $maxLength) {
+                // Append the word to the current line
+                $currentLine .= ($currentLine ? ' ' : '') . $word;
+            } else {
+                // Add the current line to the formatted string and start a new line
+                $formattedString .= $currentLine . "<br>";
+                $currentLine = $word; // Start new line with the current word
+            }
+        }
+
+        // Add the last line if there's remaining text
+        if ($currentLine) {
+            $formattedString .= $currentLine;
+        }
+
+        return $formattedString;
+    }
     
     
     
