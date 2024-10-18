@@ -777,7 +777,7 @@
 
 
 
-                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['range.tds.report', 'range.tds.report.circle', 'range.tds.report.circle.upazila', 'range.tds.report.upazila']) ? 'menu-is-opening menu-open' : ''}}">
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['range.tds.report', 'range.tds.report.circle', 'range.tds.report.circle.upazila', 'range.tds.report.upazila', 'range.tds.year']) ? 'menu-is-opening menu-open' : ''}}">
 
 
 
@@ -805,7 +805,7 @@
 
 
 
-                                    class="nav-link {{ in_array(Route::currentRouteName(), ['range.tds.report', 'range.tds.report.circle', 'range.tds.report.circle.upazila', 'range.tds.report.upazila']) ? 'active' : ''}}">
+                                    class="nav-link {{ in_array(Route::currentRouteName(), ['range.tds.report', 'range.tds.report.circle', 'range.tds.report.circle.upazila', 'range.tds.report.upazila', 'range.tds.year']) ? 'active' : ''}}">
 
 
 
