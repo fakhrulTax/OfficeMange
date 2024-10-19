@@ -112,6 +112,9 @@
                     </thead>
 
                     <tbody>
+                        <?php
+                            $totalDemand = 0;
+                        ?>
                         @foreach ($audits as $key => $audit)
                             <tr>
                                 <td>{{ ++$key }}</td>
@@ -150,11 +153,18 @@
                                     <td>{{ $audit->circle }}</td>
                                 @endif
                             </tr>
+
+                            <?php
+                                $totalDemand += $audit->demand;
+                            ?>
                         @endforeach
                     </tbody>
 
                     <tfoot>
-                        <!-- Add footer content here if necessary -->
+                        <tr>
+                            <th colspan="7">Total Demand</th>
+                            <th>{{ App\Helpers\MyHelper::moneyFormatBD($totalDemand) }}</th>
+                        </tr>
                     </tfoot>
                 </table>
             </div>

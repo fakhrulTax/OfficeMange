@@ -32,4 +32,3 @@ class Reopen extends Model
         return $this->belongsTo(Stock::class, 'tin', 'tin'); // Adjust as necessary based on your foreign key relationships
     }
 }
-

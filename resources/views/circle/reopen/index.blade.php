@@ -112,6 +112,9 @@
                     </thead>
 
                     <tbody>
+                         <?php
+                            $totalDemand = 0;
+                        ?>
                         @foreach ($reopens as $key => $reopen)
                             <tr>
                                 <td>{{ ++$key }}</td>
@@ -150,11 +153,17 @@
                                     <td>{{ $reopen->circle }}</td>
                                 @endif
                             </tr>
+                            <?php
+                                $totalDemand += $reopen->demand;
+                            ?>
                         @endforeach
                     </tbody>
 
                     <tfoot>
-                        <!-- Add footer content here if necessary -->
+                        <tr>
+                            <th colspan="7">Total Demand</th>
+                            <th>{{ App\Helpers\MyHelper::moneyFormatBD($totalDemand) }}</th>
+                        </tr>
                     </tfoot>
                 </table>
             </div>
