@@ -344,6 +344,24 @@
 
                     <li class="nav-item">
 
+                        <a href="{{ route('circle.audit.index') }}"
+
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['circle.audit.index', 'circle.audit.create', 'circle.audit.store', 'circle.audit.register', 'circle.audit.edit', 'circle.audit.search']) ? 'active' : '' }}">
+
+                            <i class="nav-icon fas fa-audio-description text-light"></i>
+
+                            <p>
+
+                                Audit
+
+                            </p>
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
                         <a href="{{ route('circle.reopen.index') }}"
 
                             class="nav-link {{ in_array(Route::currentRouteName(), ['circle.reopen.index', 'circle.reopen.create', 'circle.reopen.store', 'circle.reopen.register', 'circle.reopen.edit', 'circle.reopen.search']) ? 'active' : '' }}">

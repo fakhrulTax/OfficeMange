@@ -8,6 +8,7 @@ use App\Models\Collection;
 use App\Models\Advance;
 use App\Models\Retarn;
 use App\Models\Reopen;
+use App\Models\Audit;
 
 class Stock extends Model
 {
@@ -21,6 +22,11 @@ class Stock extends Model
     public function reopens()
     {
         return $this->hasMany(Reopen::class, 'tin', 'tin'); // Assuming 'tin' is the foreign key
+    }
+
+    public function audits()
+    {
+        return $this->hasMany(Audit::class, 'tin', 'tin'); // Assuming 'tin' is the foreign key
     }
 
     public function collections()

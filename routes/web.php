@@ -22,6 +22,7 @@ use App\Http\Controllers\TdsController;
 use App\Http\Controllers\AdvanceController;
 use App\Http\Controllers\RetarnController;
 use App\Http\Controllers\ReopenController;
+use App\Http\Controllers\AuditController;
 
 
 Route::get('/', function () {
@@ -159,6 +160,15 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/reopen/edit/{reopen}', [ReopenController::class, 'edit'])->name('reopen.edit');
     Route::put('/reopen/edit/{reopen}', [ReopenController::class, 'update'])->name('reopen.update');
     Route::get('/reopen/search', [ReopenController::class, 'search'])->name('reopen.search');
+
+    //Audit
+    Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
+    Route::get('/audit/create', [AuditController::class, 'create'])->name('audit.create');
+    Route::post('/audit', [AuditController::class, 'store'])->name('audit.store');
+    Route::get('/audit/register', [AuditController::class, 'register'])->name('audit.register');
+    Route::get('/audit/edit/{audit}', [AuditController::class, 'edit'])->name('audit.edit');
+    Route::put('/audit/edit/{audit}', [AuditController::class, 'update'])->name('audit.update');
+    Route::get('/audit/search', [AuditController::class, 'search'])->name('audit.search');
 
     //Notice Controller
     Route::post('/circle/notice/{tin}/183(3)', [NoticeController::class, 'notice183'])->name('notice.183');
