@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Collection;
 use App\Models\Advance;
 use App\Models\Retarn;
+use App\Models\Reopen;
 
 class Stock extends Model
 {
@@ -15,6 +16,11 @@ class Stock extends Model
     public function retarns()
     {
         return $this->hasMany(Retarn::class, 'tin', 'tin'); // Assuming 'tin' is the foreign key
+    }
+
+    public function reopens()
+    {
+        return $this->hasMany(Reopen::class, 'tin', 'tin'); // Assuming 'tin' is the foreign key
     }
 
     public function collections()

@@ -21,6 +21,7 @@ use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\TdsController;
 use App\Http\Controllers\AdvanceController;
 use App\Http\Controllers\RetarnController;
+use App\Http\Controllers\ReopenController;
 
 
 Route::get('/', function () {
@@ -149,6 +150,15 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/advance/edit/{id}', [AdvanceController::class, 'edit'])->name('advance.edit');
     Route::post('/advance/edit/{id}', [AdvanceController::class, 'update'])->name('advance.update');
     Route::get('/advance/search', [AdvanceController::class, 'search'])->name('advance.search');
+
+    //Reopen
+    Route::get('/reopen', [ReopenController::class, 'index'])->name('reopen.index');
+    Route::get('/reopen/create', [ReopenController::class, 'create'])->name('reopen.create');
+    Route::post('/reopen', [ReopenController::class, 'store'])->name('reopen.store');
+    Route::get('/reopen/register', [ReopenController::class, 'register'])->name('reopen.register');
+    Route::get('/reopen/edit/{reopen}', [ReopenController::class, 'edit'])->name('reopen.edit');
+    Route::put('/reopen/edit/{reopen}', [ReopenController::class, 'update'])->name('reopen.update');
+    Route::get('/reopen/search', [ReopenController::class, 'search'])->name('reopen.search');
 
     //Notice Controller
     Route::post('/circle/notice/{tin}/183(3)', [NoticeController::class, 'notice183'])->name('notice.183');

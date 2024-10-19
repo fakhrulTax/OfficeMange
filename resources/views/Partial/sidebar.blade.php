@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="overflow-x: hidden; overflow-y: auto;">
 
     <!-- Brand Logo -->
 
@@ -335,6 +335,24 @@
                             <p>
 
                                 Appeal
+
+                            </p>
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a href="{{ route('circle.reopen.index') }}"
+
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['circle.reopen.index', 'circle.reopen.create', 'circle.reopen.store', 'circle.reopen.register', 'circle.reopen.edit', 'circle.reopen.search']) ? 'active' : '' }}">
+
+                            <i class="nav-icon fas fa-book-open text-light"></i>
+
+                            <p>
+
+                                Reopen
 
                             </p>
 
