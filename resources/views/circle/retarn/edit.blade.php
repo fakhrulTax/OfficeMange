@@ -73,6 +73,7 @@
                                     <option value="b" {{ ($retarn->register == 'b' || old('register') == 'b') ? 'selected' : '' }}>B</option>
                                     <option value="c" {{ ($retarn->register == 'c' || old('register') == 'c') ? 'selected' : '' }}>C</option>
                                     <option value="d" {{ ($retarn->register == 'd' || old('register') == 'd') ? 'selected' : '' }}>D</option>
+                                    <option value="others" {{ ($retarn->register == 'others' || old('register') == 'others') ? 'selected' : '' }}>Others Year</option>
                                 </select>
                                 @error('register')
                                     <div class="text text-danger">{{ $message }}</div>

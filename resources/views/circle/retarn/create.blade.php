@@ -72,6 +72,8 @@
                                     <option value="b" {{ (session('last_register') == 'b' || old('register') == 'b') ? 'selected' : '' }}>B</option>
                                     <option value="c" {{ (session('last_register') == 'c' || old('register') == 'c') ? 'selected' : '' }}>C</option>
                                     <option value="d" {{ (session('last_register') == 'd' || old('register') == 'd') ? 'selected' : '' }}>D</option>
+                                    <option value="others" {{ (session('last_register') == 'others' || old('register') == 'others') ? 'selected' : '' }}>Others Year</option>
+                                    <option value="revise" {{ (session('last_register') == 'revise' || old('register') == 'revise') ? 'selected' : '' }}>Revise</option>
                                 </select>
                                 @error('register')
                                     <div class="text text-danger">{{ $message }}</div>
