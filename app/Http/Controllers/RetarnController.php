@@ -110,11 +110,17 @@ class RetarnController extends Controller
         }
 
         //Check the taxpayer already submitted return for the same assessment year
-        $checkRetarn = Retarn::where('tin', $request->tin)->where('assessment_year', $request->assessment_year)->first();
-        if($checkRetarn){
-            Toastr::error('The Taxpayer already submitted return for ass. year '. $request->assessment_year, 'danger');
-            return back()->withInput();
+        if( $request->register != 'revise' )
+        {
+            $checkRetarn = Retarn::where('tin', $request->tin)->where('assessment_year', $request->assessment_year)->first();
+            if($checkRetarn){
+                Toastr::error('The Taxpayer already submitted return for ass. year '. $request->assessment_year, 'danger');
+                return back()->withInput();
+            }
+
+
         }
+        
 
         // Convert the date to the correct format for storing in the database
         $validatedData['return_submission_date'] = \Carbon\Carbon::createFromFormat('d-m-Y', $validatedData['return_submission_date'])->format('Y-m-d');
@@ -183,15 +189,23 @@ class RetarnController extends Controller
             return back()->withInput();
         }
 
-        //Check the taxpayer already submitted return for the same assessment year
-        $checkRetarn = Retarn::where('tin', $request->tin)
-                                ->where('assessment_year', $request->assessment_year)
-                                ->where('id', '!=', $retarn->id) // Exclude the same ID
-                                ->first();
-        if($checkRetarn){
+
+         //Check the taxpayer already submitted return for the same assessment year
+         if( $request->register != 'revise' )
+         {
+            //Check the taxpayer already submitted return for the same assessment year
+            $checkRetarn = Retarn::where('tin', $request->tin)
+            ->where('assessment_year', $request->assessment_year)
+            ->where('id', '!=', $retarn->id) // Exclude the same ID
+            ->first();
+            if($checkRetarn){
             Toastr::error('The Taxpayer already submitted return for ass. year '. $request->assessment_year, 'danger');
             return back()->withInput();
-        }
+            }                    
+ 
+         }  
+
+        
 
         // Convert the date to the correct format for storing in the database
         $validatedData['return_submission_date'] = \Carbon\Carbon::createFromFormat('d-m-Y', $validatedData['return_submission_date'])->format('Y-m-d');

@@ -74,6 +74,9 @@ class AuditController extends Controller
                 $query->whereNull('disposal_date');
             }
         }
+
+        //Only Auth User Circle
+        $query->where('circle', Auth::user()->circle);
     
         // Get the results
         $audits = $query->paginate(100)->appends($request->except('page'));

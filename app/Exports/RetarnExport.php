@@ -2,6 +2,7 @@
 namespace App\Exports;
 
 use App\Models\Retarn;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Carbon\Carbon;
@@ -17,7 +18,7 @@ class RetarnExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        $retarns = Retarn::where($this->query)->orderby('register', 'ASC')->orderby('register_serial', 'ASC')->get();
+        $retarns = Retarn::where('circle', Auth::user()->circle)->where($this->query)->orderby('register', 'ASC')->orderby('register_serial', 'ASC')->get();
 
         // Modify the dates to the desired format
         $retarns->transform(function ($retarn) {

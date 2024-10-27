@@ -73,6 +73,7 @@ class StockController extends Controller
     //Search
     public function search(Request $request)
     {
+        
         $stocks = Stock::query();
 
         if(!empty($request->tin))
@@ -102,14 +103,16 @@ class StockController extends Controller
         
         $stocks = $stocks->paginate(100);
 
+        
         return view('commissioner.stock.index',[
             'stocks' => $stocks,
-            'search' => $request
+            'search' => $request,
         ]);
     }
 
     public function circleSearch(Request $request)
     {        
+        $stockNumber = Stock::where('circle', Auth::user()->circle)->count();
         $stocks = Stock::query();
 
         if(!empty($request->tin))
@@ -135,11 +138,12 @@ class StockController extends Controller
            
         }
         
-        $stocks = $stocks->paginate(1);
+        $stocks = $stocks->where('circle', Auth::user()->circle)->paginate(100);
 
         return view('circle.stock.index',[
             'stocks' => $stocks,
-            'search' => $request
+            'search' => $request,
+            'stockNumber' => $stockNumber
         ]);
     }
 
@@ -155,7 +159,7 @@ class StockController extends Controller
 
     //Circle Index
     public function index(){
-        $stockNumber = Stock::where('circle', Auth::user()->circle)->count();;
+        $stockNumber = Stock::where('circle', Auth::user()->circle)->count();
 
         $stocks = Stock::latest()->where('circle', Auth::user()->circle)->paginate(500);
 

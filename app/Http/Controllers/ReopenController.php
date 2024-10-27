@@ -79,6 +79,9 @@ class ReopenController extends Controller
                 $query->whereNull('disposal_date');
             }
         }
+
+        //Only Auth User Circle
+        $query->where('circle', Auth::user()->circle);
     
         // Get the results
         $reopens = $query->paginate(100)->appends($request->except('page'));
