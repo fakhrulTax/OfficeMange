@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="overflow-x: hidden; overflow-y: auto;">
 
     <!-- Brand Logo -->
 
@@ -7,9 +7,13 @@
     <div class="row">
 
         <div class="col-md-4">
-
-            <a href="{{ route('circle.dashboard') }}" class="brand-link elevation-4">
-
+            @if( Auth::user()->user_role == 'commissioner' )
+                <a href="{{ route('commissioner.dashboard') }}" class="brand-link elevation-4">
+            @elseif( Auth::user()->user_role == 'range' )
+                <a href="{{ route('range.dashboard') }}" class="brand-link elevation-4">
+            @else
+                <a href="{{ route('circle.dashboard') }}" class="brand-link elevation-4">
+            @endif
                 <img src="{{ asset('img/logo.png') }}" class="img-circle elevation-2" alt="User Image" style="width: 55px">
 
                 <span class="brand-text font-weight-light" style="font-size: 16px"></span>
@@ -134,7 +138,7 @@
 
 
 
-                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['circle.tds.index', 'circle.tds.report', 'circle.tds.create', 'circle.tds.upazila.organization', 'circle.tds.upazilaSelected.organization']) ? 'menu-is-opening menu-open' : ''}}">
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['circle.tds.index', 'circle.tds.report', 'circle.tds.create', 'circle.tds.upazila.organization', 'circle.tds.upazilaSelected.organization', 'circle.tds.search', 'circle.tds.contactPerson', 'circle.tds.contactPerson.create', 'circle.tds.contactPerson.edit', 'circle.tds.contactPerson.search']) ? 'menu-is-opening menu-open' : ''}}">
 
 
 
@@ -162,7 +166,7 @@
 
 
 
-                                    class="nav-link {{ Route::currentRouteName() == 'circle.tds.index' || Route::currentRouteName() == 'circle.tds.create' ? 'active' : ''}}">
+                                    class="nav-link {{ in_array(Route::currentRouteName(), ['circle.tds.index', 'circle.tds.create', 'circle.tds.search']) ? 'active' : ''}}">
 
 
 
@@ -216,6 +220,24 @@
 
                             </li> 
 
+                            <li class="nav-item">
+
+                                <a href="{{ route('circle.tds.contactPerson') }}"
+
+
+
+                                    class="nav-link {{ in_array(Route::currentRouteName(), [ 'circle.tds.contactPerson', 'circle.tds.contactPerson.create', 'circle.tds.contactPerson.edit', 'circle.tds.contactPerson.search' ]) ? 'active' : ''}}">
+
+
+
+                                    <i class="far fa-circle nav-icon text-light"></i>
+
+                                    <p>Contact Person</p>
+
+                                </a>
+
+                            </li> 
+
                            
 
                        
@@ -226,7 +248,7 @@
 
                     <li class="nav-item">
 
-                        <a href="{{ route('circle.stock') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['circle.stock', 'circle.stock.view'])  ? 'active' : ''}} ">
+                        <a href="{{ route('circle.stock') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['circle.stock', 'circle.stock.view', 'circle.stock.register'])  ? 'active' : ''}} ">
 
                             <i class="nav-icon fas fa-list text-light"></i>
 
@@ -242,7 +264,7 @@
 
                     <li class="nav-item">
 
-                        <a href="{{ route('circle.return.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['circle.return.index', 'circle.return.create'])  ? 'active' : ''}} ">
+                        <a href="{{ route('circle.return.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['circle.return.index', 'circle.return.create', 'circle.return.filter'])  ? 'active' : ''}} ">
 
                             <i class="nav-icon fas fa-registered text-light"></i>
 
@@ -338,6 +360,42 @@
 
                     </li>
 
+                    <li class="nav-item">
+
+                        <a href="{{ route('circle.audit.index') }}"
+
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['circle.audit.index', 'circle.audit.create', 'circle.audit.store', 'circle.audit.register', 'circle.audit.edit', 'circle.audit.search']) ? 'active' : '' }}">
+
+                            <i class="nav-icon fas fa-audio-description text-light"></i>
+
+                            <p>
+
+                                Audit
+
+                            </p>
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a href="{{ route('circle.reopen.index') }}"
+
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['circle.reopen.index', 'circle.reopen.create', 'circle.reopen.store', 'circle.reopen.register', 'circle.reopen.edit', 'circle.reopen.search']) ? 'active' : '' }}">
+
+                            <i class="nav-icon fas fa-book-open text-light"></i>
+
+                            <p>
+
+                                Reopen
+
+                            </p>
+
+                        </a>
+
+                    </li>
+
                     
 
                     <li class="nav-item">
@@ -412,7 +470,7 @@
 
                     {{ in_array(Route::currentRouteName(),
 
-                        ['commissioner.tds.collection.index', 'commissioner.tdsList.index', 'commissioner.tds.upazila.index', 'commissioner.tds.organization.index', 'commissioner.tds.upazila.organization', 'commissioner.tds.collection.zilla' ] ) ? 'menu-is-opening menu-open' : '' }}">
+                        ['commissioner.tds.collection.index', 'commissioner.tdsList.index', 'commissioner.tds.upazila.index', 'commissioner.tds.organization.index', 'commissioner.tds.upazila.organization', 'commissioner.tds.collection.zilla', 'commissioner.tds.year', 'commissioner.tds.contactPerson', 'commissioner.tds.contactPerson.search' ] ) ? 'menu-is-opening menu-open' : '' }}">
 
                         <a href="#" class="nav-link">
 
@@ -434,7 +492,7 @@
 
                             <li class="nav-item">
 
-                                <a href="{{ route('commissioner.tds.collection.index') }}" class="nav-link {{ in_array(Route::currentRouteName(),['commissioner.tds.collection.index', 'commissioner.tds.collection.zilla' ] ) ? 'active' : '' }}">
+                                <a href="{{ route('commissioner.tds.collection.index') }}" class="nav-link {{ in_array(Route::currentRouteName(),['commissioner.tds.collection.index', 'commissioner.tds.collection.zilla', 'commissioner.tds.year' ] ) ? 'active' : '' }}">
 
                                     <i class="far fa-circle nav-icon text-light"></i>
 
@@ -501,6 +559,25 @@
                         </li>    
 
                         
+                        <li class="nav-item">
+
+                            <a href="{{ route('commissioner.tds.contactPerson') }}"
+
+
+
+                                class="nav-link {{ in_array(Route::currentRouteName(), [ 'commissioner.tds.contactPerson', 'commissioner.tds.contactPerson.search' ]) ? 'active' : ''}}">
+
+
+
+                                <i class="far fa-circle nav-icon text-light"></i>
+
+                                <p>Contact Person</p>
+
+                            </a>
+
+                        </li> 
+
+                        
 
                                                    
 
@@ -516,9 +593,6 @@
 
                         <a href="{{ route('commissioner.advance.index') }}"
 
-
-
-                            class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.advance.index', 'commissioner.advance.circle', 'commissioner.advance.circle.search']) ? 'active' : '' }}">
 
 
                             class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.advance.index', 'commissioner.advance.circle', 'commissioner.advance.circle.search']) ? 'active' : '' }}">
@@ -596,23 +670,13 @@
                         </a>
 
                     </li>
-
-                    <li class="nav-item">
-                        <a href="{{ route('commissioner.stock') }}"
-                            class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.stock', 'commissioner.stock.search']) ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-list  text-light"></i>
-                            <p>
-                                Stock
-                            </p>
-                        </a>
-                    </li>
                     
 
                     <li class="nav-item">
 
                         <a href="{{ route('commissioner.users') }}"
 
-                            class="nav-link {{ Route::currentRouteName() == 'commissioner.users' ? 'active' : '' }} ">
+                            class="nav-link {{ in_array(Route::currentRouteName(), ['commissioner.users', 'commissioner.user.create', 'commissioner.user.edit']) ? 'active' : '' }} ">
 
                             <i class="nav-icon fas fa-users text-light"></i>
 
@@ -780,7 +844,7 @@
 
 
 
-                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['range.tds.report', 'range.tds.report.circle', 'range.tds.report.circle.upazila', 'range.tds.report.upazila']) ? 'menu-is-opening menu-open' : ''}}">
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['range.tds.report', 'range.tds.report.circle', 'range.tds.report.circle.upazila', 'range.tds.report.upazila', 'range.tds.year', 'range.tds.contactPerson', 'range.tds.contactPerson.search' ]) ? 'menu-is-opening menu-open' : ''}}">
 
 
 
@@ -808,7 +872,7 @@
 
 
 
-                                    class="nav-link {{ in_array(Route::currentRouteName(), ['range.tds.report', 'range.tds.report.circle', 'range.tds.report.circle.upazila', 'range.tds.report.upazila']) ? 'active' : ''}}">
+                                    class="nav-link {{ in_array(Route::currentRouteName(), ['range.tds.report', 'range.tds.report.circle', 'range.tds.report.circle.upazila', 'range.tds.report.upazila', 'range.tds.year']) ? 'active' : ''}}">
 
 
 
@@ -820,7 +884,23 @@
 
                             </li>         
 
-                           
+                            <li class="nav-item">
+
+                                <a href="{{ route('range.tds.contactPerson') }}"
+
+
+
+                                    class="nav-link {{ in_array(Route::currentRouteName(), [ 'range.tds.contactPerson', 'range.tds.contactPerson.search' ]) ? 'active' : ''}}">
+
+
+
+                                    <i class="far fa-circle nav-icon text-light"></i>
+
+                                    <p>Contact Person</p>
+
+                                </a>
+
+                            </li> 
 
                        
 

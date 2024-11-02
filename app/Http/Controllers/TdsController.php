@@ -40,6 +40,40 @@ class TdsController extends Controller
             'circleDatas' => $circleDatas,
             'upazilaData' => $upazilaData,
             'orgDatas' => $orgDatas,
+            'assessment_year' => $assessment_year,
+            'search_assessment_year' => $assessment_year,
+        ]);
+    }
+
+    //TDS Report For Range By Assessment Year
+    public function tdsRangeReportYear(Request $request)
+    {
+        $request->validate([
+            'assessment_year' => 'required|digits:8|numeric',
+        ]);
+        $assessment_year = $request->assessment_year;
+        $monthRange = MyHelper::dateRangeAssessmentYear($assessment_year);
+        $circles = Myhelper::ranges( 'range-' . Auth::user()->range );
+
+        //Circle Data
+         $circleDatas = Tds_collection::getAssessmentYearCollectionByCircle($monthRange, $circles);
+
+        //Upazila Data
+        $upazilaIds = Tds_collection::whereIn('circle', $circles)->distinct()->pluck('upazila_id')->toArray();       
+        $upazilaData = count($upazilaIds) ? Tds_Collection::getAssessmentYearCollectionByUpazila($upazilaIds, $monthRange, $circles) : [];
+        
+        //Organization Data
+        $orgIds = Tds_collection::whereIn('circle', $circles)->distinct()->pluck('organization_id')->toArray();
+        $orgDatas = count($orgIds) ? Tds_collection::getAssessmentYearCollectionByOrganization($orgIds, $monthRange, $circles) : [];
+      
+        return view('range.tds.report', [
+            'title' => 'TDS Report',
+            'monthRange' => $monthRange,
+            'circleDatas' => $circleDatas,
+            'upazilaData' => $upazilaData,
+            'orgDatas' => $orgDatas,
+            'assessment_year' => config('settings.assessment_year_commissioner'),
+            'search_assessment_year' => $assessment_year,
         ]);
     }
 
@@ -225,7 +259,7 @@ class TdsController extends Controller
         $editTds = Tds_collection::find($id)->load('upazila','organization');
 
         $tds = Tds_collection::where('circle', Auth::user()->circle)->get()->load('upazila','organization');
-        $zillas = Zilla::orderBy('name')->get();;
+        $zillas = Zilla::orderBy('name')->get();
         $updateType = 'edit';
         
         $clickedRoute = request()->input('clicked_route');
@@ -281,6 +315,7 @@ class TdsController extends Controller
 
 
     public function tdsSearch(Request $request){
+
         $zillas = Zilla::orderBy('name')->get();
         
         $tdses = Tds_collection::query();
@@ -294,7 +329,7 @@ class TdsController extends Controller
         }
         if(!empty($request->start_month)){
 
-            $tdses = $tdses->whereBetween('collection_month', [$request->start_month, $request->end_month]);
+            $tdses = $tdses->whereBetween('collection_month', [Carbon::createFromFormat('m-Y', $request->start_month)->format('Y-m'), Carbon::createFromFormat('m-Y', $request->end_month)->format('Y-m')]);
         }
     
         $tdses = $tdses->where('circle', Auth::user()->circle)
@@ -319,9 +354,6 @@ class TdsController extends Controller
         Toastr::success('TDS Deleted Successfully');
         return redirect()->back()->with('success', 'TDS Deleted Successfully');
     }
-
-
-
 
 
 
@@ -350,7 +382,7 @@ class TdsController extends Controller
     public function commissionTdsIndex(){
         $zillas = Zilla::orderBy('name')->get();
 
-        $tdsList = Tds_collection::orderBy('circle', 'ASC')->with('upazila', 'organization')
+        $tdsList = Tds_collection::orderBy('created_at', 'DESC')->with('upazila', 'organization')
 
         ->paginate(100);
      
@@ -437,9 +469,12 @@ class TdsController extends Controller
             'toatalNonGovtTDS' => $toatalNonGovtTDS,
             'circleData' => $circleData,
             'zillas' => $zillas,
-            'orgDatas' => $orgDatas 
+            'orgDatas' => $orgDatas,
+            'assessment_year' =>  $assessment_year,
+            'search_assessment_year' => $assessment_year,
         ]);
     }
+
 
     public function collectionZilla($zillaId)
     {

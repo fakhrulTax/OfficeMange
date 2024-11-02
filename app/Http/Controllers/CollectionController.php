@@ -220,7 +220,7 @@ class CollectionController extends Controller
             $collections = $collections->where('circle', '=', $request->circle);
         }
 
-        $collections = $collections->paginate(100);
+        $collections = $collections->paginate(100)->appends($request->except('page'));
 
         return view('commissioner.Collection.index',[
             'title' => 'Collection|Search', 

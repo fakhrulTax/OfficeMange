@@ -6,10 +6,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Collection;
 use App\Models\Advance;
+use App\Models\Retarn;
+use App\Models\Reopen;
+use App\Models\Audit;
 
 class Stock extends Model
 {
     use HasFactory;
+
+    public function retarns()
+    {
+        return $this->hasMany(Retarn::class, 'tin', 'tin'); // Assuming 'tin' is the foreign key
+    }
+
+    public function reopens()
+    {
+        return $this->hasMany(Reopen::class, 'tin', 'tin'); // Assuming 'tin' is the foreign key
+    }
+
+    public function audits()
+    {
+        return $this->hasMany(Audit::class, 'tin', 'tin'); // Assuming 'tin' is the foreign key
+    }
 
     public function collections()
     {

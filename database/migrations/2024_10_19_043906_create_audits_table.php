@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('reopens', function (Blueprint $table) {
+        Schema::create('audits', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('tin');
             $table->integer('assessment_year');
-            $table->date('reopen_date');
+            $table->date('audit_date');
             $table->bigInteger('main_income');
             $table->bigInteger('main_tax');
             $table->date('expire_date');
@@ -27,8 +27,6 @@ return new class extends Migration
             $table->integer('circle');
             $table->timestamps();
         });
-
-        
     }
 
     /**
@@ -38,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reopens');
+        Schema::dropIfExists('audits');
     }
 };

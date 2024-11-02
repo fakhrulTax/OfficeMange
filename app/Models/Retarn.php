@@ -10,6 +10,8 @@ class Retarn extends Model
 {
     use HasFactory;
 
+    protected $table = 'retarns';
+
     protected $fillable = [
         'register','return_submission_date','register_serial','tin', 'name',
         'assessment_year','source_of_income','income',

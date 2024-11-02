@@ -21,6 +21,9 @@ use App\Http\Controllers\UpazilaController;
 use App\Http\Controllers\TdsController;
 use App\Http\Controllers\AdvanceController;
 use App\Http\Controllers\RetarnController;
+use App\Http\Controllers\ReopenController;
+use App\Http\Controllers\AuditController;
+use App\Http\Controllers\ContactPersonController;
 
 
 Route::get('/', function () {
@@ -52,9 +55,14 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     //Return 
     Route::get('/return/create', [RetarnController::class, 'create'])->name('return.create');  
     Route::post('/return/store', [RetarnController::class, 'store'])->name('return.store');  
+    Route::get('/return/{id}/edit', [RetarnController::class, 'edit'])->name('return.edit');  
+    Route::put('/return/{id}', [RetarnController::class, 'update'])->name('return.update');  
     Route::get('/return', [RetarnController::class, 'index'])->name('return.index');  
     Route::post('/return/registerSerial', [RetarnController::class, 'getRegisterSerial'])->name('return.register.serial');  
     Route::post('/return/checkTIN', [RetarnController::class, 'checkTIN'])->name('retarn.stock.check');
+    Route::get('/return/{id}/ordersheet', [RetarnController::class, 'orderSheet'])->name('retarn.orderSheet');
+    Route::get('/return/search', [RetarnController::class, 'filter'])->name('return.filter');  
+    Route::post('/return/excle', [RetarnController::class, 'excel'])->name('return.excel');  
 
     //Stock Route
     Route::get('/stock', [StockController::class, 'index'])->name('stock');
@@ -66,6 +74,7 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/stock/editbyid', [StockController::class, 'stockEditByid'])->name('stockEditByid');
     Route::post('/stock/editbyid', [StockController::class, 'stockUpdateByid'])->name('stockUpdateByid');
     Route::get('/stock/evn/{tin}', [StockController::class, 'envelop'])->name('stock.env');   
+    Route::get('/stock/register', [StockController::class, 'register'])->name('stock.register');      
 
 
     //Collection Route
@@ -133,7 +142,15 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/tds/search', [TdsController::class, 'tdsSearch'])->name('tds.search');
     Route::get('/tds/report', [TdsController::class, 'tdsReport'])->name('tds.report');
     Route::get('/tds/report/upazila/{upzilaId}/organization', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.upzila.org');
-
+    
+    Route::get('/tds/contact-person', [ContactPersonController::class, 'index'])->name('tds.contactPerson');
+    Route::get('/tds/contact-person/create', [ContactPersonController::class, 'create'])->name('tds.contactPerson.create');
+    Route::post('/tds/contact-person', [ContactPersonController::class, 'store'])->name('tds.contactPerson.store');
+    Route::get('/tds/contact-person/{contactPerson}/edit', [ContactPersonController::class, 'edit'])->name('tds.contactPerson.edit');
+    Route::post('/tds/contact-person/{contactPerson}/update', [ContactPersonController::class, 'update'])->name('tds.contactPerson.update');
+    Route::get('/tds/contact-person/search', [ContactPersonController::class, 'search'])->name('tds.contactPerson.search');
+    
+    
     //advance
     Route::get('/advance', [AdvanceController::class, 'advanceIndex'])->name('advance.index');
     Route::get('/advance/create', [AdvanceController::class, 'create'])->name('advance.create');
@@ -143,6 +160,24 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/advance/edit/{id}', [AdvanceController::class, 'edit'])->name('advance.edit');
     Route::post('/advance/edit/{id}', [AdvanceController::class, 'update'])->name('advance.update');
     Route::get('/advance/search', [AdvanceController::class, 'search'])->name('advance.search');
+
+    //Reopen
+    Route::get('/reopen', [ReopenController::class, 'index'])->name('reopen.index');
+    Route::get('/reopen/create', [ReopenController::class, 'create'])->name('reopen.create');
+    Route::post('/reopen', [ReopenController::class, 'store'])->name('reopen.store');
+    Route::get('/reopen/register', [ReopenController::class, 'register'])->name('reopen.register');
+    Route::get('/reopen/edit/{reopen}', [ReopenController::class, 'edit'])->name('reopen.edit');
+    Route::put('/reopen/edit/{reopen}', [ReopenController::class, 'update'])->name('reopen.update');
+    Route::get('/reopen/search', [ReopenController::class, 'search'])->name('reopen.search');
+
+    //Audit
+    Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
+    Route::get('/audit/create', [AuditController::class, 'create'])->name('audit.create');
+    Route::post('/audit', [AuditController::class, 'store'])->name('audit.store');
+    Route::get('/audit/register', [AuditController::class, 'register'])->name('audit.register');
+    Route::get('/audit/edit/{audit}', [AuditController::class, 'edit'])->name('audit.edit');
+    Route::put('/audit/edit/{audit}', [AuditController::class, 'update'])->name('audit.update');
+    Route::get('/audit/search', [AuditController::class, 'search'])->name('audit.search');
 
     //Notice Controller
     Route::post('/circle/notice/{tin}/183(3)', [NoticeController::class, 'notice183'])->name('notice.183');
@@ -171,9 +206,12 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
 
     //TDS Report
     Route::get('/range/tds/report', [TdsController::class, 'tdsRangeReport'])->name('tds.report');
+    Route::get('/range/tds/report/assessment_year', [TdsController::class, 'tdsRangeReportYear'])->name('tds.year');
     Route::get('/range/tds/report/circle/{circle}', [TdsController::class, 'tdsReport'])->name('tds.report.circle');
     Route::get('/range/tds/report/circle/{circle}/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.circle.upazila');
     Route::get('/range/tds/report/circles/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgDistUpazila'])->name('tds.report.upazila');
+    Route::get('/range/tds/contact-person', [ContactPersonController::class, 'index'])->name('tds.contactPerson');
+    Route::get('/range/tds/contact-person/search', [ContactPersonController::class, 'search'])->name('tds.contactPerson.search');
 
     //Advance
     Route::get('/range/advance', [AdvanceController::class, 'advanceReport'])->name('advance.report');
@@ -213,6 +251,8 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::post('/tds/upazila', [UpazilaController::class, 'store'])->name('tds.upazila.store');
     Route::get('/tds/upazila/{id}', [UpazilaController::class, 'edit'])->name('tds.upazila.edit');
     Route::put('/tds/upazila/{id}', [UpazilaController::class, 'update'])->name('tds.upazila.update');
+    Route::get('/commissioner/tds/contact-person', [ContactPersonController::class, 'index'])->name('tds.contactPerson');
+    Route::get('/commissioner/tds/contact-person/search', [ContactPersonController::class, 'search'])->name('tds.contactPerson.search');
     
     //TDS Organization and Upazila Relation
     Route::get('/commissioner/tds/upazila/organization', [UpazilaController::class, 'upazilaOrganization'])->name('tds.upazila.organization');    
@@ -264,6 +304,8 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     //Settings
 	Route::get('/commissioner/setting', [SettingController::class, 'index'])->name('setting.index');
 	Route::post('/commissioner/setting', [SettingController::class, 'update'])->name('setting.update');
+	Route::post('/commissioner/update/assessment_year', [SettingController::class, 'updateAssessmentYear'])->name('setting.update.assessment');
+
 
     //SMS routes
     Route::get('commissioner/sms', [SMSController::class, 'index'])->name('sms');

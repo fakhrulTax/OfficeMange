@@ -46,10 +46,7 @@ class SettingController extends Controller
         if( Auth::user()->user_role == 'commissioner' &&  !isset($request->sidebar_collapse_commissioner) )
         {   
             $request['sidebar_collapse_commissioner'] = null;
-        }
-        
-       
-     
+        }    
         
         //Take Mutiple Upaziall ID
         if( $request['upazila_id_' . Auth::user()->circle] )
@@ -73,4 +70,29 @@ class SettingController extends Controller
         Toastr::success('Settings Save Successful', 'Success');
         return redirect()->route('circle.setting.index');
     }
+
+    // Update Assessment Year
+    public function updateAssessmentYear(Request $request)
+    {
+        // Validate assessment year (example: 8-digit validation)
+        $request->validate([
+            'assessment_year' => 'required|digits:8|numeric',
+        ]);
+
+        if (Auth::user()->user_role == 'commissioner' && isset($request->assessment_year)) {
+            // Update the assessment year for commissioner role
+            Setting::set('assessment_year_commissioner', $request->assessment_year);
+            
+            // Show success message
+            Toastr::success('Assessment Year Changed', 'Success');
+            
+            // Redirect back to the previous page
+            return redirect()->back();
+        }
+
+        // Optionally handle cases when the user role is not commissioner
+        Toastr::error('Unauthorized access', 'Error');
+        return redirect()->back();
+    }
+
 }

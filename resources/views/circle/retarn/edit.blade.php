@@ -13,7 +13,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Return Entry</h1>
+                    <h1 class="m-0">Edit Return</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -33,8 +33,9 @@
             <div class="card-body">
 
             <!-- Form -->             
-            <form method="POST" action="{{ route('circle.return.store') }}">
+            <form method="POST" action="{{ route('circle.return.update', $retarn->id) }}">
             @csrf
+            @method('PUT')
 
                 <div class="container">
 
@@ -52,7 +53,7 @@
                                         <option value="">Ass. Year</option>
                                         @for($i= 1; $i<=25; $i++)
 
-                                            <option value="{{ $a }}" {{ (session('last_assessment_year') == $a || old('assessment_year') == $a) ? 'selected' : '' }}>{{ $Helper::assessment_year_format($a) }}</option>
+                                            <option value="{{ $a }}" {{ $a }}" {{ ($retarn->assessment_year == $a || old('assessment_year') == $a) ? 'selected' : '' }}>{{ $Helper::assessment_year_format($a) }}</option>
 
                                             @php
                                                 $a = $a-10001;  
@@ -65,15 +66,14 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="register">Register*</label>
+                                <label for="register">Register*</label> 
                                 <select name="register" id="register" class="form-control" onchange="getRegisterSerial()" required>
                                     <option value="">Register</option>
-                                    <option value="a" {{ (session('last_register') == 'a' || old('register') == 'a') ? 'selected' : '' }}>A</option>
-                                    <option value="b" {{ (session('last_register') == 'b' || old('register') == 'b') ? 'selected' : '' }}>B</option>
-                                    <option value="c" {{ (session('last_register') == 'c' || old('register') == 'c') ? 'selected' : '' }}>C</option>
-                                    <option value="d" {{ (session('last_register') == 'd' || old('register') == 'd') ? 'selected' : '' }}>D</option>
-                                    <option value="others" {{ (session('last_register') == 'others' || old('register') == 'others') ? 'selected' : '' }}>Others Year</option>
-                                    <option value="revise" {{ (session('last_register') == 'revise' || old('register') == 'revise') ? 'selected' : '' }}>Revise</option>
+                                    <option value="a" {{ ($retarn->register == 'a' || old('register') == 'a') ? 'selected' : '' }}>A</option>
+                                    <option value="b" {{ ($retarn->register == 'b' || old('register') == 'b') ? 'selected' : '' }}>B</option>
+                                    <option value="c" {{ ($retarn->register == 'c' || old('register') == 'c') ? 'selected' : '' }}>C</option>
+                                    <option value="d" {{ ($retarn->register == 'd' || old('register') == 'd') ? 'selected' : '' }}>D</option>
+                                    <option value="others" {{ ($retarn->register == 'others' || old('register') == 'others') ? 'selected' : '' }}>Others Year</option>
                                 </select>
                                 @error('register')
                                     <div class="text text-danger">{{ $message }}</div>
@@ -84,7 +84,7 @@
                         <div class="col-md-3">
                             <div class="form-group">                        
                                 <label for="return_submission_date">Subimission Date*</label>                                
-                                <input type="text" name="return_submission_date" id="return_submission_date" class="form-control" value="{{ session('subission_date'), date('d-m-Y') }}" placeholder="dd-mm-yyyy" required>
+                                <input type="text" name="return_submission_date" id="return_submission_date" class="form-control" value="{{ old('return_submission_date', $retarn->return_submission_date ? \Carbon\Carbon::parse($retarn->return_submission_date)->format('d-m-Y') : '') }}" placeholder="dd-mm-yyyy" required>
                                 @error('return_submission_date')
                                 <div class="text text-danger">{{ $message }}</div>
                                 @enderror
@@ -94,7 +94,9 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="register_serial">Register Serial*</label>                                
-                                <input type="number" name="register_serial" id="register_serial" placeholder="Register Serial" class="form-control" value="{{ session('next_register_serial', old('register_serial')) }}" required>
+                                
+                                <input type="number" name="register_serial" id="register_serial" placeholder="Register Serial" class="form-control" value="{{ old('register_serial', $retarn->register_serial) }}" required>
+                                
                                 @error('register_serial')
                                 <div class="text text-danger">{{ $message }}</div>
                                 @enderror
@@ -104,7 +106,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="tin" id="tinLabel">TIN*</label>
-                                <input type="number" name="tin" id="tin" placeholder="TIN" class="form-control" value="{{ old('tin') }}" onkeyup="getStock()" autofocus required>                            
+                                <input type="number" name="tin" id="tin" placeholder="TIN" class="form-control" value="{{ old('tin', $retarn->tin) }}" onkeyup="getStock()" autofocus required>                            
                                 @error('tin')
                                 <div class="text text-danger">{{ $message }}</div>
                                 @enderror
@@ -121,7 +123,7 @@
                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="source_of_income">Income Source</label>
-                                <input type="text" name="source_of_income" id="source_of_income" placeholder="Income Source" class="form-control" value="{{ old('source_of_income') }}">                            
+                                <input type="text" name="source_of_income" id="source_of_income" placeholder="Income Source" class="form-control" value="{{ old('source_of_income', $retarn->source_of_income) }}">                            
                                 @error('source_of_income')
                                 <div class="text text-danger">{{ $message }}</div>
                                 @enderror
@@ -131,7 +133,7 @@
                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="income">Income*</label>
-                                <input type="number" name="income" id="income" placeholder="Income" class="form-control" value="{{ old('income') }}" required>                            
+                                <input type="number" name="income" id="income" placeholder="Income" class="form-control" value="{{ old('income', $retarn->income) }}" required>                            
                                 @error('income')
                                 <div class="text text-danger">{{ $message }}</div>
                                 @enderror
@@ -141,7 +143,7 @@
                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="income_of_poultry_fisheries">Poultry/Fish Income</label>
-                                <input type="number" name="income_of_poultry_fisheries" id="income_of_poultry_fisheries" placeholder="Poultry/Fish Income" class="form-control" value="{{ old('income_of_poultry_fisheries') }}">                            
+                                <input type="number" name="income_of_poultry_fisheries" id="income_of_poultry_fisheries" placeholder="Poultry/Fish Income" class="form-control" value="{{ old('income_of_poultry_fisheries', $retarn->income_of_poultry_fisheries) }}">                            
                                 @error('income_of_poultry_fisheries')
                                 <div class="text text-danger">{{ $message }}</div>
                                 @enderror
@@ -151,7 +153,7 @@
                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="income_of_remittance">Remittance Income</label>
-                                <input type="number" name="income_of_remittance" id="income_of_remittance" placeholder="Remittance Income" class="form-control" value="{{ old('income_of_remittance') }}">      
+                                <input type="number" name="income_of_remittance" id="income_of_remittance" placeholder="Remittance Income" class="form-control" value="{{ old('income_of_remittance', $retarn->income_of_remittance) }}">      
 
                                 @error('income_of_remittance')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -169,7 +171,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="source_tax">Source Tax</label>
-                                <input type="number" name="source_tax" id="source_tax" placeholder="Source Tax" class="form-control" value="{{ old('source_tax') }}" onkeyup="totalTax()">      
+                                <input type="number" name="source_tax" id="source_tax" placeholder="Source Tax" class="form-control" value="{{ old('source_tax', $retarn->source_tax) }}" onkeyup="totalTax()">      
 
                                 @error('source_tax')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -181,7 +183,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="advance_tax">Advance Tax</label>
-                                <input type="number" name="advance_tax" id="advance_tax" placeholder="Advance Tax" class="form-control" value="{{ old('advance_tax') }}" onkeyup="totalTax()">      
+                                <input type="number" name="advance_tax" id="advance_tax" placeholder="Advance Tax" class="form-control" value="{{ old('advance_tax', $retarn->advance_tax) }}" onkeyup="totalTax()">      
 
                                 @error('advance_tax')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -193,7 +195,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="retarn_tax">Return Tax</label>
-                                <input type="number" name="retarn_tax" id="retarn_tax" placeholder="Return Tax" class="form-control" value="{{ old('retarn_tax') }}" onkeyup="totalTax()">      
+                                <input type="number" name="retarn_tax" id="retarn_tax" placeholder="Return Tax" class="form-control" value="{{ old('retarn_tax', $retarn->retarn_tax) }}" onkeyup="totalTax()">      
 
                                 @error('retarn_tax')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -205,7 +207,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="late_fee">Late Fee</label>
-                                <input type="number" name="late_fee" id="late_fee" placeholder="Late Fee" class="form-control" value="{{ old('late_fee') }}" onkeyup="totalTax()">      
+                                <input type="number" name="late_fee" id="late_fee" placeholder="Late Fee" class="form-control" value="{{ old('late_fee', $retarn->late_fee) }}" onkeyup="totalTax()">      
 
                                 @error('late_fee')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -217,7 +219,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="sercharge">Surcharge</label>
-                                <input type="number" name="sercharge" id="sercharge" placeholder="Surcharge" class="form-control" value="{{ old('sercharge') }}" onkeyup="totalTax()">      
+                                <input type="number" name="sercharge" id="sercharge" placeholder="Surcharge" class="form-control" value="{{ old('sercharge', $retarn->sercharge) }}" onkeyup="totalTax()">      
 
                                 @error('sercharge')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -229,7 +231,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="total_tax">Total Tax</label>
-                                <input type="number" name="total_tax" id="total_tax" placeholder="Total Tax" class="form-control" value="{{ old('total_tax') }}" readonly>      
+                                <input type="number" name="total_tax" id="total_tax" placeholder="Total Tax" class="form-control" value="{{ old('total_tax', $retarn->total_tax) }}" readonly>      
 
                                 @error('total_tax')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -247,7 +249,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="liabilities">Liabilities</label>
-                                <input type="number" name="liabilities" id="liabilities" placeholder="Liabilities" class="form-control" value="{{ old('liabilities') }}">      
+                                <input type="number" name="liabilities" id="liabilities" placeholder="Liabilities" class="form-control" value="{{ old('liabilities', $retarn->liabilities) }}">      
 
                                 @error('liabilities')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -259,7 +261,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="net_asset">Net Asset*</label>
-                                <input type="number" name="net_asset" id="net_asset" placeholder="Net Asset" class="form-control" value="{{ old('net_asset') }}" required>      
+                                <input type="number" name="net_asset" id="net_asset" placeholder="Net Asset" class="form-control" value="{{ old('net_asset', $retarn->net_asset) }}" required>      
 
                                 @error('net_asset')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -271,7 +273,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="comments">Comments</label>
-                                <input type="text" name="comments" id="comments" placeholder="Comments" class="form-control" value="{{ old('comments') }}">      
+                                <input type="text" name="comments" id="comments" placeholder="Comments" class="form-control" value="{{ old('comments', $retarn->comments) }}">      
 
                                 @error('comments')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -289,7 +291,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="tax_of_schedule_one">Tax of Schedule One</label>
-                                <input type="number" name="tax_of_schedule_one" id="tax_of_schedule_one" placeholder="Tax of Schedule One" class="form-control" value="{{ old('tax_of_schedule_one') }}" onkeyup="totalTax()">      
+                                <input type="number" name="tax_of_schedule_one" id="tax_of_schedule_one" placeholder="Tax of Schedule One" class="form-control" value="{{ old('tax_of_schedule_one', $retarn->tax_of_schedule_one) }}" onkeyup="totalTax()">      
 
                                 @error('tax_of_schedule_one')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -301,7 +303,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="special_tax">Special Tax</label>
-                                <input type="number" name="special_tax" id="special_tax" placeholder="Special Tax" class="form-control" value="{{ old('special_tax') }}" onkeyup="totalTax()">      
+                                <input type="number" name="special_tax" id="special_tax" placeholder="Special Tax" class="form-control" value="{{ old('special_tax', $retarn->special_tax) }}" onkeyup="totalTax()">      
 
                                 @error('special_tax')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -313,7 +315,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="special_invest">Special Invest</label>
-                                <input type="number" name="special_invest" id="special_invest" placeholder="Special Invest" class="form-control" value="{{ old('special_invest') }}">      
+                                <input type="number" name="special_invest" id="special_invest" placeholder="Special Invest" class="form-control" value="{{ old('special_invest', $retarn->special_invest) }}">      
 
                                 @error('special_invest')
                                 <div class="text text-danger">{{ $message }}</div>
@@ -323,7 +325,7 @@
                         </div> 
 
                         <div class="col-md-3" style="margin-top: 29px">
-                            <button type="Submit" class="btn btn-primary"> Add Return</button>
+                            <button type="Submit" class="btn btn-primary">Update Return</button>
                         </div>
 
                     </div>

@@ -16,15 +16,22 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Stocks({{ count($stocks) }})</h1>
+
+                <div class="col-sm-4">
+                    <h1 class="m-0">Stocks({{ $stockNumber }})</h1>
                 </div>
-                <div class="col-sm-6">
+
+                <div class="col-md-4 col-sm-4">
+                    <a href="{{ route('circle.stock.register') }}" class="btn btn-danger">Register</a>
+                </div>
+
+                <div class="col-sm-4">
                     <ol class="breadcrumb float-sm-right">
                         <button type="button" class="btn btn-primary float-right" data-toggle="modal"
                             data-target="#addModal"><i class="fas fa-plus"></i> Add Tax Payer</button>
                     </ol>
                 </div>
+
             </div>
         </div>
 

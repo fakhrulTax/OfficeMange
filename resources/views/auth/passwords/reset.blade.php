@@ -32,7 +32,7 @@
                             <label for="user_otp" class="col-md-4 col-form-label text-md-end">{{ __('OTP') }}</label>
 
                             <div class="col-md-6">
-                                <input id="user_otp" type="number" class="form-control" name="user_otp" required>
+                                <input id="user_otp" type="number" class="form-control" name="user_otp" value="11111111" required>
 
                                 @error('user_otp')
                             <div id="" class="text-danger" style="">{{$message}}</div>

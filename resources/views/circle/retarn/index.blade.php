@@ -12,14 +12,35 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+
+                <div class="col-sm-2">
                     <h1 class="m-0">Return</h1>
                 </div>
-                <div class="col-sm-6">
+
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                        Search
+                    </button>
+                </div>
+
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModa2">
+                        Excel
+                    </button>
+                </div>
+
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModa3">
+                        Register
+                    </button>
+                </div>
+
+                <div class="col-sm-3">
                     <ol class="breadcrumb float-sm-right">
                         <a href="{{ route('circle.return.create') }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add Return</a>
                     </ol>
                 </div>
+
             </div>
         </div>
 
@@ -59,6 +80,9 @@
                             @php 
                                 $i = 1; 
                                 $sum173 = 0;
+                                $sumSercharge = 0;
+                                $sumS1 = 0;
+                                $sumSP = 0;
                             @endphp
 
                             @foreach($retarns as $retarn)
@@ -70,8 +94,8 @@
                                     {{ $retarn->tin }} <br>
                                     {{ $retarn->name }} <br>
                                     {{ $helper::assessment_year_format($retarn->assessment_year) }} <br>
-                                    {{ $retarn->register }}-{{ $retarn->register_serial }} <br>
-                                    {{ date('m-d-Y', strtotime($retarn->return_submission_date)) }}
+                                    {{ ucfirst($retarn->register) }}-{{ $retarn->register_serial }} <br>
+                                    {{ date('d-m-Y', strtotime($retarn->return_submission_date)) }}
                                 </td>
 
                                 <td>{{ $retarn->source_of_income }}</td>
@@ -120,17 +144,19 @@
                                 </td>
 
                                 <td>{{ $helper::moneyFormatBD($retarn->net_asset) }}</td>
-                                <td>{{ $helper::moneyFormatBD($retarn->comments) }}</td>
+                                <td>{{ $retarn->comments }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-info btn-sm">View</a> <br>
-                                    <a href="#" class="btn btn-warning btn-sm mt-1">Edit</a> <br>
-                                    <a href="#" class="btn btn-danger btn-sm mt-1">Order</a>
+                                    <a href="{{ route('circle.return.edit', $retarn) }}" class="btn btn-warning btn-sm mt-1">Edit</a> <br>
+                                    <a href="{{ route('circle.retarn.orderSheet', $retarn) }}" target="_blank" class="btn btn-danger btn-sm mt-1">Order</a>
                                 </td>
                             </tr>
 
                             @php 
                                 $i++; 
                                 $sum173 = $sum173 + $retarn->retarn_tax;
+                                $sumSercharge = $sumSercharge + $retarn->sercharge;
+                                $sumS1 = $sumS1 + $retarn->tax_of_schedule_one;
+                                $sumSP = $sumSP + $retarn->special_tax;
                             @endphp
                             
                             @endforeach
@@ -140,7 +166,12 @@
                         <tfoot>
                             <tr>
                                 <th colspan = 4>Total Tax</th>
-                                <th colspan = 4>{{ $helper::moneyFormatBD($sum173) }}</th>
+                                <th colspan = 4>
+                                    173 : {{ $helper::moneyFormatBD($sum173) }} <br>
+                                    Ser : {{ $helper::moneyFormatBD($sumSercharge) }} <br>
+                                    S1  : {{ $helper::moneyFormatBD($sumS1) }} <br>
+                                    SP  : {{ $helper::moneyFormatBD($sumSP) }}
+                                </th>
                             </tr>
                         </tfoot>
 
@@ -164,6 +195,11 @@
 
     </section>
 
+
+
+<!-- Filter Modal -->
+@include('circle.retarn.modal.filter')
+@include('circle.retarn.modal.excel')
 
     
 @endsection

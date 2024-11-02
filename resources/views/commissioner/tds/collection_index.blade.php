@@ -302,7 +302,7 @@
                 "responsive": false,
                 "lengthChange": true,
                 "autoWidth": true,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],    
+                "buttons": ["copy", "excel",],    
                            
             }).buttons().container().appendTo('#circle_table_wrapper .col-md-6:eq(0)');
             
@@ -310,14 +310,14 @@
                 "responsive": false,
                 "lengthChange": true,
                 "autoWidth": true,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],                
+                "buttons": ["copy", "excel", ],                
             }).buttons().container().appendTo('#distict_table_wrapper .col-md-6:eq(0)');
 
             $("#authority_table").DataTable({
                 "responsive": false,
                 "lengthChange": true,
                 "autoWidth": true,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],                
+                "buttons": ["copy", "excel", ],                
             }).buttons().container().appendTo('#authority_table_wrapper .col-md-6:eq(0)');
             
 
