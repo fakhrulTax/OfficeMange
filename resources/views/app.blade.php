@@ -83,14 +83,15 @@
 
   
 
-  $('#collection_month').datepicker({
-
+  $('#collection_month, #start_month, #end_month').datepicker({
     autoclose: true,
     useStrict: true,
     format: 'mm-yyyy',
     viewMode: 'months',
     minViewMode: 'months'
   });
+
+ 
 </script>
 
 <script>

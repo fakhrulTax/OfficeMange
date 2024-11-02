@@ -23,6 +23,7 @@ use App\Http\Controllers\AdvanceController;
 use App\Http\Controllers\RetarnController;
 use App\Http\Controllers\ReopenController;
 use App\Http\Controllers\AuditController;
+use App\Http\Controllers\ContactPersonController;
 
 
 Route::get('/', function () {
@@ -141,7 +142,15 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
     Route::get('/tds/search', [TdsController::class, 'tdsSearch'])->name('tds.search');
     Route::get('/tds/report', [TdsController::class, 'tdsReport'])->name('tds.report');
     Route::get('/tds/report/upazila/{upzilaId}/organization', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.upzila.org');
-
+    
+    Route::get('/tds/contact-person', [ContactPersonController::class, 'index'])->name('tds.contactPerson');
+    Route::get('/tds/contact-person/create', [ContactPersonController::class, 'create'])->name('tds.contactPerson.create');
+    Route::post('/tds/contact-person', [ContactPersonController::class, 'store'])->name('tds.contactPerson.store');
+    Route::get('/tds/contact-person/{contactPerson}/edit', [ContactPersonController::class, 'edit'])->name('tds.contactPerson.edit');
+    Route::post('/tds/contact-person/{contactPerson}/update', [ContactPersonController::class, 'update'])->name('tds.contactPerson.update');
+    Route::get('/tds/contact-person/search', [ContactPersonController::class, 'search'])->name('tds.contactPerson.search');
+    
+    
     //advance
     Route::get('/advance', [AdvanceController::class, 'advanceIndex'])->name('advance.index');
     Route::get('/advance/create', [AdvanceController::class, 'create'])->name('advance.create');
@@ -201,6 +210,8 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
     Route::get('/range/tds/report/circle/{circle}', [TdsController::class, 'tdsReport'])->name('tds.report.circle');
     Route::get('/range/tds/report/circle/{circle}/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgUpazila'])->name('tds.report.circle.upazila');
     Route::get('/range/tds/report/circles/upazila/{upazila}', [TdsController::class, 'tdsReportbyOrgDistUpazila'])->name('tds.report.upazila');
+    Route::get('/range/tds/contact-person', [ContactPersonController::class, 'index'])->name('tds.contactPerson');
+    Route::get('/range/tds/contact-person/search', [ContactPersonController::class, 'search'])->name('tds.contactPerson.search');
 
     //Advance
     Route::get('/range/advance', [AdvanceController::class, 'advanceReport'])->name('advance.report');
@@ -240,6 +251,8 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::post('/tds/upazila', [UpazilaController::class, 'store'])->name('tds.upazila.store');
     Route::get('/tds/upazila/{id}', [UpazilaController::class, 'edit'])->name('tds.upazila.edit');
     Route::put('/tds/upazila/{id}', [UpazilaController::class, 'update'])->name('tds.upazila.update');
+    Route::get('/commissioner/tds/contact-person', [ContactPersonController::class, 'index'])->name('tds.contactPerson');
+    Route::get('/commissioner/tds/contact-person/search', [ContactPersonController::class, 'search'])->name('tds.contactPerson.search');
     
     //TDS Organization and Upazila Relation
     Route::get('/commissioner/tds/upazila/organization', [UpazilaController::class, 'upazilaOrganization'])->name('tds.upazila.organization');    

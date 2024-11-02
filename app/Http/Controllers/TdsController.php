@@ -259,7 +259,7 @@ class TdsController extends Controller
         $editTds = Tds_collection::find($id)->load('upazila','organization');
 
         $tds = Tds_collection::where('circle', Auth::user()->circle)->get()->load('upazila','organization');
-        $zillas = Zilla::orderBy('name')->get();;
+        $zillas = Zilla::orderBy('name')->get();
         $updateType = 'edit';
         
         $clickedRoute = request()->input('clicked_route');
@@ -315,6 +315,7 @@ class TdsController extends Controller
 
 
     public function tdsSearch(Request $request){
+
         $zillas = Zilla::orderBy('name')->get();
         
         $tdses = Tds_collection::query();
@@ -328,7 +329,7 @@ class TdsController extends Controller
         }
         if(!empty($request->start_month)){
 
-            $tdses = $tdses->whereBetween('collection_month', [$request->start_month, $request->end_month]);
+            $tdses = $tdses->whereBetween('collection_month', [Carbon::createFromFormat('m-Y', $request->start_month)->format('Y-m'), Carbon::createFromFormat('m-Y', $request->end_month)->format('Y-m')]);
         }
     
         $tdses = $tdses->where('circle', Auth::user()->circle)

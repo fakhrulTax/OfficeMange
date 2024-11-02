@@ -1,30 +1,16 @@
 @extends('app')
 
-@section('title', 'TDS Create')
-
-
+@section('title', 'TDS | Contact Person')
 
 @section('content')
 
 <div class="content-header">
 
     <div class="container-fluid">
-
         <div class="row mb-2">
 
             <div class="col-sm-6">
-
-                @if(isset($updateType)  && $updateType == 'edit')
-
-
-
-                    <h1 class="m-0">Edit TDS</h1>
-
-                @else
-
-                <h1 class="m-0">Add New TDS</h1>
-
-                @endif
+                <h1 class="m-0">Add New Contact Person</h1>
 
             </div>
 
@@ -52,264 +38,49 @@
 
 
 
-      @if(isset($updateType)  && $updateType == 'edit')
+        <form action="{{ route('circle.tds.contactPerson.store') }}" method="POST">
 
-      <form action="{{ route('circle.tds.update', $editTds->id) }}" method="POST" >
-
-        @csrf
-
-       
-
-        @if($clickedRoute)
-
-            <input type="hidden" name="clicked_route" value=" {{ $clickedRoute ? $clickedRoute : '' }} ">
-
-            <input type="hidden" name="zilla_id" value="{{ $editTds->upazila->zilla->id }}" class="form-control">
-
-            <input type="hidden" name = "upazila_id" value="{{ $editTds->upazila->id }}" class="form-control">
-
-        @endif
-
-        <div class="row">
-
-
-
-            <div class="col-md-4">
-
-                <div class="form-group">
-
-                    <label for="zilla">Zilla</label>
-
-                   <input type="text" value="{{ ucfirst($editTds->upazila->zilla->name) }}" class="form-control" readonly>
-
-                </div>
-
-            </div>
-
-
-
-
-
-            <div class="col-md-4">
-
-                <div class="form-group">
-
-                    <label for="upazila">Upazilla</label>
-
-                    <input type="text" value="{{ ucfirst($editTds->upazila->name ) }}" class="form-control" readonly>
-
-                </div>
-
-            </div>
-
-
-
-            <div class="col-md-4">
-
-                <div class="form-group">
-
-                    <label for="organization">Organization</label>
-
-                    <input type="text" value="{{ ucfirst($editTds->organization->name) }}" class="form-control" readonly>
-
-                </div>
-
-            </div>
-
-
-
-
-
-
-
-
-
-            <div class="col-md-4">
-
-
-
-                <div class="form-group">
-
-                    <label for="collection_month">Collection Month</label>
-
-                    <input type="text" name="collection_month" id="collection_month"
-
-                        placeholder="01-2024" value="{{ date('m-Y', strtotime($editTds->collection_month)) }}" class="form-control"  autocomplete="off">
-
-                </div>
-
-            </div>       
-
-
-
-
-
-            <div class="col-md-4">
-
-                <div class="form-group">
-
-                    <label for="tds">TDS</label>
-
-                    <input type="number" id="tds" name="tds" placeholder="TDS" class="form-control"
-
-                        value="{{ $editTds->tds }}">
-
-                </div>
-
-            </div>
-
-
-
-            <div class="col-md-4">
-
-
-
-                <div class="form-group">
-
-                    <label for="bill">Bill</label>
-
-                    <input type="number" value="{{ $editTds->bill }}"  name="bill" placeholder="bill" class="form-control">
-
-                </div>
-
-            </div>
-
-
-
-
-
-            <div class="col-md-4">
-
-                <label for="comments">Comment</label>
-
-                <div class="form-group">
-
-                    <textarea name="comments" id="" cols="30" rows="1" class="form-control">{{ $editTds->comments }}</textarea>
-
-                </div>
-
-            </div>
-
-
-
-            <div class="col-md-3 mt-4">
-
-                <input type="submit" value="Update TDS" class="btn btn-primary  mt-2">
-
-
-
-            </div>
-
-
-
-        </div>
-
-
-
-    </form>
-
-
-
-
-
-
-
-      @else
-
-        <form action="{{ route('circle.tds.store') }}" method="POST">
-
-            @csrf
-
-            
-
-
+            @csrf     
 
             <div class="row">
 
-
-
                 <div class="col-md-4">
-
                     <div class="form-group">
-
                         <label for="zilla">Zilla</label>
-
                         <select class="form-control" id="zilla" name="zilla_id" required>
-
                             <option value="">Select Zilla</option>
-
                             @foreach ($zillas as $zilla)
-
                                 <option value="{{ $zilla->id }}" {{ old('zilla_id') == $zilla->id || $zilla->id == $selectedDistictId ? 'selected' : ''}} >{{ ucfirst($zilla->name) }}</option>
-
                             @endforeach
-
-
-
                         </select>
-
 
 
                         @error('zilla_id')
-
                         <span class="text-danger" role="alert">
-
                             <strong>{{ $message }}</strong>
-
-                        </span>
-
-                            
-
-                        @enderror
-
-
+                        </span>         
+                         @enderror
 
                     </div>
-
                 </div>
 
 
-
-
-
                 <div class="col-md-4">
-
                     <div class="form-group">
-
                         <label for="upazila">Upazilla</label>
-
                         <select class="form-control" name="upazila_id" id="upazila" required autofocus>
-
                             <option value="">Select Upazilla</option>
-
-
-
                             @foreach( $selectedUpazilas as $upazila )
-
                                 <option value="{{ $upazila->id }}">{{ ucfirst($upazila->name) }}</option>
-
                             @endforeach
-
-
-
                         </select>
 
-
-
                         @error('upazila_id')
-
                         <span class="text-danger" role="alert">
-
                             <strong> {{ $message }}</strong>
-
                         </span>
-
-                            
-
                         @enderror
-
                     </div>
-
                 </div>
 
 
@@ -323,9 +94,6 @@
                         <select class="form-control" name="organization_id" id="organization" required>
 
                             <option value="">Select Organization</option>
-
-
-
 
 
                         </select>
@@ -348,29 +116,18 @@
 
                 </div>
 
-
-
-
-
-
-
-
-
                 <div class="col-md-4">
-
-
-
                     <div class="form-group">
 
-                        <label for="collection_month">Collection Month</label>
+                        <label for="name">Name</label>
 
-                        <input type="text" id="collection_month" name="collection_month" 
+                        <input type="text" id="name" name="name" 
 
-                            placeholder="01-2024" class="form-control" value="{{ old('collection_month') }}" required autocomplete="off">
+                            placeholder="Name" class="form-control" value="{{ old('name') }}" required autocomplete="off" required>
 
 
 
-                            @error('collection_month')
+                            @error('name')
 
                             <span class="text-danger" role="alert">
 
@@ -392,11 +149,11 @@
 
                     <div class="form-group">
 
-                        <label for="tds">TDS</label>
+                        <label for="tds">Designation</label>
 
-                        <input type="number" id="tds" name="tds" placeholder="TDS" class="form-control">
+                        <input type="designation" id="designation" name="designation" placeholder="Designation" class="form-control" value="{{ old('designation') }}" required>
 
-                            @error('tds')
+                            @error('designation')
 
                             <span class="text-danger" role="alert">
 
@@ -420,13 +177,13 @@
 
                     <div class="form-group">
 
-                        <label for="bill">Bill</label>
+                        <label for="mobile_number">Mobile Number</label>
 
-                        <input type="number" id="bill" name="bill" placeholder="bill" class="form-control" value="{{ old('bill') }}">
+                        <input type="text" id="mobile_number" name="mobile_number" placeholder="mobile_number" class="form-control" value="{{ old('mobile_number') }}" required>
 
 
 
-                            @error('bill')
+                            @error('mobile_number')
 
                             <span class="text-danger" role="alert">
 
@@ -443,48 +200,39 @@
                 </div>
 
 
-
-
-
-
-
-              
-
-
-
                 <div class="col-md-4">
 
-                    <label for="comments">Comment</label>
+
 
                     <div class="form-group">
 
-             <textarea name="comments" id="" cols="30" rows="1" class="form-control">{{old('comments')}}</textarea>
+                        <label for="email">Email</label>
+
+                        <input type="email" id="email" name="email" placeholder="E-mail" class="form-control" value="{{ old('email') }}">
+
+
+
+                            @error('email')
+
+                            <span class="text-danger" role="alert">
+
+                                <strong> {{ $message }}</strong>
+
+                            </span>
+
+                                
+
+                            @enderror
 
                     </div>
 
-
-
-                    @error('comments')
-
-                    <span class="text-danger" role="alert">
-
-                        <strong> {{ $message }}</strong>
-
-                    </span>
-
-                        
-
-                    @enderror
-
-                </div>
+                </div>     
 
 
 
                 <div class="col-md-4 mt-4">
 
-                    <input type="submit" value="Add TDS" class="btn btn-primary mt-2">
-
-
+                    <input type="submit" value="Add Contact Person" class="btn btn-primary mt-2">
 
                 </div>
 
@@ -496,7 +244,7 @@
 
         </form>
 
-      @endif
+ 
 
     </div>
 
@@ -527,7 +275,6 @@
             $('#upazila').empty();
 
 
-
             if (zilla) {
 
                 $.ajax({
@@ -545,9 +292,6 @@
                         if (res) {
 
                             $('#upazila').empty();
-
-
-
 
 
                             $('#upazila').append('<option>Select Upazilla</option>');

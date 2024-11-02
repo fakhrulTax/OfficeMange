@@ -2,7 +2,7 @@
 
 
 
-@section('title', 'TDS')
+@section('title', 'Circle | TDS | Contact Person')
 
 
 
@@ -18,7 +18,7 @@
 
                 <div class="col-sm-6">
 
-                    <h1 class="m-0">TDS</h1>
+                    <h1 class="m-0">Contact Person</h1>
 
                 </div>
 
@@ -28,7 +28,7 @@
 
                     <ol class="breadcrumb float-sm-right">
 
-                        <a href="{{ route('circle.tds.create') }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add New TDS</a>
+                        <a href="{{ route('circle.tds.contactPerson.create') }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add New Contact Person</a>
 
                     </ol>
 
@@ -46,9 +46,7 @@
 
 
 
-    <section class="content">
-
-        
+    <section class="content">    
 
 
 
@@ -57,8 +55,14 @@
         <div class="card">
 
             <div class="card-body">
-
-              <form action="{{ route('circle.tds.search') }}" method="GET">
+            
+            @if( $Auth::user()->user_role == 'commissioner' )
+                <form action="{{ route('commissioner.tds.contactPerson.search') }}" method="GET">
+            @elseif( $Auth::user()->user_role == 'range' )
+                <form action="{{ route('range.tds.contactPerson.search') }}" method="GET">
+            @else
+              <form action="{{ route('circle.tds.contactPerson.search') }}" method="GET">
+            @endif
 
                 <div class="row">
 
@@ -70,13 +74,13 @@
 
                             <label for="zilla">Zilla</label>
 
-                            <select class="form-control" name="zilla_search" id="zilla_search">
+                            <select class="form-control" name="zilla_id" id="zilla_id">
 
                                 <option value="">Select Zilla</option>
 
                                 @foreach ($zillas as $zilla)
 
-                                    <option value="{{ $zilla->id }}" {{ Request::get('zilla_search') == $zilla->id ? 'selected' : ''}} >{{ ucfirst($zilla->name) }} </option>
+                                    <option value="{{ $zilla->id }}" {{ Request::get('zilla_id') == $zilla->id ? 'selected' : ''}} >{{ ucfirst($zilla->name) }} </option>
 
                                 @endforeach
 
@@ -96,21 +100,21 @@
 
                         <div class="form-group">
 
-                            <label for="upazila_search">Upazilla</label>
+                            <label for="upazila_id">Upazilla</label>
 
-                            <select class="form-control" name="upazila_search" id="upazila_search">
+                            <select class="form-control" name="upazila_id" id="upazila_id">
 
                                 <option value="">Select Upazilla</option>
 
 
 
-                                @if (Request::get('zilla_search'))
+                                @if (Request::get('zilla_id'))
 
 
 
                                 @php
 
-                                    $uapzilas = App\Models\Upazila::where('zilla_id', Request::get('zilla_search'))->get();
+                                    $uapzilas = App\Models\Upazila::where('zilla_id', Request::get('zilla_id'))->get();
 
                                 @endphp
 
@@ -118,7 +122,7 @@
 
                                 @foreach ($uapzilas as $uapzila )
 
-                                <option value="{{ $uapzila->id }}" {{ Request::get('upazila_search') == $uapzila->id ? 'selected' : ''}} > {{ ucfirst($uapzila->name)}} </option>
+                                <option value="{{ $uapzila->id }}" {{ Request::get('upazila_id') == $uapzila->id ? 'selected' : ''}} > {{ ucfirst($uapzila->name)}} </option>
 
                                 @endforeach
 
@@ -136,24 +140,24 @@
 
           
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
 
                         <div class="form-group">
 
-                            <label for="organization_search">Organization</label>
+                            <label for="organization_id">Organization</label>
 
-                            <select class="form-control" name="organization_search" id="organization_search" >
+                            <select class="form-control" name="organization_id" id="organization_id" >
 
                                 <option value="">Select Organization</option>
 
-                                @if (Request::get('upazila_search'))
+                                @if (Request::get('upazila_id'))
 
 
 
                                 @php
 
-                                    $organizations = App\Models\Upazila::where('id', Request::get('upazila_search'))->first()->organizations;
-
+                                    $organizations = App\Models\Upazila::where('id', Request::get('upazila_id'))->first()->organizations;
+                                    
                                     
 
                                 @endphp
@@ -162,18 +166,13 @@
 
                                 @foreach ($organizations as $organization )
 
-                                <option value="{{ $organization->id }}" {{ Request::get('organization_search') == $organization->id ? 'selected' : ''}} > {{ ucfirst($organization->name) }} </option>
+                                <option value="{{ $organization->id }}" {{ Request::get('organization_id') == $organization->id ? 'selected' : ''}} > {{ ucfirst($organization->name) }} </option>
 
                                 @endforeach
 
                                     
 
                                 @endif
-
-                               
-
-          
-
           
 
                             </select>
@@ -187,36 +186,25 @@
                     </div>
 
           
-
-                    <div class="col-md-2">
+                    @if($Auth::user()->user_role != 'circle')
+                    <div class="col-md-3">
 
                         <div class="form-group">
 
-                            <label for="start_month">Start Month</label>
-
-                            <input type="text" name="start_month" id="start_month" value="{{ Request::get('start_month') }}" class="form-control" autocomplete="off">
-
+                            <label for="circle">Circle</label>
+                            <select name="circle" id="circle" class="form-control">
+                                <option value="">Circle</option>
+                                @foreach($circles as $circle)
+                                    <option value="{{ $circle }}" {{ Request::get('circle') == $circle ? 'selected' : ''}}>{{ $circle }}</option>
+                                @endforeach
+                            </select>
 
 
                         </div>
 
                     </div>
+                    @endif
 
-
-
-                    <div class="col-md-2">
-
-                        <div class="form-group">
-
-                            <label for="end_month">End Month</label>
-
-                            <input type="text" id="end_month" name="end_month" value="{{ Request::get('end_month') }}" class="form-control" autocomplete="off">
-
-
-
-                        </div>
-
-                    </div>
 
           
 
@@ -256,11 +244,7 @@
 
 
 
-            @if (count($tdses) < 1)
-
-
-
-
+            @if (count($persons) < 1)
 
                 <h2 class="text-danger p-5">Sorry! There is no data to show!</h2>
 
@@ -278,25 +262,19 @@
 
                                 <th>#</th>
 
-                                <th>Collection Month </th>
-
                                 <th>Zilla</th>
 
                                 <th>Upazila</th>
 
-                                <th>Orginization</th>
+                                <th>Authority</th>
 
-                                <th>TDS</th>
+                                <th>Name & Designation</th>
+                                <th>Mobile & E-mail</th>   
 
-
-
-                                <th>Bill</th>                                
-
-
-
-                                <th>Comments</th>
-
-                                <th>Action</th>
+                                <th>Circle</th>
+                                @if($Auth::user()->user_role == 'circle')
+                                    <th>Action</th>
+                                @endif
 
                             </tr>
 
@@ -308,15 +286,7 @@
 
 
 
-                            @php
-
-                                $totalTDS = 0;
-
-                            @endphp
-
-
-
-                            @foreach ($tdses as $key => $tds)
+                            @foreach ($persons as $key => $person)
 
 
 
@@ -326,49 +296,39 @@
 
                                     <td>
 
-                                        {{ date('M-Y', strtotime($tds->collection_month)) }}<br>
-
-
+                                        {{ $person->zilla->name }}
 
                                     </td>
 
-                                    <td> {{ ucfirst($tds->upazila->zilla->name ) }}</td>
+                                    <td> {{ $person->upazila->name }}</td>
 
-                                    <td> {{ ucfirst($tds->upazila->name) }}</td>
+                                    <td> {{ $person->organization->name }}</td>
+                                    
 
-                                    <td> {{ ucfirst($tds->organization->name )}} </td>
+                                    <td> 
+                                        {{ ucfirst($person->name )}} <br>
+                                        {{ ucfirst($person->designation )}} 
+                                     </td>
 
                                     <td>
 
-                                        {{ App\Helpers\MyHelper::moneyFormatBD($tds->tds) }}
+                                    {{ $person->mobile_number }} <br>
+                                    {{ $person->email }}
 
                                     </td>
-
-                                    <td> {{ App\Helpers\MyHelper::moneyFormatBD($tds->bill) }} </td>
-
-                                    
-
-                                    <td> {{ $tds->comments }} </td>
-
+                                    <td>{{ $person->circle }}</td>
+                                    @if($Auth::user()->user_role == 'circle')
                                     <td> 
 
-                                      <a href="{{ route('circle.tds.edit', $tds->id) }}" class="btn btn-sm btn-warning">Edit</a>
-
-                                      <!-- <a href="{{ route('circle.tds.destroy', $tds->id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this TDS?')">Delete</a> -->
-
-                                    
+                                      <a href="{{ route('circle.tds.contactPerson.edit', $person->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                   
 
                                     </td>
+                                    @endif
 
 
 
                                 </tr>
-
-                                @php
-
-                                    $totalTDS += $tds->tds;
-
-                                @endphp
 
 
 
@@ -379,21 +339,6 @@
                         </tbody>
 
                         <tfoot>
-
-                            <tr>
-
-                                <td colspan="5" class="font-weight-bold text-center">Total</td>
-
-
-
-                                <td>{{ App\Helpers\MyHelper::moneyFormatBD($totalTDS ) }}</td>
-
-
-
-                                <td colspan="2"></td>
-
-                            </tr>
-
 
 
                         </tfoot>
@@ -424,7 +369,7 @@
 
 
 
-            {{ $tdses->links("pagination::bootstrap-4") }}
+            {{ $persons->links("pagination::bootstrap-4") }}
 
 
 
@@ -455,11 +400,6 @@
 @push('js')
 
     <script>
-
-       
-
-
-
         $('#zilla_search').change(function() {
 
             var zilla = $(this).val();
@@ -507,12 +447,6 @@
                         }
 
                     }
-
-
-
-
-
-
 
                 });
 
@@ -593,4 +527,3 @@
     </script>
 
 @endpush
-
