@@ -34,12 +34,15 @@ class ContactPersonController extends Controller
         {
             $circles = [Auth::user()->circle];
         }
+        
+       
+
 
         $persons = ContactPerson::with(['zilla', 'upazila', 'organization'])
                 ->whereIn('circle', $circles)
                 ->orderBy('id', 'DESC')
                 ->paginate(100);
-
+                
         return view('circle.tds.person.index', [
             'persons' => $persons,
             'zillas' => $zillas,
@@ -78,9 +81,13 @@ class ContactPersonController extends Controller
             'name' => 'required|string|max:255',
             'designation' => 'nullable|string|max:255',
             'mobile_number' => 'required|numeric',
+            'officer_incharge_name' => 'nullable|string|max:255',
+            'officer_incharge_designation' => 'nullable|string|max:255',
+            'officer_incharge_mobile' => 'nullable|numeric',
             'email' => 'nullable|email',
         ]);
 
+        
         $validatedData['circle'] = Auth::user()->circle;
 
         //check exists for same month and upazila and organization
@@ -136,6 +143,9 @@ class ContactPersonController extends Controller
             'name' => 'required|string|max:255',
             'designation' => 'nullable|string|max:255',
             'mobile_number' => 'required|numeric',
+            'officer_incharge_name' => 'nullable|string|max:255',
+            'officer_incharge_designation' => 'nullable|string|max:255',
+            'officer_incharge_mobile' => 'nullable|numeric',
             'email' => 'nullable|email',
         ]);
 

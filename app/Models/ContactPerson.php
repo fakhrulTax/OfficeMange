@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\zilla;
 use App\Models\Upazila;
-use App\Models\organization;
+use App\Models\Organization;
 
 class ContactPerson extends Model
 {
@@ -23,6 +23,9 @@ class ContactPerson extends Model
         'name',
         'designation',
         'mobile_number',
+        'officer_incharge_name',
+        'officer_incharge_designation',
+        'officer_incharge_mobile',
         'email',
         'circle',
     ];

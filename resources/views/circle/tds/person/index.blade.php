@@ -261,16 +261,10 @@
                             <tr>
 
                                 <th>#</th>
-
-                                <th>Zilla</th>
-
-                                <th>Upazila</th>
-
+                                <th>Zilla & Upazila</th>
                                 <th>Authority</th>
-
-                                <th>Name & Designation</th>
-                                <th>Mobile & E-mail</th>   
-
+                                <th>Officer Info</th>   
+                                <th>Contac Person</th>    
                                 <th>Circle</th>
                                 @if($Auth::user()->user_role == 'circle')
                                     <th>Action</th>
@@ -296,22 +290,22 @@
 
                                     <td>
 
-                                        {{ $person->zilla->name }}
-
+                                        {{ $person->zilla->name }} <br>
+                                        {{ $person->upazila->name }}
                                     </td>
-
-                                    <td> {{ $person->upazila->name }}</td>
 
                                     <td> {{ $person->organization->name }}</td>
                                     
 
                                     <td> 
-                                        {{ ucfirst($person->name )}} <br>
-                                        {{ ucfirst($person->designation )}} 
+                                        {{ ucfirst($person->officer_incharge_name )}} <br>
+                                        {{ ucfirst($person->officer_incharge_designation )}} <br>
+                                        {{ $person->officer_incharge_mobile }} <br>
                                      </td>
 
                                     <td>
-
+                                    {{ ucfirst($person->name )}} <br>
+                                    {{ ucfirst($person->designation )}} <br>
                                     {{ $person->mobile_number }} <br>
                                     {{ $person->email }}
 

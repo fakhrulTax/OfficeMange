@@ -124,7 +124,7 @@
 
                         <input type="text" id="name" name="name" 
 
-                            placeholder="Name" class="form-control" value="{{ $contactPerson->name }}" required autocomplete="off" required>
+                            placeholder="Name" class="form-control" value="{{ $contactPerson->name }}"  autocomplete="off" required>
 
 
 
@@ -150,7 +150,7 @@
 
                     <div class="form-group">
 
-                        <label for="tds">Designation</label>
+                        <label for="designation">Designation</label>
 
                         <input type="designation" id="designation" name="designation" placeholder="Designation" class="form-control" value="{{ $contactPerson->designation }}" required>
 
@@ -185,6 +185,89 @@
 
 
                             @error('mobile_number')
+
+                            <span class="text-danger" role="alert">
+
+                                <strong> {{ $message }}</strong>
+
+                            </span>
+
+                                
+
+                            @enderror
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+
+                        <label for="officer_incharge_name">Officer Incharge Name</label>
+
+                        <input type="text" id="officer_incharge_name" name="officer_incharge_name" 
+
+                            placeholder="Officer Name" class="form-control" value="{{ $contactPerson->officer_incharge_name }}" autocomplete="off">
+
+
+
+                            @error('officer_incharge_name')
+
+                            <span class="text-danger" role="alert">
+
+                                <strong> {{ $message }}</strong>
+
+                            </span>
+
+                                
+
+                            @enderror
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-md-4">
+
+                    <div class="form-group">
+
+                        <label for="officer_incharge_designation">Officer Designation</label>
+
+                        <input type="text" id="officer_incharge_designation" name="officer_incharge_designation" placeholder="Officer Designation" class="form-control" value="{{ $contactPerson->officer_incharge_designation }}">
+
+                            @error('officer_incharge_designation')
+
+                            <span class="text-danger" role="alert">
+
+                                <strong> {{ $message }}</strong>
+
+                            </span>
+
+                                
+
+                            @enderror
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-md-4">
+
+
+
+                    <div class="form-group">
+
+                        <label for="mobile_number">Officer Mobile Number</label>
+
+                        <input type="text" id="officer_incharge_mobile" name="officer_incharge_mobile" placeholder="officer_incharge_mobile" class="form-control" value="{{ $contactPerson->officer_incharge_mobile }}">
+
+
+
+                            @error('officer_incharge_mobile')
 
                             <span class="text-danger" role="alert">
 
