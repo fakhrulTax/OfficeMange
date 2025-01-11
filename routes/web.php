@@ -24,6 +24,7 @@ use App\Http\Controllers\RetarnController;
 use App\Http\Controllers\ReopenController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\ContactPersonController;
+use App\Http\Controllers\DailyReportController;
 
 
 Route::get('/', function () {
@@ -119,7 +120,12 @@ Route::middleware(['auth', 'role:circle'])->name('circle.')->group(function () {
      Route::post('/circle/forward_dairy', [TaskController::class, 'store'])->name('task.store');
      Route::delete('/circle/forward_dairy/{id}', [TaskController::class, 'destroy'])->name('task.destroy');
      Route::put('/circle/forward_dairy/{id}/update_status', [TaskController::class, 'updateStatus'])->name('task.updateStatus');
- 
+    
+     //Daily Report
+     Route::get('/circle/daily-report/create', [DailyReportController::class, 'create'])->name('daily.create');
+     Route::post('/circle/daily-report/create', [DailyReportController::class, 'store'])->name('daily.store');
+     Route::get('/circle/daily-report', [DailyReportController::class, 'index'])->name('daily.index');
+     Route::get('/circle/daily-report/search', [DailyReportController::class, 'search'])->name('daily.search');
 
     //Settings
 	Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
@@ -202,7 +208,11 @@ Route::middleware(['auth', 'role:range'])->name('range.')->group(function () {
     Route::get('/range/arrear', [ArrearController::class, 'rangeArrear'])->name('arrear');
     Route::get('/range/arrear/circle/{circle}', [ArrearController::class, 'index'])->name('arrear.circle');
     Route::get('/range/arrear/circle/{circle}/search', [ArrearController::class, 'search'])->name('arrear.circle.search');
-   
+    
+    //Daily Report
+    Route::get('/range/daily-report', [DailyReportController::class, 'index'])->name('daily.index');
+    Route::get('/range/daily-report/search', [DailyReportController::class, 'search'])->name('daily.search');
+
 
     //TDS Report
     Route::get('/range/tds/report', [TdsController::class, 'tdsRangeReport'])->name('tds.report');
@@ -240,6 +250,9 @@ Route::middleware(['auth', 'role:commissioner'])->name('commissioner.')->group(f
     Route::post('/commissioner/stock/upload', [StockController::class, 'upload'])->name('stock.upload');
     Route::delete('commissioner/stock/{id}', [StockController::class, 'destroy'])->name('stock.delete');
 
+    //Daily Report
+    Route::get('/commissioner/daily-report', [DailyReportController::class, 'index'])->name('daily.index');
+    Route::get('/commissioner/daily-report/search', [DailyReportController::class, 'search'])->name('daily.search');
 
     //Arrear Route
     Route::get('/commissioner/arrear', [ArrearController::class, 'commissionerArrear'])->name('arrear');

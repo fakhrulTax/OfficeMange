@@ -175,7 +175,7 @@ class ContactPersonController extends Controller
 
         if( Auth::user()->user_role == 'commissioner')
         {
-            $circles = $circle = range(1, 22);;
+            $circles = $circle = range(1, 22);
            
         }elseif( Auth::user()->user_role == 'range')
         {

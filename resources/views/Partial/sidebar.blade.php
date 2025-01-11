@@ -340,6 +340,24 @@
 
                     </li>
 
+                    <li class="nav-item">
+
+                        <a href="{{ route('circle.daily.index') }}"
+
+                            class="nav-link {{ in_array(Route::currentRouteName(),['circle.daily.index', 'circle.daily.search', 'circle.daily.create']) ? 'active' : '' }} ">
+
+                            <i class="nav-icon fas fa-book text-light"></i>
+
+                            <p>
+
+                                Daily Report
+
+                            </p>
+
+                        </a>
+
+                    </li>
+
 
 
                     <li class="nav-item">
@@ -461,6 +479,24 @@
                             </p>
 
                         </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                    <a href="{{ route('commissioner.daily.index') }}"
+
+                        class="nav-link {{ in_array(Route::currentRouteName(),['commissioner.daily.index', 'commissioner.daily.search']) ? 'active' : '' }} ">
+
+                        <i class="nav-icon fas fa-book text-light"></i>
+
+                        <p>
+
+                            Daily Report
+
+                        </p>
+
+                    </a>
 
                     </li>
 
@@ -835,6 +871,24 @@
                             <p>
 
                                 Home
+
+                            </p>
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a href="{{ route('range.daily.index') }}"
+
+                            class="nav-link {{ in_array(Route::currentRouteName(),['range.daily.index', 'range.daily.search']) ? 'active' : '' }} ">
+
+                            <i class="nav-icon fas fa-book text-light"></i>
+
+                            <p>
+
+                                Daily Report
 
                             </p>
 
